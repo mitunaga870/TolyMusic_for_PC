@@ -1,0 +1,85 @@
+﻿<Window x:Class="TolyMusic_for_PC.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TolyMusic_for_PC"
+        mc:Ignorable="d"
+        Foreground= "#ececec"
+        Title="MainWindow" Height="810" Width="1440"
+        
+        >
+    <Grid Background="#FF030303"><!--メイングリッド-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#FF212121" ><!--ヘッダー-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="360" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Orientation="Horizontal"><!--再生ボタンとか-->
+                <CheckBox Width="54" Content="シャッフル" Foreground="#ececec" />
+                <Button Width="54" Content="巻き戻し" />
+                <Button Width="54" Content="再生・停止" />
+                <Button Width="54" Content="早送り" />
+                <CheckBox Width="54" Content="リピート" Foreground="#ececec" />
+            </StackPanel>
+            
+            <Slider Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Opacity="0"></Slider><!--シークバー-->
+        </Grid>
+        
+        <StackPanel Grid.Column="0" Grid.Row="1" Background="#FF212121"><!--サイドバー-->
+            <Label Content="ライブラリ" Foreground= "#ececec" />
+            <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_tracks"/>
+            <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_albums"/>
+            <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_artists"/>
+            <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_playlists"/>
+            <Label Content="ローカル" Foreground= "#ececec" />
+            <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_tracks"/>
+            <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_albums"/>
+            <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_artists"/>
+            <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_playlists"/>
+            <Label Content="Youtube" Foreground= "#ececec" />
+            <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
+            <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
+            <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
+            <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1" Grid.Column="1"><!--メインコンテンツ:streaming以外-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <!--タイトルヘッダ-->
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="TypeLabel" Content="{Binding Type}" Foreground="#ececec" Width="90" />
+                <Label x:Name="PageLabel" Content="{Binding Page}" Foreground="#ececec" FontSize="60" />
+            </StackPanel>
+            <!--コンテンツ-->
+            <ListBox Grid.Row="1" Name="ContentList" SelectionMode="Single" cli>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Title}"></TextBlock>
+                            <TextBlock Width="0" Text="{Binding Path}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Window>
