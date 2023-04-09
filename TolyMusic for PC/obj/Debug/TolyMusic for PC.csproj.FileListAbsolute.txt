@@ -19,3 +19,17 @@ D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\TagLibSharp.xml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.CopyComplete
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csprojAssemblyReference.cache
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.Win32.Registry.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.Asio.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.Core.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.Midi.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.Wasapi.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.WinForms.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.WinMM.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.AccessControl.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.Principal.Windows.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.Win32.Registry.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.AccessControl.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.Principal.Windows.xml

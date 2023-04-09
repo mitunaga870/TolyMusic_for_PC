@@ -6,9 +6,15 @@
         xmlns:local="clr-namespace:TolyMusic_for_PC"
         mc:Ignorable="d"
         Foreground= "#ececec"
-        Title="MainWindow" Height="810" Width="1440"
-        
-        >
+        Title="MainWindow" Height="810" Width="1440">
+    <Window.Resources>
+        <Style TargetType="Label">
+           <Setter Property="Foreground" Value="#ececec"></Setter> 
+        </Style>
+        <Style TargetType="ListBoxItem">
+            <EventSetter Event="MouseDoubleClick" Handler="PlayTrack"></EventSetter>
+        </Style>
+    </Window.Resources>
     <Grid Background="#FF030303"><!--メイングリッド-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
@@ -33,12 +39,16 @@
             <StackPanel Orientation="Horizontal"><!--再生ボタンとか-->
                 <CheckBox Width="54" Content="シャッフル" Foreground="#ececec" />
                 <Button Width="54" Content="巻き戻し" />
-                <Button Width="54" Content="再生・停止" />
+                <Button Width="54" Content="再生・停止" Click="Toggle_Player"/>
                 <Button Width="54" Content="早送り" />
                 <CheckBox Width="54" Content="リピート" Foreground="#ececec" />
             </StackPanel>
             
             <Slider Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Opacity="0"></Slider><!--シークバー-->
+            
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                <Label FontSize="30" Content="{Binding Curt_track.Title}" />
+            </StackPanel>
         </Grid>
         
         <StackPanel Grid.Column="0" Grid.Row="1" Background="#FF212121"><!--サイドバー-->
@@ -70,7 +80,7 @@
                 <Label x:Name="PageLabel" Content="{Binding Page}" Foreground="#ececec" FontSize="60" />
             </StackPanel>
             <!--コンテンツ-->
-            <ListBox Grid.Row="1" Name="ContentList" SelectionMode="Single" cli>
+            <ListBox Grid.Row="1" Name="ContentList" SelectionMode="Single" HorizontalContentAlignment="Stretch"> 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

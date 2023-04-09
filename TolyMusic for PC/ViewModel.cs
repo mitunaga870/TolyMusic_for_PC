@@ -9,8 +9,8 @@ namespace TolyMusic_for_PC
     {
         //変数宣言
         private string type, page;
-        private ObservableCollection<Album> albums;
-        private ObservableCollection<Artist> artists;
+        private string curt_driver;
+        private Track curt_track;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -47,6 +47,26 @@ namespace TolyMusic_for_PC
             }
         }
 
+        public Track Curt_track
+        {
+            get { return curt_track; }
+            set
+            {
+                curt_track = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public string Curt_Driver
+        {
+            get { return curt_driver; }
+            set
+            {
+                curt_driver = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public ObservableCollection<Track> Tracks { get; set; }
 
         public ObservableCollection<Album> Albums { get; set; }

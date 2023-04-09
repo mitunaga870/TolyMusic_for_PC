@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using NAudio.Wave;
 using Label = System.Windows.Controls.Label;
 
 namespace TolyMusic_for_PC
@@ -9,7 +10,8 @@ namespace TolyMusic_for_PC
     /// </summary>
     public partial class MainWindow : Window
     {
-        PageController pageController;
+        private PageController pageController;
+        private Player Player;
         private ViewModel vm;
         public static Label typelabel, pagelabel;
         //コンストラクタ
@@ -19,6 +21,7 @@ namespace TolyMusic_for_PC
             vm = new ViewModel();
             DataContext = vm;
             pageController = new PageController(vm);
+            Player = new Player(vm);
             Go_library_tracks( null, null);
         }
         //ページ遷移イベント
@@ -55,6 +58,24 @@ namespace TolyMusic_for_PC
         {
             pageController.go("local", "playlists", vm);
         }
-        
+        //トラック再生
+        private void PlayTrack(object sender, RoutedEventArgs e)
+        {
+            vm.Curt_Driver = AsioOut.GetDriverNames()[0];
+            vm.Curt_track = (Track)ContentList.SelectedItem;
+            Player.Start();
+        }
+        //再生ボタン
+        private void Toggle_Player(object sender, RoutedEventArgs e)
+        {
+            if (Player.isPlaying)
+            {
+                Player.Pause();
+            }
+            else
+            {
+                Player.Play();
+            }
+        }
     }
 }
