@@ -11,6 +11,7 @@ namespace TolyMusic_for_PC
         private string type, page;
         private string curt_driver;
         private Track curt_track;
+        private int curt_queue_num;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -67,8 +68,20 @@ namespace TolyMusic_for_PC
             }
         }
         
+        public int Curt_queue_num
+        {
+            get { return curt_queue_num; }
+            set
+            {
+                curt_queue_num = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public ObservableCollection<Track> Tracks { get; set; }
 
+        public ObservableCollection<Track> PlayQueue { get; set; }
+        
         public ObservableCollection<Album> Albums { get; set; }
 
         public ObservableCollection<Artist> Artists { get; set; }

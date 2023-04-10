@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using NAudio.Wave;
 
@@ -21,6 +22,7 @@ namespace TolyMusic_for_PC
             if(asio != null)
                 asio.Dispose();
             asio = new AsioOut(vm.Curt_Driver);
+            asio.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
         }
         //キュー開始処理
         public void Start()
@@ -56,6 +58,11 @@ namespace TolyMusic_for_PC
             }
             asio.Pause();
             isPlaying = false;
+        }
+        //再生終了時の処理
+        public void Ended(object obj, StoppedEventArgs e)
+        {
+            MessageBox.Show("再生終了");
         }
     }
 }

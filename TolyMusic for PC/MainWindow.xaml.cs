@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using NAudio.Wave;
 using Label = System.Windows.Controls.Label;
@@ -63,6 +64,12 @@ namespace TolyMusic_for_PC
         {
             vm.Curt_Driver = AsioOut.GetDriverNames()[0];
             vm.Curt_track = (Track)ContentList.SelectedItem;
+            vm.PlayQueue = (ObservableCollection<Track>)ContentList.ItemsSource;
+            for (int i = 0; i < vm.Tracks.Count; i++)
+            {
+                if(vm.Curt_track.id==vm.PlayQueue[i].id)
+                    vm.Curt_queue_num = i;
+            }
             Player.Start();
         }
         //再生ボタン

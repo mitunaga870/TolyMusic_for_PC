@@ -211,6 +211,7 @@ namespace TolyMusic_for_PC.Local
             {
                 Track track = new Track
                 {
+                    id = row["track_id"].ToString(),
                     Title = row["track_title"].ToString(),
                     Path = row["path"].ToString(),
                 };
