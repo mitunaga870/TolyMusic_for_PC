@@ -2,16 +2,22 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using NAudio.Wave;
 
 namespace TolyMusic_for_PC
 {
     public class ViewModel : INotifyPropertyChanged
     {
         //変数宣言
+        private bool excl;
+        private object loop;
         private string type, page;
         private string curt_driver;
         private Track curt_track;
+        private long curt_time;
+        private long prev_time;
         private int curt_queue_num;
+        private long curt_length;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,6 +26,8 @@ namespace TolyMusic_for_PC
         {
             type = "ライブラリ";
             page = "曲";
+            excl = false;
+            prev_time = -1;
         }
 
         //プロパティ
@@ -28,6 +36,55 @@ namespace TolyMusic_for_PC
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        public long Prev_time
+        {
+            get { return prev_time; }
+            set
+            {
+                prev_time = value;
+                OnPropertyChanged();
+            }
+        }
+        public long Curt_length
+        {
+            get { return curt_length; }
+            set
+            {
+                curt_length = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public long Curt_time
+        {
+            get { return curt_time; }
+            set
+            {
+                curt_time = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public object Loop
+        {
+            get { return loop; }
+            set
+            {
+                loop = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public bool Excl
+        {
+            get { return excl; }
+            set
+            {
+                excl = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public string Type
         {
             get { return type; }
@@ -85,5 +142,7 @@ namespace TolyMusic_for_PC
         public ObservableCollection<Album> Albums { get; set; }
 
         public ObservableCollection<Artist> Artists { get; set; }
+        
+        public ObservableCollection<string> Directories { get; set; }
     }
 }

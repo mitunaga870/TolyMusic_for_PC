@@ -20,8 +20,21 @@ namespace TolyMusic_for_PC.Local
 
         public void Init()//ローカル内ファイル用DBの初期化
         {
+            
             //ファイルのパスを配列で取得
-            String[] files = System.IO.Directory.GetFiles("D:\\music\\","*",SearchOption.AllDirectories);
+            Collection<string> files = new Collection<string>();
+            foreach (var path in Properties.Settings.Default.LocalDirectryPath.Split(','))
+            {
+                if (path == "")
+                {
+                    continue;
+                }
+                string[] tmp_strary = System.IO.Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+                foreach (string tmp_str in tmp_strary)
+                {
+                    files.Add(tmp_str);
+                }
+            }
             //テーブルの初期化
             Local.DB.NonQuery(new String[]{ 
                 "drop table IF EXISTS tracks;",
@@ -62,6 +75,9 @@ namespace TolyMusic_for_PC.Local
             List<SQLiteParameter[]> params_tracks = new List<SQLiteParameter[]>();
             List<SQLiteParameter[]> params_track_album = new List<SQLiteParameter[]>();
             foreach (string file in files){
+                //拡張子の確認
+                if (Path.GetExtension(file) != ".mp3"&& Path.GetExtension(file) != ".m4a"&& Path.GetExtension(file) != ".flac" && Path.GetExtension(file) != ".wav")
+                    continue;
                 //パラメータ配列の作成
                 SQLiteParameter[] param_tracks = new SQLiteParameter[8];
                 //ファイルのタグを取得

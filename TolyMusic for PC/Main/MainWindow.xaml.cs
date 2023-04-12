@@ -14,7 +14,7 @@ namespace TolyMusic_for_PC
         private PageController pageController;
         private Player Player;
         private ViewModel vm;
-        public static Label typelabel, pagelabel;
+        private bool seek_playing;
         //コンストラクタ
         public MainWindow()
         {
@@ -24,6 +24,11 @@ namespace TolyMusic_for_PC
             pageController = new PageController(vm);
             Player = new Player(vm);
             Go_library_tracks( null, null);
+        }
+        //終了処理
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Player.Dispose();
         }
         //ページ遷移イベント
         private void Go_library_tracks(object sender, RoutedEventArgs e)
@@ -62,7 +67,6 @@ namespace TolyMusic_for_PC
         //トラック再生
         private void PlayTrack(object sender, RoutedEventArgs e)
         {
-            vm.Curt_Driver = AsioOut.GetDriverNames()[0];
             vm.Curt_track = (Track)ContentList.SelectedItem;
             vm.PlayQueue = (ObservableCollection<Track>)ContentList.ItemsSource;
             for (int i = 0; i < vm.Tracks.Count; i++)
@@ -83,6 +87,27 @@ namespace TolyMusic_for_PC
             {
                 Player.Play();
             }
+        }
+        
+        private void Open_Settings(object sender, RoutedEventArgs e)
+        {
+            Setting setting = new Setting();
+            setting.Owner = this;
+            setting.Show();
+        }
+
+        private void Seeked(object sender, RoutedEventArgs e)
+        {
+            vm.Prev_time = (long)Seekbar.Value;
+            if (seek_playing)
+                Player.Play();
+        }
+        
+        private void Seeking(object sender, RoutedEventArgs e)
+        {
+            seek_playing = Player.isPlaying;
+            if (seek_playing)
+                Player.Pause();
         }
     }
 }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TolyMusic_for_PC"
+        Closing="Window_Closing"
         mc:Ignorable="d"
         Foreground= "#ececec"
         Title="MainWindow" Height="810" Width="1440">
@@ -41,13 +42,20 @@
                 <Button Width="54" Content="巻き戻し" />
                 <Button Width="54" Content="再生・停止" Click="Toggle_Player"/>
                 <Button Width="54" Content="早送り" />
-                <CheckBox Width="54" Content="リピート" Foreground="#ececec" />
+                <CheckBox Width="54" Content="リピート" Foreground="#ececec" IsChecked="{Binding Loop}" IsThreeState="True"/>
             </StackPanel>
             
-            <Slider Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Opacity="0"></Slider><!--シークバー-->
+            <Slider Name = "Seekbar" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Opacity="1" 
+                    Value="{Binding Curt_time}" Maximum="{Binding Curt_length}" IsMoveToPointEnabled="True" 
+                    PreviewMouseUp="Seeked" PreviewMouseDown="Seeking" />
             
-            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"><!--再生曲情報-->
                 <Label FontSize="30" Content="{Binding Curt_track.Title}" />
+            </StackPanel>
+            
+            <StackPanel Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft"><!--その他ヘッダー要素-->
+                <Button Width="54" Content="設定" Click="Open_Settings" />
+                <CheckBox Width="27" Content="排他モード"></CheckBox>
             </StackPanel>
         </Grid>
         

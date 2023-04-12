@@ -33,3 +33,45 @@ D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\NAudio.xml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.AccessControl.xml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.exe.config
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.exe
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.pdb
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.Win32.Registry.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.Asio.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.Core.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.Midi.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.Wasapi.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.WinForms.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.WinMM.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Data.SQLite.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Security.AccessControl.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TagLibSharp.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.Win32.Registry.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\NAudio.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Data.SQLite.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Security.AccessControl.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TagLibSharp.pdb
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\TagLibSharp.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.AssemblyReference.cache
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.SuggestedBindingRedirects.cache
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\App.g.cs
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_MarkupCompile.cache
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_MarkupCompile.lref
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.g.resources
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic_for_PC.Properties.Resources.resources
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.GenerateResource.cache
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.CoreCompileInputs.cache
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.CopyComplete
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.exe
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.pdb
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Main\MainWindow.g.cs
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Setting\Setting.g.cs
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Main\MainWindow.baml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Setting\Setting.baml
