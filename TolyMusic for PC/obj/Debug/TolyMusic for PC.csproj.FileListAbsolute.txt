@@ -1,11 +1,9 @@
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.exe.config
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.exe
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\TolyMusic for PC.pdb
-D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\MainWindow.g.cs
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\App.g.cs
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_MarkupCompile.cache
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_MarkupCompile.lref
-D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\MainWindow.baml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.g.resources
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic_for_PC.Properties.Resources.resources
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC.csproj.GenerateResource.cache
@@ -75,3 +73,11 @@ C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Main\Mai
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Setting\Setting.g.cs
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Main\MainWindow.baml
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\Setting\Setting.baml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Main\MainWindow.g.cs
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Setting\Setting.g.cs
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Main\MainWindow.baml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Setting\Setting.baml

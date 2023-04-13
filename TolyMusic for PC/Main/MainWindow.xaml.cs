@@ -67,6 +67,7 @@ namespace TolyMusic_for_PC
         //トラック再生
         private void PlayTrack(object sender, RoutedEventArgs e)
         {
+            //キューの割当
             vm.Curt_track = (Track)ContentList.SelectedItem;
             vm.PlayQueue = (ObservableCollection<Track>)ContentList.ItemsSource;
             for (int i = 0; i < vm.Tracks.Count; i++)
@@ -74,6 +75,7 @@ namespace TolyMusic_for_PC
                 if(vm.Curt_track.id==vm.PlayQueue[i].id)
                     vm.Curt_queue_num = i;
             }
+            //再生
             Player.Start();
         }
         //再生ボタン
@@ -98,7 +100,7 @@ namespace TolyMusic_for_PC
 
         private void Seeked(object sender, RoutedEventArgs e)
         {
-            vm.Prev_time = (long)Seekbar.Value;
+            vm.Next_time = (long)Seekbar.Value;
             if (seek_playing)
                 Player.Play();
         }
@@ -108,6 +110,13 @@ namespace TolyMusic_for_PC
             seek_playing = Player.isPlaying;
             if (seek_playing)
                 Player.Pause();
+        }
+
+        private void SetExcl(object sender, RoutedEventArgs e)
+        {
+            long tmp = vm.Curt_time;
+            Player.Start();
+            vm.Next_time = tmp;
         }
     }
 }

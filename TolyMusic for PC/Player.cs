@@ -44,7 +44,10 @@ namespace TolyMusic_for_PC
             else//共有WASAPI
             {
                 //ドライバ指定
-                if(Properties.Settings.Default.NDcustumized){}
+                if (Properties.Settings.Default.NDcustumized)
+                {
+                    wasapi = new WasapiOut();
+                }
                 else//デフォルト
                 {
                     if (wasapi != null)
@@ -104,30 +107,26 @@ namespace TolyMusic_for_PC
             }
             else
             {
-                Prev();
+                next();
             }
         }
 
-        public void Prev()
+        public void next()
         {
             if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && (bool)vm.Loop) //キューのループ処理
             {
                 vm.Curt_queue_num = 0;
                 vm.Curt_track = vm.PlayQueue[0];
-                reader.Dispose();
-                reader = new AudioFileReader(vm.Curt_track.Path);
-                vm.Curt_length = reader.CurrentTime.Ticks;
-                Play();
             }
             else
             {
                 vm.Curt_queue_num++;
                 vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-                reader.Dispose();
-                reader = new AudioFileReader(vm.Curt_track.Path);
-                vm.Curt_length = reader.CurrentTime.Ticks;
-                Play();
             }
+            reader.Dispose();
+            reader = new AudioFileReader(vm.Curt_track.Path);
+            vm.Curt_length = reader.CurrentTime.Ticks;
+            Start();
         }
 
         //再生位置の変更
@@ -136,10 +135,10 @@ namespace TolyMusic_for_PC
             while (isPlaying)
             {
                 vm.Curt_time = reader.CurrentTime.Ticks;
-                if (vm.Prev_time != -1)
+                if (vm.Next_time != -1)
                 {
-                    reader.CurrentTime = TimeSpan.FromTicks(vm.Prev_time);
-                    vm.Prev_time = -1;
+                    reader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
+                    vm.Next_time = -1;
                 }
             }
         }

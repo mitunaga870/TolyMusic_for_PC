@@ -13,13 +13,15 @@ namespace TolyMusic_for_PC
     {
         //変数宣言
         private Setting_ViewModel vm;
-        private Setting_PageController sp;
+        private Setting_Page_Local spl;
+        private Setting_Page_general spg;
         public Setting()
         {
             InitializeComponent();
             vm = new Setting_ViewModel();
             DataContext = vm;
-            sp = new Setting_PageController(vm);
+            spl = new Setting_Page_Local(vm);
+            spg = new Setting_Page_general(vm);
         }
         //ページ初期化イベント
         private void Page_init()
@@ -30,7 +32,7 @@ namespace TolyMusic_for_PC
         private void Open_Local_Directory(object sender, RoutedEventArgs e)
         {
             Page_init();
-            sp.go_local_directory(main);
+            spl.go_local_directory(main);
         }
         private void Send(object sender, RoutedEventArgs e)
         {
@@ -45,6 +47,12 @@ namespace TolyMusic_for_PC
             Properties.Settings.Default.Save();
             vm.Init();
             this.Close();
+        }
+
+        private void Open_general_Device(object sender, RoutedEventArgs e)
+        {
+            Page_init();
+            spg.go_general_device(main);
         }
     }
 }

@@ -16,6 +16,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
+            <Label Content="一般" />
+            <Button Content="出力デバイス" Click="Open_general_Device"></Button>
             <Label Content="ローカル" />
             <Button Content="ディレクトリ" Click="Open_Local_Directory"/>
         </StackPanel>

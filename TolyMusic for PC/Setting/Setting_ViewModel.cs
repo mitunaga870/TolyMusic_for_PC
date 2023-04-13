@@ -26,6 +26,10 @@ namespace TolyMusic_for_PC
                     continue;
                 path_list.Add(path);
             }
+            Share_device_list = new ObservableCollection<object>();
+            Share_device_list.Add("デフォルトデバイス");
+            Excl_device_list = new ObservableCollection<object>();
+            Excl_device_list.Add("デフォルトデバイス");
         }
 
 
@@ -37,6 +41,8 @@ namespace TolyMusic_for_PC
         }
         //プロパティ
         public ObservableCollection<string> path_list { set; get; }
+        public ObservableCollection<object> Share_device_list { set; get; }
+        public ObservableCollection<object> Excl_device_list { set; get; }
         public string Tmp_Path
         {
             get { return tmp_path; }

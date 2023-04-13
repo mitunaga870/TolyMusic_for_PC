@@ -101,7 +101,6 @@
     <Compile Include="Album.cs" />
     <Compile Include="Artist.cs" />
     <Compile Include="Local\DB.cs" />
-    <Compile Include="Local\Setting_PageController.cs" />
     <Compile Include="Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -112,6 +111,8 @@
     <Compile Include="Setting\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Setting\Setting_Page_general.cs" />
+    <Compile Include="Setting\Setting_Page_Local.cs" />
     <Compile Include="Setting\Setting_ViewModel.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="App.xaml.cs">

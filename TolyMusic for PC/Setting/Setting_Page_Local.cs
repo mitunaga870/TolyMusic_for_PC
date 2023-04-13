@@ -4,10 +4,10 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace TolyMusic_for_PC.Local
 {
-    public class Setting_PageController
+    public class Setting_Page_Local
     {
         Setting_ViewModel vm;
-        public Setting_PageController(Setting_ViewModel vm)
+        public Setting_Page_Local(Setting_ViewModel vm)
         {
             this.vm = vm;
         }
@@ -74,5 +74,6 @@ namespace TolyMusic_for_PC.Local
             }));
             main.Children.Add(delete_button);
         }
+        
     }
 }

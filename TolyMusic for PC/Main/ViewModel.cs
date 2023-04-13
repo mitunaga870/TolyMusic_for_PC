@@ -15,7 +15,7 @@ namespace TolyMusic_for_PC
         private string curt_driver;
         private Track curt_track;
         private long curt_time;
-        private long prev_time;
+        private long next_time;
         private int curt_queue_num;
         private long curt_length;
 
@@ -27,7 +27,7 @@ namespace TolyMusic_for_PC
             type = "ライブラリ";
             page = "曲";
             excl = false;
-            prev_time = -1;
+            next_time = -1;
         }
 
         //プロパティ
@@ -36,12 +36,12 @@ namespace TolyMusic_for_PC
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public long Prev_time
+        public long Next_time
         {
-            get { return prev_time; }
+            get { return next_time; }
             set
             {
-                prev_time = value;
+                next_time = value;
                 OnPropertyChanged();
             }
         }

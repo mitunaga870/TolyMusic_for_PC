@@ -55,7 +55,7 @@
             
             <StackPanel Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft"><!--その他ヘッダー要素-->
                 <Button Width="54" Content="設定" Click="Open_Settings" />
-                <CheckBox Width="27" Content="排他モード"></CheckBox>
+                <CheckBox Width="27" Content="排他モード" IsChecked="{Binding Excl}" Checked="SetExcl" Unchecked="SetExcl"/>
             </StackPanel>
         </Grid>
         
