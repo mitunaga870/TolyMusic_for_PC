@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using NAudio.CoreAudioApi;
+using NAudio.Wave;
 using TolyMusic_for_PC.Local;
 
 namespace TolyMusic_for_PC
@@ -8,7 +10,9 @@ namespace TolyMusic_for_PC
     public class Setting_ViewModel : INotifyPropertyChanged
     {
         //private変数
-        string tmp_path;
+        private string tmp_path;
+        private int selected_share;
+        private int selectid_excl;
         //コンストラクタ
         public Setting_ViewModel()
         {
@@ -18,6 +22,7 @@ namespace TolyMusic_for_PC
 
         public void Init()
         {
+            var settingfile = Properties.Settings.Default;
             //settingfileを読み込み
             path_list = new ObservableCollection<string>();
             foreach (string path in Properties.Settings.Default.LocalDirectryPath.Split(','))
@@ -26,10 +31,43 @@ namespace TolyMusic_for_PC
                     continue;
                 path_list.Add(path);
             }
-            Share_device_list = new ObservableCollection<object>();
-            Share_device_list.Add("デフォルトデバイス");
-            Excl_device_list = new ObservableCollection<object>();
-            Excl_device_list.Add("デフォルトデバイス");
+            //driver
+            Share_driver_list = new ObservableCollection<Driver>();
+            Share_driver_list.Add(new Driver());
+            Excl_driver_list = new ObservableCollection<Driver>();
+            Excl_driver_list.Add(new Driver());
+            //接続デバイス読み込み
+            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+            foreach (var wasapi in enumerator.EnumerateAudioEndPoints(DataFlow.Render,DeviceState.Active))
+            {
+                Excl_driver_list.Add(new Driver(wasapi));
+                Share_driver_list.Add(new Driver(wasapi));
+            }
+            foreach (var asio in AsioOut.GetDriverNames())
+                Excl_driver_list.Add(new Driver(asio));
+             enumerator.Dispose();
+             //setting繁栄
+             for (int i = 1; i < Share_driver_list.Count; i++)
+             {
+                 if (settingfile.ShareDriver == Share_driver_list[i].Name)
+                 {
+                     Selected_share = i;
+                     break;
+                 }
+                 if (i + 1 == Share_driver_list.Count)
+                     Selected_share = 0;
+             }
+             for (int i = 1; i < Excl_driver_list.Count; i++)
+             {
+                 if (settingfile.ExclutionDriver == Excl_driver_list[i].Name)
+                 {
+                     Selected_excl = i;
+                     break;
+                 }
+
+                 if (i + 1 == Excl_driver_list.Count)
+                     Selected_excl = 0;
+             }
         }
 
 
@@ -41,8 +79,27 @@ namespace TolyMusic_for_PC
         }
         //プロパティ
         public ObservableCollection<string> path_list { set; get; }
-        public ObservableCollection<object> Share_device_list { set; get; }
-        public ObservableCollection<object> Excl_device_list { set; get; }
+        public ObservableCollection<Driver> Share_driver_list { set; get; }
+        public ObservableCollection<Driver> Excl_driver_list { set; get; }
+
+        public int Selected_excl
+        {
+            get { return selectid_excl;}
+            set
+            {
+                selectid_excl = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Selected_share
+        {
+            get { return selected_share;}
+            set
+            {
+                selected_share = value;
+                OnPropertyChanged();
+            }
+        }
         public string Tmp_Path
         {
             get { return tmp_path; }

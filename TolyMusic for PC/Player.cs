@@ -44,7 +44,7 @@ namespace TolyMusic_for_PC
             else//共有WASAPI
             {
                 //ドライバ指定
-                if (Properties.Settings.Default.NDcustumized)
+                if (Properties.Settings.Default.SDcustumized)
                 {
                     wasapi = new WasapiOut();
                 }

@@ -15,6 +15,14 @@ namespace TolyMusic_for_PC
         private Setting_ViewModel vm;
         private Setting_Page_Local spl;
         private Setting_Page_general spg;
+        private enum SettingPage 
+        {
+            Home,
+            General_Deiver,
+            Local_Directory
+        }
+
+        private SettingPage title;
         public Setting()
         {
             InitializeComponent();
@@ -22,6 +30,7 @@ namespace TolyMusic_for_PC
             DataContext = vm;
             spl = new Setting_Page_Local(vm);
             spg = new Setting_Page_general(vm);
+            title = SettingPage.Home;
         }
         //ページ初期化イベント
         private void Page_init()
@@ -32,10 +41,12 @@ namespace TolyMusic_for_PC
         private void Open_Local_Directory(object sender, RoutedEventArgs e)
         {
             Page_init();
+            title = SettingPage.Local_Directory;
             spl.go_local_directory(main);
         }
         private void Send(object sender, RoutedEventArgs e)
         {
+            var send_obj = Properties.Settings.Default;
             //LocalDirectoryPath
             string send = "";
             foreach (var path in vm.path_list)
@@ -43,8 +54,22 @@ namespace TolyMusic_for_PC
                 send += path + ",";
             }
             send = send.Substring(0, send.Length - 1);
-            Properties.Settings.Default.LocalDirectryPath = send;
-            Properties.Settings.Default.Save();
+            send_obj.LocalDirectryPath = send;
+            //Driver
+            bool custumized_share = vm.Selected_share != 0;
+            if (custumized_share)
+                send_obj.ShareDriver = vm.Share_driver_list[vm.Selected_share].Name;
+            else
+                send_obj.ShareDriver = "";
+            send_obj.SDcustumized = custumized_share;
+            bool custumized_excl = vm.Selected_excl != 0;
+            if (custumized_excl)
+                send_obj.ExclutionDriver = vm.Excl_driver_list[vm.Selected_excl].Name;
+            else
+                send_obj.ExclutionDriver = "";
+            send_obj.EDcustumized = custumized_excl;
+            //send
+            send_obj.Save();
             vm.Init();
             this.Close();
         }
@@ -52,7 +77,8 @@ namespace TolyMusic_for_PC
         private void Open_general_Device(object sender, RoutedEventArgs e)
         {
             Page_init();
-            spg.go_general_device(main);
+            title = SettingPage.General_Deiver;
+            spg.go_general_driver(main);
         }
     }
 }

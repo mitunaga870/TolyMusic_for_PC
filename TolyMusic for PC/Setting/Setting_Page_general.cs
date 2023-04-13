@@ -15,31 +15,32 @@ namespace TolyMusic_for_PC.Local
             this.vm = vm;
         }
         //ページ遷移
-        public void go_general_device(StackPanel sp)
+        public void go_general_driver(StackPanel sp)
         {
             //要素追加
             sp.Children.Add(new Label() { Content = "共有時設定デバイス" });
             ComboBox sd_cb = new ComboBox();
             sd_cb.Name = "Share_Device";
-            sd_cb.ItemsSource = vm.Share_device_list;
-            sd_cb.SelectedIndex = 0;
+            sd_cb.ItemsSource = vm.Share_driver_list;
+            sd_cb.DisplayMemberPath = "DisplayName"; 
+            sd_cb.SelectedIndex = vm.Selected_share;
+            sd_cb.SelectionChanged += new SelectionChangedEventHandler(((sender, args) =>
+            {
+                vm.Selected_share = sd_cb.SelectedIndex;
+            }));
             sp.Children.Add(sd_cb);
             sp.Children.Add(new Label() { Content = "排他時設定デバイス" });
             ComboBox ex_cb = new ComboBox();
             ex_cb.Name = "Excl_Device";
-            ex_cb.ItemsSource = vm.Excl_device_list;
-            ex_cb.SelectedIndex = 0;
+            ex_cb.ItemsSource = vm.Excl_driver_list;
+            ex_cb.DisplayMemberPath = "DisplayName"; 
+            ex_cb.SelectedIndex = vm.Selected_excl;
+            ex_cb.SelectionChanged += new SelectionChangedEventHandler(((sender, args) =>
+            {
+                vm.Selected_excl = ex_cb.SelectedIndex;
+            }));
+            vm.Selected_excl = ex_cb.SelectedIndex;
             sp.Children.Add(ex_cb);
-            //接続デバイス読み込み
-             MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-             foreach (var wasapi in enumerator.EnumerateAudioEndPoints(DataFlow.All,DeviceState.Active))
-             {
-                 vm.Excl_device_list.Add(wasapi); 
-                 vm.Share_device_list.Add(wasapi);
-             }
-             foreach (var asio in AsioOut.GetDriverNames())
-                 vm.Excl_device_list.Add(asio);
-             enumerator.Dispose();
         }
     }
 }

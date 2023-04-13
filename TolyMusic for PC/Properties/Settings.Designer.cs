@@ -37,12 +37,12 @@ namespace TolyMusic_for_PC.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string NomalDriver {
+        public string ShareDriver {
             get {
-                return ((string)(this["NomalDriver"]));
+                return ((string)(this["ShareDriver"]));
             }
             set {
-                this["NomalDriver"] = value;
+                this["ShareDriver"] = value;
             }
         }
         
@@ -61,12 +61,12 @@ namespace TolyMusic_for_PC.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool NDcustumized {
+        public bool SDcustumized {
             get {
-                return ((bool)(this["NDcustumized"]));
+                return ((bool)(this["SDcustumized"]));
             }
             set {
-                this["NDcustumized"] = value;
+                this["SDcustumized"] = value;
             }
         }
         
