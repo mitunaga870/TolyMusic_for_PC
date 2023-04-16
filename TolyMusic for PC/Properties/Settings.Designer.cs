@@ -93,5 +93,17 @@ namespace TolyMusic_for_PC.Properties {
                 this["EDisASIO"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultPlayListID {
+            get {
+                return ((string)(this["DefaultPlayListID"]));
+            }
+            set {
+                this["DefaultPlayListID"] = value;
+            }
+        }
     }
 }

@@ -4,7 +4,8 @@ namespace TolyMusic_for_PC
 {
     public class Artist
     {
-        string name { get; set; }
-        Collection<Track> Tracks { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public Collection<Album> Albums { get; set; }
     }
 }

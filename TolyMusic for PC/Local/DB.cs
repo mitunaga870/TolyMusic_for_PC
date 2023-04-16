@@ -67,5 +67,27 @@ namespace TolyMusic_for_PC.Local
             con.Close();
             return result;
         }
+        public static Collection<Dictionary<string,object>> Reader(string query, SQLiteParameter[] parameters)
+        {
+            //変数宣言
+            Collection<Dictionary<string, object>> result = new Collection<Dictionary<string, object>>();
+            con.Open();
+            SQLiteCommand cmd = new SQLiteCommand(query, con);
+            cmd.Parameters.AddRange(parameters);
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Dictionary<string, object> row = new Dictionary<string, object>();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    row.Add(reader.GetName(i), reader.GetValue(i));
+                }
+                result.Add(row);
+            }
+            reader.Close();
+            cmd.Dispose();
+            con.Close();
+            return result;
+        }
     }
 }

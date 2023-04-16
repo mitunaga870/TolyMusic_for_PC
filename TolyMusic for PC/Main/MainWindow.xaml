@@ -12,9 +12,6 @@
         <Style TargetType="Label">
            <Setter Property="Foreground" Value="#ececec"></Setter> 
         </Style>
-        <Style TargetType="ListBoxItem">
-            <EventSetter Event="MouseDoubleClick" Handler="PlayTrack"></EventSetter>
-        </Style>
     </Window.Resources>
     <Grid Background="#FF030303"><!--メイングリッド-->
         <Grid.ColumnDefinitions>
@@ -38,10 +35,10 @@
             </Grid.RowDefinitions>
             
             <StackPanel Orientation="Horizontal"><!--再生ボタンとか-->
-                <CheckBox Width="54" Content="シャッフル" Foreground="#ececec" />
-                <Button Width="54" Content="巻き戻し" />
+                <Button Width="54" Content="シャッフル" Click="Shuffle"/>
+                <Button Width="54" Content="巻き戻し" Click="Prev"/>
                 <Button Width="54" Content="再生・停止" Click="Toggle_Player"/>
-                <Button Width="54" Content="早送り" />
+                <Button Width="54" Content="早送り" Click="Skip"/>
                 <CheckBox Width="54" Content="リピート" Foreground="#ececec" IsChecked="{Binding Loop}" IsThreeState="True"/>
             </StackPanel>
             
@@ -55,6 +52,7 @@
             
             <StackPanel Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft"><!--その他ヘッダー要素-->
                 <Button Width="54" Content="設定" Click="Open_Settings" />
+                <Slider Orientation="Vertical"  Value="{Binding Volume}" Minimum="0" Maximum="100" ValueChanged="ChangeVol" IsEnabled="{Binding Enable_volume}"/><!--ボリューム-->
                 <CheckBox Width="27" Content="排他モード" IsChecked="{Binding Excl}" Checked="SetExcl" Unchecked="SetExcl"/>
             </StackPanel>
         </Grid>
@@ -79,25 +77,39 @@
         
         <Grid Grid.Row="1" Grid.Column="1"><!--メインコンテンツ:streaming以外-->
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="40" />
                 <RowDefinition Height="80"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
+            <!--Queue-->
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Content="キュー　🔻" Margin="0" Padding="0" Height="{Binding Queue_bt_height}" Click="Open_queuelist"/>
+                <ListView Grid.Row="1" Name="queue_list" SelectionMode="Single" HorizontalContentAlignment="Stretch" Height="{Binding Queue_list_height}" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="タイトル" DisplayMemberBinding="{Binding Title}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+            <!--戻るボタン-->
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Content="戻る" Width="60" Click="PrevList"/>
+            </StackPanel>
             <!--タイトルヘッダ-->
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <Label x:Name="TypeLabel" Content="{Binding Type}" Foreground="#ececec" Width="90" />
                 <Label x:Name="PageLabel" Content="{Binding Page}" Foreground="#ececec" FontSize="60" />
+                <StackPanel Name="PageFuncContainer"></StackPanel>
             </StackPanel>
             <!--コンテンツ-->
-            <ListBox Grid.Row="1" Name="ContentList" SelectionMode="Single" HorizontalContentAlignment="Stretch"> 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Title}"></TextBlock>
-                            <TextBlock Width="0" Text="{Binding Path}"></TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Grid Grid.Row="3" Name="MainGrid">
+            </Grid>
         </Grid>
     </Grid>
 </Window>

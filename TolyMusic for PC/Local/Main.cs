@@ -12,6 +12,13 @@ namespace TolyMusic_for_PC.Local
 {
     public class Main
     {
+        //変数宣言
+        public enum id_type
+        {
+            artist,
+            album,
+            track
+        }
         public Main()
         {
             //初回時にはファイルを漁る
@@ -35,39 +42,25 @@ namespace TolyMusic_for_PC.Local
                     files.Add(tmp_str);
                 }
             }
-            //テーブルの初期化
-            Local.DB.NonQuery(new String[]{ 
-                "drop table IF EXISTS tracks;",
-                "drop table IF EXISTS artist;",
-                "drop table IF EXISTS album;",
-                "drop table IF EXISTS \"group\";",
-                "drop table IF EXISTS track_artist;",
-                
-                "drop table IF EXISTS artist_group;",
-                "drop table IF EXISTS album_artist;",
-                "drop table IF EXISTS album_group;",
-                "drop table IF EXISTS playlist;",
-                "drop table IF EXISTS playlist_track;",
-                "drop table IF EXISTS history_track;",
-                "drop table IF EXISTS history_playlist;",
-                "drop table IF EXISTS device;", 
-            });
+            //DBが存在しない時作成
             Local.DB.NonQuery(new string[] 
             { 
                 "create table IF NOT EXISTS tracks(track_id char(32) primary key,track_title varchar(255),track_title_pron varchar(255),album_id char(32),composer_id char(32),group_id char(32),track_number int,duration double,location int,play_count int,device_id char(32),path varchar(255),youtube_id varchar(255),tois_favearchives_id char(32));", 
-                "create table artist(    artist_id char(32) primary key,    artist_name varchar(255),    artist_name_pron varchar(255));", 
-                "create table album(    album_id char(32) primary key,    album_title varchar(255),    album_title_pron varchar(255))", 
-                "create table \"group\"(    group_id char(32) primary key,    group_name varchar(255),    group_name_pron varchar(255));", 
-                "create table track_artist(    track_id char(32),    artist_id char(32));", 
-                "create table artist_group(    artist_id char(32),    group_id char(32));", 
-                "create table album_artist(    album_id char(32),    artist_id char(32));", 
-                "create table album_group(    album_id char(32),    group_id char(32));", 
-                "create table playlist(    playlist_id char(32) primary key,    playlist_title varchar(255),    play_count int);", 
-                "create table playlist_track(    playlist_id char(32),    track_id char(32),      track_number int);", 
-                "create table history_track(    history_num int auto_increment,    track_id char(32));", 
-                "create table history_playlist(    history_num int auto_increment,    playlist_id char(32));", 
-                "create table device(    device_id char(32) primary key,    device_name varchar(255),    device_description varchar(255));",
+                "create table IF NOT EXISTS artist(    artist_id char(32) primary key,    artist_name varchar(255),    artist_name_pron varchar(255));", 
+                "create table IF NOT EXISTS album(    album_id char(32) primary key,    album_title varchar(255),    album_title_pron varchar(255))", 
+                "create table IF NOT EXISTS \"group\"(    group_id char(32) primary key,    group_name varchar(255),    group_name_pron varchar(255));", 
+                "create table IF NOT EXISTS track_artist(    track_id char(32),    artist_id char(32));", 
+                "create table IF NOT EXISTS artist_group(    artist_id char(32),    group_id char(32));", 
+                "create table IF NOT EXISTS album_artist(    album_id char(32),    artist_id char(32));", 
+                "create table IF NOT EXISTS album_group(    album_id char(32),    group_id char(32));", 
+                "create table IF NOT EXISTS playlist(    playlist_id char(32) primary key,    playlist_title varchar(255),    play_count int);", 
+                "create table IF NOT EXISTS playlist_track(    playlist_id char(32),    track_id char(32),      track_number int);", 
+                "create table IF NOT EXISTS history_track(    history_num int auto_increment,    track_id char(32));", 
+                "create table IF NOT EXISTS history_playlist(    history_num int auto_increment,    playlist_id char(32));", 
+                "create table IF NOT EXISTS device(    device_id char(32) primary key,    device_name varchar(255),    device_description varchar(255));",
             });
+            //既存トラックのパスを取得
+            Collection<Track> tracks = GetTracks();
             //じゅうふくアーティスト・アルバムデータ保存用の変数を用意
             var album = new Dictionary<string, string>();
             var artist = new Dictionary<string, string>();
@@ -77,6 +70,9 @@ namespace TolyMusic_for_PC.Local
             foreach (string file in files){
                 //拡張子の確認
                 if (Path.GetExtension(file) != ".mp3"&& Path.GetExtension(file) != ".m4a"&& Path.GetExtension(file) != ".flac" && Path.GetExtension(file) != ".wav")
+                    continue;
+                //既に登録されているか確認
+                if(tracks.Where(x => x.Path == file).Count() != 0)
                     continue;
                 //パラメータ配列の作成
                 SQLiteParameter[] param_tracks = new SQLiteParameter[8];
@@ -232,6 +228,79 @@ namespace TolyMusic_for_PC.Local
                     Path = row["path"].ToString(),
                 };
                 result.Add(track);
+            }
+            return result;
+        }
+        public ObservableCollection<Track> GetTracks(string id, id_type filtter)
+        {
+            switch (filtter)
+            {
+                case id_type.album:
+                    Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM tracks WHERE album_id = @id", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
+                    ObservableCollection<Track> result = new ObservableCollection<Track>();
+                    foreach (var row in res)
+                    {
+                        Track track = new Track
+                        {
+                            id = row["track_id"].ToString(),
+                            Title = row["track_title"].ToString(),
+                            Path = row["path"].ToString(),
+                        };
+                        result.Add(track);
+                    }
+                    return result;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        public ObservableCollection<Album> GetAlbums()
+        {
+            Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM album");
+            ObservableCollection<Album> result = new ObservableCollection<Album>();
+            foreach (var row in res)
+            {
+                Album album = new Album()
+                {
+                    Title = row["album_title"].ToString(),
+                    Id = row["album_id"].ToString(),
+                };
+                result.Add(album);
+            }
+            return result;
+        }
+        public ObservableCollection<Album> GetAlbums(string id, id_type filtter)
+        {
+            switch (filtter)
+            {
+                case id_type.artist:
+                    Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM album WHERE album_id IN (SELECT album_id FROM tracks WHERE track_id IN (SELECT track_id FROM track_artist WHERE artist_id = @id) OR composer_id = @id OR group_id = @id) OR album_id IN (SELECT album_id FROM album_artist WHERE artist_id = @id)", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
+                    ObservableCollection<Album> result = new ObservableCollection<Album>();
+                    foreach (var row in res)
+                    {
+                        Album album = new Album()
+                        {
+                            Title = row["album_title"].ToString(),
+                            Id = row["album_id"].ToString(),
+                        };
+                        result.Add(album);
+                    }
+                    return result;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        public ObservableCollection<Artist> GetArtists()
+        {
+            Collection<Dictionary<string,object>> res = Local.DB.Reader("SELECT * FROM artist");
+            ObservableCollection<Artist> result = new ObservableCollection<Artist>();
+            foreach (var row in res)
+            {
+                Artist artist = new Artist()
+                {
+                    Name = row["artist_name"].ToString(),
+                    Id = row["artist_id"].ToString(),
+                };
+                result.Add(artist);
             }
             return result;
         }

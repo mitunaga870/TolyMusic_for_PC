@@ -81,3 +81,17 @@ D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Setting\Setting.g.cs
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Main\MainWindow.baml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\Setting\Setting.baml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\MySqlConnector.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Buffers.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Memory.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Numerics.Vectors.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\MySqlConnector.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Buffers.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Memory.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Numerics.Vectors.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.xml

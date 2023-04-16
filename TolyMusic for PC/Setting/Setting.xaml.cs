@@ -64,7 +64,10 @@ namespace TolyMusic_for_PC
             send_obj.SDcustumized = custumized_share;
             bool custumized_excl = vm.Selected_excl != 0;
             if (custumized_excl)
+            {
                 send_obj.ExclutionDriver = vm.Excl_driver_list[vm.Selected_excl].Name;
+                send_obj.EDisASIO = vm.Excl_driver_list[vm.Selected_excl].isAsio;
+            }
             else
                 send_obj.ExclutionDriver = "";
             send_obj.EDcustumized = custumized_excl;

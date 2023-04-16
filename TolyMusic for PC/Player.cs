@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
 namespace TolyMusic_for_PC
@@ -12,60 +13,99 @@ namespace TolyMusic_for_PC
     {
         //変数宣言
         ViewModel vm; 
-        bool isASIO;
+        private bool isASIO;
         AsioOut asio;
         WasapiOut wasapi;
         public bool isPlaying = false;
         private AudioFileReader reader;
         private Task timesetter;
+        public bool started = false;
         public Player(ViewModel vm)
         {
             this.vm = vm;
-            isASIO = Properties.Settings.Default.EDisASIO;
+            isASIO = false;
         }
         //初期化処理
         public void Init()
         {
-
-            if (vm.Excl&&isASIO)//排他・ASIO
+            if (vm.Excl&& Properties.Settings.Default.EDisASIO)//排他・ASIO
             {
+                isASIO = true;
+                //ドライバ破棄
+                if (asio != null)
+                {
+                    asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                    asio.Dispose();
+                } 
+                if (wasapi != null)
+                {
+                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                    wasapi.Dispose();
+                }
                 //ドライバ指定
+                asio = new AsioOut(vm.Excl_Driver.Name);
+                asio.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
+                asio.AutoStop = true;
+            }else if (vm.Excl)//排他WASAPI
+            {
+                isASIO = false;
+                //ドライバ破棄
                 if (asio != null)
                 {
                     asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
                     asio.Dispose();
                 }
-                asio = new AsioOut(vm.Curt_Driver);
-                asio.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
-            }else if (vm.Excl)//排他WASAPI
-            {
-                //ドライバ指定
-            }
-            else//共有WASAPI
-            {
+                if (wasapi != null)
+                {
+                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                    wasapi.Dispose();
+                }
                 //ドライバ指定
                 if (Properties.Settings.Default.SDcustumized)
                 {
-                    wasapi = new WasapiOut();
+                    wasapi = new WasapiOut(vm.Excl_Driver.mmdevice, AudioClientShareMode.Exclusive, false, 100);
+                }
+                else
+                {
+                    wasapi = new WasapiOut(AudioClientShareMode.Exclusive,100);
+                }
+                wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
+            }
+            else//共有WASAPI
+            {
+                isASIO = false;
+                //ドライバ破棄
+                if (wasapi != null) 
+                { 
+                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended); 
+                    wasapi.Dispose(); 
+                }
+                if (asio != null)
+                {
+                    asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                    asio.Dispose();
+                }
+                //ドライバ指定
+                if (Properties.Settings.Default.SDcustumized)
+                {
+                    wasapi = new WasapiOut(vm.Share_Driver.mmdevice, AudioClientShareMode.Shared, false, 100);
                 }
                 else//デフォルト
                 {
-                    if (wasapi != null)
-                    {
-                        wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                        wasapi.Dispose();
-                    }
                     wasapi = new WasapiOut();
-                    wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
                 }
+                wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
             }
         }
         //キュー開始処理
         public void Start()
         {
             Init();
+            started = true;
             reader = new AudioFileReader(vm.Curt_track.Path);
             vm.Curt_length = reader.TotalTime.Ticks;
+            if(vm.Excl)
+                SetVol();
             if(isASIO)
                 asio.Init(reader);
             else
@@ -124,11 +164,30 @@ namespace TolyMusic_for_PC
                 vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
             }
             reader.Dispose();
-            reader = new AudioFileReader(vm.Curt_track.Path);
-            vm.Curt_length = reader.CurrentTime.Ticks;
             Start();
         }
-
+        //巻き戻し
+        public void prev()
+        {
+            if(vm.Curt_time < 10000000)
+            {
+                if (vm.Curt_queue_num == 0)
+                {
+                    reader.CurrentTime = TimeSpan.FromTicks(0);
+                }
+                else
+                {
+                    vm.Curt_queue_num--;
+                    vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
+                    reader.Dispose();
+                    Start();
+                }
+            }
+            else
+            {
+                reader.CurrentTime = TimeSpan.FromTicks(0);
+            }
+        }
         //再生位置の変更
         private void TimeControler()
         {
@@ -140,6 +199,14 @@ namespace TolyMusic_for_PC
                     reader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
                     vm.Next_time = -1;
                 }
+            }
+        }
+        //Volume
+        public void SetVol()
+        {
+            if (started)
+            {
+                reader.Volume = (float)vm.Volume / 100;
             }
         }
         //終了処理
@@ -154,6 +221,7 @@ namespace TolyMusic_for_PC
                 wasapi.Dispose();
             }
             reader.Dispose();
+            isPlaying = false;
         }
     }
 }

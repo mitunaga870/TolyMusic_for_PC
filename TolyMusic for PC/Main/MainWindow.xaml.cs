@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using NAudio.Wave;
+using TolyMusic_for_PC.Library;
 using Label = System.Windows.Controls.Label;
 
 namespace TolyMusic_for_PC
@@ -14,15 +17,20 @@ namespace TolyMusic_for_PC
         private PageController pageController;
         private Player Player;
         private ViewModel vm;
+        private Queue queue;
         private bool seek_playing;
+        private bool queue_opened;
+        private Main lib;
         //コンストラクタ
         public MainWindow()
         {
             InitializeComponent();
             vm = new ViewModel();
             DataContext = vm;
-            pageController = new PageController(vm);
             Player = new Player(vm);
+            queue = new Queue(vm,queue_list);
+            lib = new Main(vm);
+            pageController = new PageController(vm,MainGrid,PageFuncContainer,Player,queue);
             Go_library_tracks( null, null);
         }
         //終了処理
@@ -30,53 +38,52 @@ namespace TolyMusic_for_PC
         {
             Player.Dispose();
         }
+        //ページ切り替え事前処理
+        private void closingPage(){
+            MainGrid.Children.Clear();
+            queue.hide();
+        }
         //ページ遷移イベント
         private void Go_library_tracks(object sender, RoutedEventArgs e)
         {
-            pageController.go("library", "tracks", vm);
+            closingPage();
+            pageController.go("library", "tracks");
         }
         private void Go_library_albums(object sender, RoutedEventArgs e)
         {
-            pageController.go("library", "albums", vm);
+            closingPage();
+            pageController.go("library", "albums");
         }
         private void Go_library_artists(object sender, RoutedEventArgs e)
         {
-            pageController.go("library", "artists", vm);
+            closingPage();
+            pageController.go("library", "artists");
         }
         private void Go_library_playlists(object sender, RoutedEventArgs e)
         {
-            pageController.go("library", "playlists", vm);
+            closingPage();
+            pageController.go("library", "playlists");
         }
         private void Go_local_tracks(object sender, RoutedEventArgs e)
         {
-            pageController.go("local", "tracks", vm);
-            ContentList.ItemsSource = vm.Tracks;
+            closingPage();
+            pageController.go("local", "tracks");
+            
         }
         private void Go_local_albums(object sender, RoutedEventArgs e)
         {
-            pageController.go("local", "albums", vm);
+            closingPage();
+            pageController.go("local", "albums");
         }
         private void Go_local_artists(object sender, RoutedEventArgs e)
         {
-            pageController.go("local", "artists", vm);
+            closingPage();
+            pageController.go("local", "artists");
         }
         private void Go_local_playlists(object sender, RoutedEventArgs e)
         {
-            pageController.go("local", "playlists", vm);
-        }
-        //トラック再生
-        private void PlayTrack(object sender, RoutedEventArgs e)
-        {
-            //キューの割当
-            vm.Curt_track = (Track)ContentList.SelectedItem;
-            vm.PlayQueue = (ObservableCollection<Track>)ContentList.ItemsSource;
-            for (int i = 0; i < vm.Tracks.Count; i++)
-            {
-                if(vm.Curt_track.id==vm.PlayQueue[i].id)
-                    vm.Curt_queue_num = i;
-            }
-            //再生
-            Player.Start();
+            closingPage();
+            pageController.go("local", "playlists");
         }
         //再生ボタン
         private void Toggle_Player(object sender, RoutedEventArgs e)
@@ -114,9 +121,49 @@ namespace TolyMusic_for_PC
 
         private void SetExcl(object sender, RoutedEventArgs e)
         {
-            long tmp = vm.Curt_time;
-            Player.Start();
-            vm.Next_time = tmp;
+            if (Player.started)
+            {
+                Player.Start();
+            }
+        }
+
+        private void Skip(object sender, RoutedEventArgs e)
+        {
+            if (Player.started)
+                Player.next();
+        }
+
+        private void Shuffle(object sender, RoutedEventArgs e)
+        {
+            if (vm.PlayQueue != null)
+            {
+                queue.Shuffle();
+            }
+        }
+        
+        private void Open_queuelist(object sender, RoutedEventArgs e)
+        {
+            queue.toggle();
+        }
+
+        private void ChangeVol(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Player.SetVol();
+        }
+
+        private void Prev(object sender, RoutedEventArgs e)
+        {
+            if (Player.started)
+                Player.prev();
+        }
+
+        private void PrevList(object sender, RoutedEventArgs e)
+        {
+            if (MainGrid.Children.Count > 1)
+            {
+                MainGrid.Children.Remove(MainGrid.Children[MainGrid.Children.Count - 1]);
+                vm.Page = vm.Prev_title;
+            }
         }
     }
 }
