@@ -105,5 +105,65 @@ namespace TolyMusic_for_PC.Properties {
                 this["DefaultPlayListID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DeviceID {
+            get {
+                return ((string)(this["DeviceID"]));
+            }
+            set {
+                this["DeviceID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LibraryServerAdress {
+            get {
+                return ((string)(this["LibraryServerAdress"]));
+            }
+            set {
+                this["LibraryServerAdress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LibraryServerUser {
+            get {
+                return ((string)(this["LibraryServerUser"]));
+            }
+            set {
+                this["LibraryServerUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LibraryServerPass {
+            get {
+                return ((string)(this["LibraryServerPass"]));
+            }
+            set {
+                this["LibraryServerPass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LibraryServerPort {
+            get {
+                return ((string)(this["LibraryServerPort"]));
+            }
+            set {
+                this["LibraryServerPort"] = value;
+            }
+        }
     }
 }

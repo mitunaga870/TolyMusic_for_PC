@@ -35,6 +35,8 @@ namespace TolyMusic_for_PC
         private Collection<string> prev_page = new Collection<string>();
         private Collection<TypeEnum> listtypes = new Collection<TypeEnum>();
         private TypeEnum curttype;
+        private Artist curt_artist;
+        private Album curt_album;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -48,6 +50,7 @@ namespace TolyMusic_for_PC
             Queue_bt_height = 0;
             Queue_list_height = 0;
             Volume = 100;
+            Listtypes = new ObservableCollection<TypeEnum>();
             Load_Settings();
         }
 
@@ -90,6 +93,24 @@ namespace TolyMusic_for_PC
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        public Album Curt_Album
+        {
+            get { return curt_album; }
+            set
+            {
+                curt_album = value;
+                OnPropertyChanged();
+            }
+        }
+        public Artist Curt_Artist
+        {
+            get { return curt_artist; }
+            set
+            {
+                curt_artist = value;
+                OnPropertyChanged();
+            }
         }
         public bool Enable_volume
         {

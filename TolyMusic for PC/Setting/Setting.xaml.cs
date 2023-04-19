@@ -19,7 +19,8 @@ namespace TolyMusic_for_PC
         {
             Home,
             General_Deiver,
-            Local_Directory
+            Local_Directory,
+            Library_DataBaseServer
         }
 
         private SettingPage title;
@@ -71,6 +72,12 @@ namespace TolyMusic_for_PC
             else
                 send_obj.ExclutionDriver = "";
             send_obj.EDcustumized = custumized_excl;
+            //Library
+            //DataBaseServer
+            send_obj.LibraryServerAdress = vm.DatabaseSeverAdress;
+            send_obj.LibraryServerPort = vm.DatabaseSeverPort;
+            send_obj.LibraryServerUser = vm.DatabaseSeverUser;
+            send_obj.LibraryServerPass = vm.DatabaseSeverPassword.Password;
             //send
             send_obj.Save();
             vm.Init();
@@ -82,6 +89,13 @@ namespace TolyMusic_for_PC
             Page_init();
             title = SettingPage.General_Deiver;
             spg.go_general_driver(main);
+        }
+
+        private void Open_Library_DataBaseServer(object sender, RoutedEventArgs e)
+        {
+            Page_init();
+            title = SettingPage.Library_DataBaseServer;
+            spg.go_library_database(main);
         }
     }
 }

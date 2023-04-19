@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using TolyMusic_for_PC.Local;
@@ -13,6 +14,10 @@ namespace TolyMusic_for_PC
         private string tmp_path;
         private int selected_share;
         private int selectid_excl;
+        private string database_sever_adress;
+        private string database_sever_port;
+        private string database_sever_user;
+        private PasswordBox database_sever_password;
         //コンストラクタ
         public Setting_ViewModel()
         {
@@ -68,9 +73,11 @@ namespace TolyMusic_for_PC
                  if (i + 1 == Excl_driver_list.Count)
                      Selected_excl = 0;
              }
+             //DB
+             DatabaseSeverAdress = settingfile.LibraryServerAdress;
+             DatabaseSeverPort = settingfile.LibraryServerPort;
+             DatabaseSeverUser = settingfile.LibraryServerUser;
         }
-
-
         //変更時処理
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -106,6 +113,46 @@ namespace TolyMusic_for_PC
             set
             {
                 tmp_path = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DatabaseSeverAdress
+        {
+            get { return database_sever_adress; }
+            set
+            {
+                database_sever_adress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DatabaseSeverPort
+        {
+            get { return database_sever_port;}
+            set
+            {
+                database_sever_port = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DatabaseSeverUser
+        {
+            get { return database_sever_user;}
+            set
+            {
+                database_sever_user = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PasswordBox DatabaseSeverPassword
+        {
+            get { return database_sever_password;}
+            set
+            {
+                database_sever_password = value;
                 OnPropertyChanged();
             }
         }

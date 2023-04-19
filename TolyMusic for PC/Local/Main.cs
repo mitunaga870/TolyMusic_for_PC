@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace TolyMusic_for_PC.Local
 {
@@ -233,25 +234,30 @@ namespace TolyMusic_for_PC.Local
         }
         public ObservableCollection<Track> GetTracks(string id, id_type filtter)
         {
+            Collection<Dictionary<string, object>> res;
+            ObservableCollection<Track> result = new ObservableCollection<Track>();
             switch (filtter)
             {
                 case id_type.album:
-                    Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM tracks WHERE album_id = @id", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
-                    ObservableCollection<Track> result = new ObservableCollection<Track>();
-                    foreach (var row in res)
-                    {
-                        Track track = new Track
-                        {
-                            id = row["track_id"].ToString(),
-                            Title = row["track_title"].ToString(),
-                            Path = row["path"].ToString(),
-                        };
-                        result.Add(track);
-                    }
-                    return result;
+                    res = Local.DB.Reader("SELECT * FROM tracks WHERE album_id = @id", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
+                    break;
+                case id_type.artist:
+                    res = DB.Reader("SELECT * FROM tracks WHERE track_id IN (SELECT track_id FROM track_artist WHERE artist_id = @id) OR composer_id = @id OR group_id = @id OR album_id IN (SELECT album_id FROM album_group where group_id = @id) OR album_id IN (SELECT album_id From album_artist WHERE artist_id = @id)", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
+                    break;
                 default:
                     throw new NotImplementedException();
             }
+            foreach (var row in res)
+            {
+                Track track = new Track
+                {
+                    id = row["track_id"].ToString(),
+                    Title = row["track_title"].ToString(),
+                    Path = row["path"].ToString(),
+                };
+                result.Add(track);
+            }
+            return result;
         }
         public ObservableCollection<Album> GetAlbums()
         {

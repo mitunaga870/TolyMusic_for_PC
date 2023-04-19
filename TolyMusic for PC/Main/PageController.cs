@@ -26,7 +26,7 @@ namespace TolyMusic_for_PC
             this.container = container;
             this.player = player;
             this.queue = queue;
-            this.func_container = func_container;
+            this.func_container = funcContainer;
             go("library", "tracks");
         }
         public void go(string type, string page)
@@ -73,11 +73,13 @@ namespace TolyMusic_for_PC
             switch (type)
             {
                 case "local":
+                    //初回DB更新
                     if(!loadedlocal)
                     {
                         local = new Local.Main();
                         loadedlocal = true;
                     }
+                    //データ取得
                     switch (page)
                     {
                         case "tracks":
@@ -89,14 +91,34 @@ namespace TolyMusic_for_PC
                         case "albums":
                             vm.Albums = local.GetAlbums();
                             vm.Curttype = ViewModel.TypeEnum.Album;
+                            vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                             MakeAlbumList();
                             break;
                         case "artists":
                             vm.Artists = local.GetArtists();
                             vm.Curttype = ViewModel.TypeEnum.Artist;
+                            vm.Listtypes.Add(ViewModel.TypeEnum.Artist);
                             MakeArtistList();
                             break;
                     }
+                    //その他ボタンの作成
+                    LocalFunc localFunc = new LocalFunc(vm,player,queue,local);
+                    //順再生
+                    Button playall = new Button();
+                    playall.Content = "順再生";
+                    playall.Click += localFunc.PlayAll;
+                    func_container.Children.Add(playall);
+                    //シャッフル再生
+                    Button Shuffleall = new Button();
+                    Shuffleall.Content = "シャッフル再生";
+                    Shuffleall.Click += localFunc.ShuffleAll;
+                    func_container.Children.Add(Shuffleall);
+                    //ライブラリ追加
+                    Button AddLib = new Button();
+                    AddLib.Content = "ライブラリに追加";
+                    AddLib.Click += localFunc.AddLibAll;
+                    //プレイリスト追加
+                    //その他
                     break;
             }
         }
@@ -162,14 +184,15 @@ namespace TolyMusic_for_PC
             Albumsetter.Event = ListViewItem.MouseDoubleClickEvent;
             Albumsetter.Handler = new MouseButtonEventHandler((sender, args) =>
             {
-                
                 Album album = (Album)AlbumList.SelectedItem;
+                vm.Curt_Album = album;
                 //ページタイトル変更
                 vm.Prev_title = vm.Page;
                 vm.Page = album.Title;
                 //アルバムページに移動(トラックページとほぼ同様)
                 local.GetTracks(album.Id, Main.id_type.album);
                 vm.Tracks = local.GetTracks(album.Id, Main.id_type.album);
+                vm.Listtypes.Add(ViewModel.TypeEnum.Track);
                 MakeTrackList();
             });
             Albumstyle.Setters.Add(Albumsetter);
@@ -195,11 +218,13 @@ namespace TolyMusic_for_PC
             Artistsetter.Handler = new MouseButtonEventHandler(((sender, args) =>
             {
                 Artist artist = (Artist)ArtistList.SelectedItem;
+                vm.Curt_Artist = artist;
                 //ページタイトル変更
                 vm.Prev_title = vm.Page;
                 vm.Page = artist.Name;
                 //アーティストページに移動(トラックページとほぼ同様)
                 vm.Albums = local.GetAlbums(artist.Id, Main.id_type.artist);
+                vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                 MakeAlbumList();
             }));
             Artiststyle.Setters.Add(Artistsetter);

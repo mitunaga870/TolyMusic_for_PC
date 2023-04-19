@@ -163,7 +163,8 @@ namespace TolyMusic_for_PC
             {
                 MainGrid.Children.Remove(MainGrid.Children[MainGrid.Children.Count - 1]);
                 vm.Page = vm.Prev_title;
+                vm.Listtypes.RemoveAt(vm.Listtypes.Count - 1);
             }
         }
     }
-}
+}   

@@ -95,3 +95,18 @@ D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Numerics.Vectors.xml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\MySqlConnector.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Buffers.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Memory.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\MySqlConnector.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Buffers.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Memory.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_Content.g.cs

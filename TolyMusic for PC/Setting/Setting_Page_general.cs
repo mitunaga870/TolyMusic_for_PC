@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Data;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using NAudio.Wave.Asio;
@@ -41,6 +42,33 @@ namespace TolyMusic_for_PC.Local
             }));
             vm.Selected_excl = ex_cb.SelectedIndex;
             sp.Children.Add(ex_cb);
+        }
+        public void go_library_database(StackPanel main)
+        {
+            //Adress
+            main.Children.Add(new Label() { Content = "アドレス" });
+            TextBox Adress = new TextBox();
+            Adress.Name = "Adress";
+            Adress.SetBinding(TextBox.TextProperty, new Binding("DatabaseSeverAdress") { Source = vm });
+            main.Children.Add(Adress);
+            //Port
+            main.Children.Add(new Label() { Content = "ポート" });
+            TextBox Port = new TextBox();
+            Port.Name = "Port";
+            Port.SetBinding(TextBox.TextProperty, new Binding("DatabaseSeverPort") { Source = vm });
+            main.Children.Add(Port);
+            //User
+            main.Children.Add(new Label() { Content = "ユーザー名" });
+            TextBox User = new TextBox();
+            User.Name = "User";
+            User.SetBinding(TextBox.TextProperty, new Binding("DatabaseSeverUser") { Source = vm });
+            main.Children.Add(User);
+            //Password
+            main.Children.Add(new Label() { Content = "パスワード" });
+            PasswordBox Password = new PasswordBox();
+            Password.Name = "Password";
+            vm.DatabaseSeverPassword = Password;
+            main.Children.Add(Password);
         }
     }
 }

@@ -102,7 +102,16 @@ namespace TolyMusic_for_PC
         {
             Init();
             started = true;
-            reader = new AudioFileReader(vm.Curt_track.Path);
+            try
+            {
+                reader = new AudioFileReader(vm.Curt_track.Path);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("ファイルが見つかりませんでした。");
+                Dispose();
+                return;
+            }
             vm.Curt_length = reader.TotalTime.Ticks;
             if(vm.Excl)
                 SetVol();
