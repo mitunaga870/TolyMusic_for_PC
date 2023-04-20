@@ -109,12 +109,12 @@ namespace TolyMusic_for_PC.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DeviceID {
+        public string MachineName {
             get {
-                return ((string)(this["DeviceID"]));
+                return ((string)(this["MachineName"]));
             }
             set {
-                this["DeviceID"] = value;
+                this["MachineName"] = value;
             }
         }
         
@@ -163,6 +163,18 @@ namespace TolyMusic_for_PC.Properties {
             }
             set {
                 this["LibraryServerPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LibraryAddedMachine {
+            get {
+                return ((bool)(this["LibraryAddedMachine"]));
+            }
+            set {
+                this["LibraryAddedMachine"] = value;
             }
         }
     }

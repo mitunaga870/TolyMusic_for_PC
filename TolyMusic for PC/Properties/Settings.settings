@@ -25,7 +25,7 @@
     <Setting Name="DefaultPlayListID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DeviceID" Type="System.String" Scope="User">
+    <Setting Name="MachineName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LibraryServerAdress" Type="System.String" Scope="User">
@@ -39,6 +39,9 @@
     </Setting>
     <Setting Name="LibraryServerPort" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LibraryAddedMachine" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

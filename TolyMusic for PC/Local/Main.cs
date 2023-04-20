@@ -86,15 +86,17 @@ namespace TolyMusic_for_PC.Local
                 param_tracks[0] = (new SQLiteParameter("track_id", trackid));
                 if(Tagfail){
                     param_tracks[1] = (new SQLiteParameter("track_title", Path.GetFileNameWithoutExtension(file)));
-                    param_tracks[2] = (new SQLiteParameter("track_num", null));
+                    param_tracks[2] = new SQLiteParameter("track_title_pron", null);
+                    param_tracks[3] = (new SQLiteParameter("track_num", null));
                 }
                 else
                 {
                     param_tracks[1] = (new SQLiteParameter("track_title", f.Tag.Title));
-                    param_tracks[2] = (new SQLiteParameter("track_num", f.Tag.TrackCount));
+                    param_tracks[2] = new SQLiteParameter("track_title_pron", f.Tag.TitleSort);
+                    param_tracks[3] = (new SQLiteParameter("track_num", f.Tag.TrackCount));
                 }
-                param_tracks[3] = (new SQLiteParameter("duration", f.Properties.Duration.TotalSeconds));
-                param_tracks[4] = (new SQLiteParameter("path", file));
+                param_tracks[4] = (new SQLiteParameter("duration", f.Properties.Duration.TotalSeconds));
+                param_tracks[5] = (new SQLiteParameter("path", file));
 
                 //アルバムの存在確認及びアルバムidの生成・取得
                 string album_title;
@@ -108,13 +110,13 @@ namespace TolyMusic_for_PC.Local
                 }
                 if (album.ContainsKey(album_title))
                 {
-                    param_tracks[5] = new SQLiteParameter("$album_id", album[album_title]);
+                    param_tracks[7] = new SQLiteParameter("$album_id", album[album_title]);
                 }
                 else
                 {
                     string albumid = Guid.NewGuid().ToString();
                     album.Add(album_title, albumid);
-                    param_tracks[5] = new SQLiteParameter("$album_id", albumid);
+                    param_tracks[6] = new SQLiteParameter("$album_id", albumid);
                 }
                 //グループの存在確認及びグループidの生成・取得
                 string group_name;
@@ -123,18 +125,18 @@ namespace TolyMusic_for_PC.Local
                     group_name = f.Tag.FirstAlbumArtist;
                     if (artist.ContainsKey(group_name))
                     { 
-                        param_tracks[6] = new SQLiteParameter("$group_id", artist[group_name]);
+                        param_tracks[7] = new SQLiteParameter("$group_id", artist[group_name]);
                     }
                     else 
                     { 
                         string groupid = Guid.NewGuid().ToString(); 
                         artist.Add(group_name, groupid); 
-                        param_tracks[6] = new SQLiteParameter("$group_id", groupid);
+                        param_tracks[7] = new SQLiteParameter("$group_id", groupid);
                     }
                 }
                 else
                 {
-                    param_tracks[6] = new SQLiteParameter("$group_id", null);
+                    param_tracks[7] = new SQLiteParameter("$group_id", null);
                 }
                 
                 //作曲者の存在確認及び作曲者idの生成・取得
@@ -142,18 +144,18 @@ namespace TolyMusic_for_PC.Local
                 {
                     if (artist.ContainsKey(f.Tag.FirstComposer))
                     {
-                        param_tracks[7] = new SQLiteParameter("$composer_id", artist[f.Tag.FirstComposer]);
+                        param_tracks[8] = new SQLiteParameter("$composer_id", artist[f.Tag.FirstComposer]);
                     }
                     else
                     {
                         string composerid = Guid.NewGuid().ToString();
                         artist.Add(f.Tag.FirstComposer, composerid);
-                        param_tracks[7] = new SQLiteParameter("$composer_id", composerid);
+                        param_tracks[8] = new SQLiteParameter("$composer_id", composerid);
                     }
                 }
                 else
                 {
-                    param_tracks[7] = new SQLiteParameter("$composer_id", null);
+                    param_tracks[8] = new SQLiteParameter("$composer_id", null);
                 }
                 params_tracks.Add(param_tracks);
                 //track_album用パラメータづくり
@@ -197,7 +199,7 @@ namespace TolyMusic_for_PC.Local
                 }
                 params_track_album.Add(param_track_album);
             };
-            Local.DB.NonQuery(@"INSERT INTO tracks (track_id,track_title,album_id,composer_id,group_id,track_number,duration,play_count,path) values ($track_id,$track_title,$album_id,$composer_id,$group_id,$track_num,$duration,0,$path)",params_tracks);
+            Local.DB.NonQuery(@"INSERT INTO tracks (track_id,track_title,album_id,composer_id,group_id,track_number,duration,play_count,path) values ($track_id,$track_title,$track_title_pron,$album_id,$composer_id,$group_id,$track_num,$duration,0,$path)",params_tracks);
             Local.DB.NonQuery(@"INSERT INTO track_artist (track_id,artist_id) values ($track_id,$artist_id)",params_track_album);
             //alubmsテーブルに書き込む
             List<SQLiteParameter[]> params_albums = new List<SQLiteParameter[]>();
@@ -222,12 +224,7 @@ namespace TolyMusic_for_PC.Local
             ObservableCollection<Track> result = new ObservableCollection<Track>();
             foreach (var row in res)
             {
-                Track track = new Track
-                {
-                    id = row["track_id"].ToString(),
-                    Title = row["track_title"].ToString(),
-                    Path = row["path"].ToString(),
-                };
+                Track track = new Track(row);
                 result.Add(track);
             }
             return result;
@@ -249,12 +246,7 @@ namespace TolyMusic_for_PC.Local
             }
             foreach (var row in res)
             {
-                Track track = new Track
-                {
-                    id = row["track_id"].ToString(),
-                    Title = row["track_title"].ToString(),
-                    Path = row["path"].ToString(),
-                };
+                Track track = new Track(row);
                 result.Add(track);
             }
             return result;
@@ -301,11 +293,7 @@ namespace TolyMusic_for_PC.Local
             ObservableCollection<Artist> result = new ObservableCollection<Artist>();
             foreach (var row in res)
             {
-                Artist artist = new Artist()
-                {
-                    Name = row["artist_name"].ToString(),
-                    Id = row["artist_id"].ToString(),
-                };
+                Artist artist = new Artist(row);
                 result.Add(artist);
             }
             return result;

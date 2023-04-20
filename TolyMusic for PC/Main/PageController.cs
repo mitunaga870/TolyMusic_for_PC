@@ -141,7 +141,7 @@ namespace TolyMusic_for_PC
                 queue.showbutton();
                 for (int i = 0; i < vm.Tracks.Count; i++)
                 {
-                    if(vm.Curt_track.id==vm.PlayQueue[i].id)
+                    if(vm.Curt_track.Id==vm.PlayQueue[i].Id)
                         vm.Curt_queue_num = i;
                 }
                 //再生
