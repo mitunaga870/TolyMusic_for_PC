@@ -11,10 +11,12 @@ namespace TolyMusic_for_PC.Library
     {
         ViewModel vm;
         DB lib;
+        private Local.Main local;
         public Main(ViewModel vm)
         {
             this.vm = vm;
             lib = new DB();
+            local = new Local.Main();
         }
         //ライブラリにリスト上の曲を追加
         public void AddListTracks(Collection<Track> tracks)
@@ -25,6 +27,8 @@ namespace TolyMusic_for_PC.Library
                 if(!AddMachine())
                     return;
             }
+            //localのアーティストリストを取得
+            Collection<Artist> localArtists = local.GetArtists();
             //既存DB情報取得
             //既存トラック確認用
             Collection<Dictionary<string,object>> tmp = lib.Read("select path,device_id from location where location = 0");
@@ -44,6 +48,18 @@ namespace TolyMusic_for_PC.Library
             {
                 addedartist.Add(new Artist(item));
             }
+            //artist重複確認
+            //新規アーティストリスト
+            Collection<Artist> newArtists = new Collection<Artist>();
+            Collection<Artist> addArtists = new Collection<Artist>();
+            foreach (var artist in localArtists)
+            {
+                if (addedartist.Count(a => a.Name == artist.Name) == 0)
+                {
+                    newArtists.Add(artist);
+                    addedartist.Add(artist);
+                }
+            }
             //ベースクエリ作成
             //track
             string track_quary = "INSERT INTO tracks (track_id,track_title,track_title_pron,composer_id,group_id,track_num,duration,location,device_id,path) VALUES ";
@@ -54,17 +70,18 @@ namespace TolyMusic_for_PC.Library
             Uri cwd = new Uri(Properties.Settings.Default.LocalDirectryPath);
             for (int i = 0; i < tracks.Count; i++)
             {
-                //追加済み楽曲の除外
+                //トラック重複確認
                 if (addedlocation.Count(x => x["path"] == tracks[i].Path) != 0)
                     continue;
-                //追加クエリ作成
                 //track
                 track_quary += "(@track_id" + i + ",@track_title" + i + ",@track_title_pron" + i + ",@composer_id" + i + ",@group_id" + i + ",@track_num" + i + ",@duration" + i + ",@location" + i + ",@device_id" + i + ",@path" + i + "),";
                 track_parameters.Add(new MySqlParameter("@track_id" + i, tracks[i].Id));
                 track_parameters.Add(new MySqlParameter("@track_title"+i, tracks[i].Title));
                 track_parameters.Add(new MySqlParameter("@track_title_pron"+i, tracks[i].Title_pron));
-                track_parameters.Add(new MySqlParameter("@composer_id"+i, tracks[i].Composer_id));
-                track_parameters.Add(new MySqlParameter("@group_id" + i, tracks[i].Group_id));
+                string composer_id = addedartist.Where(a => a.Name == tracks[i].Composer_id).ToArray()[0].Id;
+                track_parameters.Add(new MySqlParameter("@composer_id"+i, composer_id));
+                string group_id = addedartist.Where(a => a.Name == tracks[i].Group_id).ToArray()[0].Id;
+                track_parameters.Add(new MySqlParameter("@group_id" + i, group_id));
                 track_parameters.Add(new MySqlParameter("@track_num" + i, tracks[i].TrackNumber));
                 track_parameters.Add(new MySqlParameter("@duration" + i, tracks[i].Duration));
                 //location

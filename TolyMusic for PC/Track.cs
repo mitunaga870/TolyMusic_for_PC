@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace TolyMusic_for_PC
@@ -23,7 +24,10 @@ namespace TolyMusic_for_PC
             Path = dictionary["path"].ToString();
             Title_pron = dictionary["track_title_pron"].ToString();
             Duration = (double) dictionary["duration"];
-            TrackNumber = (int)dictionary["track_num"];
+            if(dictionary["track_num"] != DBNull.Value)
+                TrackNumber = (int)dictionary["track_num"];
+            else
+                TrackNumber = -1;
         }
     }
 }

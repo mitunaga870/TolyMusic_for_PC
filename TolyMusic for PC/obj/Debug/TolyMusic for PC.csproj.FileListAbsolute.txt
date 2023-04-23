@@ -110,3 +110,4 @@ C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.N
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_Content.g.cs
+D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\obj\Debug\TolyMusic for PC_Content.g.cs

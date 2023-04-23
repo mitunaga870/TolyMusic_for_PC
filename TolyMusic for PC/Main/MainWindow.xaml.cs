@@ -40,6 +40,7 @@ namespace TolyMusic_for_PC
         }
         //ページ切り替え事前処理
         private void closingPage(){
+            PageFuncContainer.Children.Clear();
             MainGrid.Children.Clear();
             queue.hide();
         }

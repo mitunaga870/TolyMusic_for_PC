@@ -46,7 +46,7 @@ namespace TolyMusic_for_PC.Local
             //DBが存在しない時作成
             Local.DB.NonQuery(new string[] 
             { 
-                "create table IF NOT EXISTS tracks(track_id char(32) primary key,track_title varchar(255),track_title_pron varchar(255),album_id char(32),composer_id char(32),group_id char(32),track_number int,duration double,location int,play_count int,device_id char(32),path varchar(255),youtube_id varchar(255),tois_favearchives_id char(32));", 
+                "create table IF NOT EXISTS tracks(track_id char(32) primary key,track_title varchar(255),track_title_pron varchar(255),album_id char(32),composer_id char(32),group_id char(32),track_num int,duration double,location int,play_count int,device_id char(32),path varchar(255),youtube_id varchar(255),tois_favearchives_id char(32));", 
                 "create table IF NOT EXISTS artist(    artist_id char(32) primary key,    artist_name varchar(255),    artist_name_pron varchar(255));", 
                 "create table IF NOT EXISTS album(    album_id char(32) primary key,    album_title varchar(255),    album_title_pron varchar(255))", 
                 "create table IF NOT EXISTS \"group\"(    group_id char(32) primary key,    group_name varchar(255),    group_name_pron varchar(255));", 
@@ -55,7 +55,7 @@ namespace TolyMusic_for_PC.Local
                 "create table IF NOT EXISTS album_artist(    album_id char(32),    artist_id char(32));", 
                 "create table IF NOT EXISTS album_group(    album_id char(32),    group_id char(32));", 
                 "create table IF NOT EXISTS playlist(    playlist_id char(32) primary key,    playlist_title varchar(255),    play_count int);", 
-                "create table IF NOT EXISTS playlist_track(    playlist_id char(32),    track_id char(32),      track_number int);", 
+                "create table IF NOT EXISTS playlist_track(    playlist_id char(32),    track_id char(32),      track_num int);", 
                 "create table IF NOT EXISTS history_track(    history_num int auto_increment,    track_id char(32));", 
                 "create table IF NOT EXISTS history_playlist(    history_num int auto_increment,    playlist_id char(32));", 
                 "create table IF NOT EXISTS device(    device_id char(32) primary key,    device_name varchar(255),    device_description varchar(255));",
@@ -76,7 +76,7 @@ namespace TolyMusic_for_PC.Local
                 if(tracks.Where(x => x.Path == file).Count() != 0)
                     continue;
                 //パラメータ配列の作成
-                SQLiteParameter[] param_tracks = new SQLiteParameter[8];
+                SQLiteParameter[] param_tracks = new SQLiteParameter[9];
                 //ファイルのタグを取得
                 TagLib.File f = TagLib.File.Create(file);
                 //タグデータの文字化けが予想される場合・パスから取得するように
@@ -110,7 +110,7 @@ namespace TolyMusic_for_PC.Local
                 }
                 if (album.ContainsKey(album_title))
                 {
-                    param_tracks[7] = new SQLiteParameter("$album_id", album[album_title]);
+                    param_tracks[6] = new SQLiteParameter("$album_id", album[album_title]);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace TolyMusic_for_PC.Local
                 }
                 params_track_album.Add(param_track_album);
             };
-            Local.DB.NonQuery(@"INSERT INTO tracks (track_id,track_title,album_id,composer_id,group_id,track_number,duration,play_count,path) values ($track_id,$track_title,$track_title_pron,$album_id,$composer_id,$group_id,$track_num,$duration,0,$path)",params_tracks);
+            Local.DB.NonQuery(@"INSERT INTO tracks (track_id,track_title,track_title_pron,album_id,composer_id,group_id,track_num,duration,play_count,path) values ($track_id,$track_title,$track_title_pron,$album_id,$composer_id,$group_id,$track_num,$duration,0,$path)",params_tracks);
             Local.DB.NonQuery(@"INSERT INTO track_artist (track_id,artist_id) values ($track_id,$artist_id)",params_track_album);
             //alubmsテーブルに書き込む
             List<SQLiteParameter[]> params_albums = new List<SQLiteParameter[]>();

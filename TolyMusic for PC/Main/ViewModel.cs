@@ -13,6 +13,7 @@ namespace TolyMusic_for_PC
         public enum TypeEnum
         {
             Track = 0,
+            All = 0,
             Album = 1,
             Playlist = 1,
             Artist = 2,

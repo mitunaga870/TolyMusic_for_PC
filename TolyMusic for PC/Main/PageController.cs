@@ -79,25 +79,23 @@ namespace TolyMusic_for_PC
                         local = new Local.Main();
                         loadedlocal = true;
                     }
+                    vm.Listtypes.Add(ViewModel.TypeEnum.All);
                     //データ取得
                     switch (page)
                     {
                         case "tracks":
                             vm.Tracks = local.GetTracks();
                             vm.Curttype = ViewModel.TypeEnum.Track;
-                            vm.Listtypes.Add(ViewModel.TypeEnum.Track);
                             MakeTrackList();
                             break;
                         case "albums":
                             vm.Albums = local.GetAlbums();
                             vm.Curttype = ViewModel.TypeEnum.Album;
-                            vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                             MakeAlbumList();
                             break;
                         case "artists":
                             vm.Artists = local.GetArtists();
                             vm.Curttype = ViewModel.TypeEnum.Artist;
-                            vm.Listtypes.Add(ViewModel.TypeEnum.Artist);
                             MakeArtistList();
                             break;
                     }
@@ -192,7 +190,7 @@ namespace TolyMusic_for_PC
                 //アルバムページに移動(トラックページとほぼ同様)
                 local.GetTracks(album.Id, Main.id_type.album);
                 vm.Tracks = local.GetTracks(album.Id, Main.id_type.album);
-                vm.Listtypes.Add(ViewModel.TypeEnum.Track);
+                vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                 MakeTrackList();
             });
             Albumstyle.Setters.Add(Albumsetter);
@@ -224,7 +222,7 @@ namespace TolyMusic_for_PC
                 vm.Page = artist.Name;
                 //アーティストページに移動(トラックページとほぼ同様)
                 vm.Albums = local.GetAlbums(artist.Id, Main.id_type.artist);
-                vm.Listtypes.Add(ViewModel.TypeEnum.Album);
+                vm.Listtypes.Add(ViewModel.TypeEnum.Artist);
                 MakeAlbumList();
             }));
             Artiststyle.Setters.Add(Artistsetter);
