@@ -26,7 +26,7 @@ namespace TolyMusic_for_PC.Local
             switch (vm.Listtype)
             {
                 case ViewModel.TypeEnum.Track:
-                    vm.PlayQueue = vm.Tracks;
+                    vm.PlayQueue = local.GetTracks();
                     break;
                 case ViewModel.TypeEnum.Album:
                     vm.PlayQueue = local.GetTracks(vm.Curt_Album.Id,Main.id_type.album);

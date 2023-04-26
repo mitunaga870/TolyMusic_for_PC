@@ -220,13 +220,9 @@ namespace TolyMusic_for_PC.Local
         
         public ObservableCollection<Track> GetTracks()
         {
-            Collection<Dictionary<string,object>> res = Local.DB.Reader("SELECT * FROM tracks");
+            Collection<Dictionary<string,object>> res = Local.DB.Reader("SELECT * FROM tracks join track_artist on tracks.track_id = track_artist.track_id join artist on track_artist.artist_id = artist.artist_id");
             ObservableCollection<Track> result = new ObservableCollection<Track>();
-            foreach (var row in res)
-            {
-                Track track = new Track(row);
-                result.Add(track);
-            }
+            result = MakeTracks(res);
             return result;
         }
         public ObservableCollection<Track> GetTracks(string id, id_type filtter)
@@ -236,7 +232,7 @@ namespace TolyMusic_for_PC.Local
             switch (filtter)
             {
                 case id_type.album:
-                    res = Local.DB.Reader("SELECT * FROM tracks WHERE album_id = @id", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
+                    res = Local.DB.Reader("SELECT * FROM tracks join track_artist on tracks.track_id = track_artist.track_id join artist on track_artist.artist_id = artist.artist_id WHERE album_id = @id", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
                     break;
                 case id_type.artist:
                     res = DB.Reader("SELECT * FROM tracks WHERE track_id IN (SELECT track_id FROM track_artist WHERE artist_id = @id) OR composer_id = @id OR group_id = @id OR album_id IN (SELECT album_id FROM album_group where group_id = @id) OR album_id IN (SELECT album_id From album_artist WHERE artist_id = @id)", new SQLiteParameter[] { new SQLiteParameter("@id", id) });
@@ -244,11 +240,7 @@ namespace TolyMusic_for_PC.Local
                 default:
                     throw new NotImplementedException();
             }
-            foreach (var row in res)
-            {
-                Track track = new Track(row);
-                result.Add(track);
-            }
+            result = MakeTracks(res);
             return result;
         }
         public ObservableCollection<Album> GetAlbums()
@@ -295,6 +287,27 @@ namespace TolyMusic_for_PC.Local
             {
                 Artist artist = new Artist(row);
                 result.Add(artist);
+            }
+            return result;
+        }
+
+        private ObservableCollection<Track> MakeTracks(Collection<Dictionary<string,object>> reader)
+        { 
+            Collection<string> addedid = new Collection<string>();
+            ObservableCollection<Track> result = new ObservableCollection<Track>();
+            foreach (var row in reader)
+            {
+                if (addedid.Contains(row["track_id"].ToString()))
+                {
+                    Track item = result[result.Count - 1];
+                    item.addArtist(row);
+                }
+                else
+                {
+                    Track item = new Track(row);
+                    item.addArtist(row);
+                    result.Add(item);
+                }
             }
             return result;
         }

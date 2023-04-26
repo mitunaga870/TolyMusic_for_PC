@@ -58,6 +58,8 @@ namespace TolyMusic_for_PC.Local
                 Dictionary<string,object> row = new Dictionary<string, object>();
                 for(int i = 0; i < reader.FieldCount; i++)
                 {
+                    if(row.ContainsKey(reader.GetName(i)))
+                        continue;
                     row.Add(reader.GetName(i), reader.GetValue(i));
                 }
                 result.Add(row);
@@ -80,6 +82,8 @@ namespace TolyMusic_for_PC.Local
                 Dictionary<string, object> row = new Dictionary<string, object>();
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
+                    if(row.ContainsKey(reader.GetName(i)))
+                        continue;
                     row.Add(reader.GetName(i), reader.GetValue(i));
                 }
                 result.Add(row);

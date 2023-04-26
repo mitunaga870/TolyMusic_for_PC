@@ -14,6 +14,7 @@ namespace TolyMusic_for_PC
         public string Title_pron { get; set; }
         public double Duration { get; set; }
         public int TrackNumber { get; set; }
+        public Collection<Artist> Artists { get; set; }
 
         public Track(Dictionary<string,object> dictionary)
         {
@@ -24,10 +25,16 @@ namespace TolyMusic_for_PC
             Path = dictionary["path"].ToString();
             Title_pron = dictionary["track_title_pron"].ToString();
             Duration = (double) dictionary["duration"];
-            if(dictionary["track_num"] != DBNull.Value)
-                TrackNumber = (int)dictionary["track_num"];
+            var truck_num = dictionary["track_num"];
+            if (DBNull.Value != truck_num)
+                TrackNumber = (int)truck_num;
             else
-                TrackNumber = -1;
+                TrackNumber = 0;
+            Artists = new Collection<Artist>();
+        }
+        public void addArtist(Dictionary<string,object> dictionary)
+        {
+            Artists.Add(new Artist(dictionary));
         }
     }
 }

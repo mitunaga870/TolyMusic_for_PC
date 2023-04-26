@@ -221,6 +221,10 @@ namespace TolyMusic_for_PC
         //終了処理
         public void Dispose()
         {
+            vm.Curt_track = null;
+            if(vm.PlayQueue.Count != 0)
+                vm.PlayQueue.Clear();
+            vm.Curt_queue_num = -1;
             if (isASIO)
             {
                 asio.Dispose();
@@ -229,7 +233,8 @@ namespace TolyMusic_for_PC
             {
                 wasapi.Dispose();
             }
-            reader.Dispose();
+            if(reader != null) 
+                reader.Dispose();
             isPlaying = false;
         }
     }
