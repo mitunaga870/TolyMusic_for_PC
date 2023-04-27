@@ -56,10 +56,7 @@ namespace TolyMusic_for_PC.Library
             foreach (var artist in localArtists)
             {
                 if (addedartist.Count(a => a.Name == artist.Name) == 0)//新規アーティスト
-                {
                     newArtists.Add(artist);
-                    addedartist.Add(artist);
-                }
                 else
                 {
                     oldArtists.Add(artist);
@@ -75,6 +72,20 @@ namespace TolyMusic_for_PC.Library
             {
                 addedalbum.Add(new Album(item));
             }
+            Collection<Album> localAlbums = local.GetAlbums();
+            Collection<Album> addAlbums = new Collection<Album>();//追加アルバムリスト
+            Collection<Album> newAlbums = new Collection<Album>();//新規アルバムリスト
+            foreach (var album in localAlbums)
+            {
+                if(addedalbum.Count(a => a.Title == album.Title) == 0)
+                    newAlbums.Add(album);
+                else
+                {
+                    string tmpId;
+                    tmpId = addedalbum.Where(a => a.Title == album.Title).ToArray()[0].Id;
+                    album.Id = tmpId;
+                }
+            }
             //ベースクエリ作成
             //track
             string track_quary = "INSERT INTO tracks (track_id,track_title,track_title_pron,composer_id,group_id,track_num,duration,location,device_id,path) VALUES ";
@@ -86,6 +97,9 @@ namespace TolyMusic_for_PC.Library
             string track_artist_quary = "INSERT INTO track_artist (track_id,artist_id) VALUES ";
             Collection<MySqlParameter> track_artist_parameters = new Collection<MySqlParameter>();
             Uri cwd = new Uri(Properties.Settings.Default.LocalDirectryPath);
+            //album_aritst
+            string album_artist_quary = "INSERT INTO album_artist (album_id,artist_id) VALUES ";
+            Collection<MySqlParameter> album_artist_parameters = new Collection<MySqlParameter>();
             //各トラックに応じてループによるクエリ作成
             for (int i = 0; i < tracks.Count; i++)
             {
@@ -97,42 +111,35 @@ namespace TolyMusic_for_PC.Library
                 {
                     track_artist_quary += "(@track_id" + i + ",@artist_id" + i + "),";
                     track_artist_parameters.Add(new MySqlParameter("@track_id" + i, tracks[i].Id));
-                    //新規：IDを取得・既存：何もしないでいい
+                    track_artist_parameters.Add(new MySqlParameter("@artist_id" + i, artist.Id));
+                    //新規は追加リストに追加
                     if (newArtists.Count(a => a.Name == artist.Name) != 0)
-                    {
-                        track_artist_parameters.Add(new MySqlParameter("@artist_id" + i, newArtists.Where(a => a.Name == artist.Name).ToArray()[0].Id));
-                        if(addedartist.Count(a =>a.Id == artist.Id) == 0)
-                            addArtists.Add(artist);
-                    }
-                    else
-                        track_artist_parameters.Add(new MySqlParameter("@artist_id" + i, oldArtists.Where(a => a.Name == artist.Name).ToArray()[0].Id));
+                        addArtists.Add(artist);
                 }
                 //track
-                track_quary += "(@track_id" + i + ",@track_title" + i + ",@track_title_pron" + i + ",@composer_id" + i + ",@group_id" + i + ",@track_num" + i + ",@duration" + i + ",@location" + i + ",@device_id" + i + ",@path" + i + "),";
+                track_quary += "(@track_id" + i + ",@track_title" + i + ",@track_title_pron" + i + ",@album_id" + i + ",@composer_id" + i + ",@group_id" + i + ",@track_num" + i + ",@duration" + i + ",@location" + i + ",@device_id" + i + ",@path" + i + "),";
                 track_parameters.Add(new MySqlParameter("@track_id" + i, tracks[i].Id));
                 track_parameters.Add(new MySqlParameter("@track_title"+i, tracks[i].Title));
                 track_parameters.Add(new MySqlParameter("@track_title_pron"+i, tracks[i].Title_pron));
+                //album_id
+                string album_id = tracks[i].Album_id;
+                string album_title = localAlbums.Where(a => a.Id == album_id).ToArray()[0].Title;
+                track_parameters.Add(new MySqlParameter("@album_id"+i, album_id));
+                //新記事は追加リストに追加
+                if (newAlbums.Count(a => a.Title == album_title) != 0)
+                    addAlbums.Add(newAlbums.Where(a => a.Id == album_id).ToArray()[0]);
                 //composer_id
                 string composer_id = tracks[i].Composer_id;
                 string composer_name = localArtists.Where(a => a.Id == composer_id).ToArray()[0].Name;
-                //新規：何もしないでいい・既存：IDを取得
-                if (oldArtists.Count(artist => artist.Name == composer_name) != 0)
-                {
-                    composer_id = oldArtists.Where(a => a.Name == composer_name).ToArray()[0].Id;
-                        if(addedartist.Count(a =>a.Id == composer_id) == 0)
-                            addArtists.Add(newArtists.Where(a => a.Id == composer_id).ToArray()[0]);
-                }
+                if (newArtists.Count(a => a.Name == composer_name) != 0)
+                    addArtists.Add(newArtists.Where(a => a.Id == composer_id).ToArray()[0]);
                 track_parameters.Add(new MySqlParameter("@composer_id"+i, composer_id));
                 //group_id
                 string group_id = tracks[i].Group_id;
                 string group_name = localArtists.Where(a=>a.Id == group_id).ToArray()[0].Name;
-                //新規：IDを取得・既存：何もしないでいい
-                if (newArtists.Count(artist => artist.Name == group_name) != 0)
-                {
-                    group_id = newArtists.Where(a => a.Name == group_name).ToArray()[0].Id;
-                    if(addedartist.Count(a =>a.Id == group_id) == 0)
-                        addArtists.Add(newArtists.Where(a => a.Id == group_id).ToArray()[0]);
-                }
+                //新規は追加リストに追加
+                if(newArtists.Count(a => a.Name == group_name) != 0)
+                    addArtists.Add(newArtists.Where(a => a.Id == group_id).ToArray()[0]);
                 track_parameters.Add(new MySqlParameter("@group_id" + i, group_id));
                 track_parameters.Add(new MySqlParameter("@track_num" + i, tracks[i].TrackNumber));
                 track_parameters.Add(new MySqlParameter("@duration" + i, tracks[i].Duration));

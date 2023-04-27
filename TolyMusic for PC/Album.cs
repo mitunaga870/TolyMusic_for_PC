@@ -7,18 +7,14 @@ namespace TolyMusic_for_PC
     {
         public string Id { get; set; }
         public string Title { get; set; }
-        public string artist { get; set; }
-        public string genre { get; set; }
-        public string year { get; set; }
+        public string TitlePron { get; set; }
         public Collection<Artist> Artists { get; set; }
         //コンストラクタ
         public Album(Dictionary<string, object> dictionary)
         {
             Id = dictionary["album_id"].ToString();
             Title = dictionary["album_title"].ToString();
-            artist = dictionary["album_artist"].ToString();
-            genre = dictionary["album_genre"].ToString();
-            year = dictionary["album_year"].ToString();
+            TitlePron = dictionary["album_title_pron"].ToString();
         }
     }
 }

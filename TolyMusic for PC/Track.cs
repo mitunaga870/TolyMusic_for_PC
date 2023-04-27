@@ -14,10 +14,12 @@ namespace TolyMusic_for_PC
         public string Title_pron { get; set; }
         public double Duration { get; set; }
         public int TrackNumber { get; set; }
+        public string Album_id { get; set; }
         public Collection<Artist> Artists { get; set; }
 
         public Track(Dictionary<string,object> dictionary)
         {
+            Album_id = dictionary["album_id"].ToString();
             Composer_id = dictionary["composer_id"].ToString();
             Group_id = dictionary["group_id"].ToString();
             Id = dictionary["track_id"].ToString();

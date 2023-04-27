@@ -227,10 +227,12 @@ namespace TolyMusic_for_PC
             vm.Curt_queue_num = -1;
             if (isASIO)
             {
+                asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
                 asio.Dispose();
             }
             else
             {
+                wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
                 wasapi.Dispose();
             }
             if(reader != null) 

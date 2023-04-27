@@ -245,16 +245,11 @@ namespace TolyMusic_for_PC.Local
         }
         public ObservableCollection<Album> GetAlbums()
         {
-            Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM album");
+            Collection<Dictionary<string, object>> res = Local.DB.Reader("SELECT * FROM album ");
             ObservableCollection<Album> result = new ObservableCollection<Album>();
             foreach (var row in res)
             {
-                Album album = new Album()
-                {
-                    Title = row["album_title"].ToString(),
-                    Id = row["album_id"].ToString(),
-                };
-                result.Add(album);
+                result.Add(new Album(row));
             }
             return result;
         }
@@ -267,12 +262,7 @@ namespace TolyMusic_for_PC.Local
                     ObservableCollection<Album> result = new ObservableCollection<Album>();
                     foreach (var row in res)
                     {
-                        Album album = new Album()
-                        {
-                            Title = row["album_title"].ToString(),
-                            Id = row["album_id"].ToString(),
-                        };
-                        result.Add(album);
+                        result.Add(new Album(row));
                     }
                     return result;
                 default:
