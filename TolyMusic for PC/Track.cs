@@ -24,20 +24,28 @@ namespace TolyMusic_for_PC
         //SQL用
         public Track(Dictionary<string,object> dictionary)
         {
-            Album_id = dictionary["album_id"].ToString();
-            Composer_id = dictionary["composer_id"].ToString();
-            Group_id = dictionary["group_id"].ToString();
             Id = dictionary["track_id"].ToString();
             Title = dictionary["track_title"].ToString();
-            if(dictionary.ContainsKey("path"))
+            if(Other.CheckDBValue(dictionary,"album_id"))
+                Album_id = dictionary["album_id"].ToString();
+            if(Other.CheckDBValue(dictionary,"composer_id"))
+                Composer_id = dictionary["composer_id"].ToString();
+            if(Other.CheckDBValue(dictionary,"group_id"))
+                Group_id = dictionary["group_id"].ToString();
+            if(Other.CheckDBValue(dictionary,"path"))
                 Path = dictionary["path"].ToString();
-            Title_pron = dictionary["track_title_pron"].ToString();
-            Duration = (double) dictionary["duration"];
-            var truck_num = dictionary["track_num"];
-            if (DBNull.Value != truck_num)
-                TrackNumber = (int)truck_num;
+            if(Other.CheckDBValue(dictionary,"track_title_pron"))
+                Title_pron = dictionary["track_title_pron"].ToString();
+            if (Other.CheckDBValue(dictionary,"duration"))
+                Duration = (double) dictionary["duration"];
+            if (Other.CheckDBValue(dictionary,"track_num"))
+                TrackNumber = (int)dictionary["track_num"];
             else
-                TrackNumber = 0;
+                TrackNumber = -1;
+            if(Other.CheckDBValue(dictionary,"location"))
+                location = (int)dictionary["location"];
+            if(Other.CheckDBValue(dictionary,"youtube_id"))
+                youtube_id = dictionary["youtube_id"].ToString();
             Artists = new Collection<Artist>();
         }
         //yuMusic用

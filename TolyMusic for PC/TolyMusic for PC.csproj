@@ -175,6 +175,7 @@
     <Compile Include="Main\PageController.cs" />
     <Compile Include="Main\Queue.cs" />
     <Compile Include="Main\ViewModel.cs" />
+    <Compile Include="Other.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Setting\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
