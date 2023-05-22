@@ -36,7 +36,7 @@ public class Yt_Func
         //スクリプトプロセス宣言
         var proc = new Process
         {
-            StartInfo = new ProcessStartInfo("python.exe")
+            StartInfo = new ProcessStartInfo("py")
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
