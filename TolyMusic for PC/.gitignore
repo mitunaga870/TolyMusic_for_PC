@@ -1,3 +1,4 @@
 ﻿obj/*
 bin/*
+!bin/Debug/*.dll
 !bin/Debug/script/*
