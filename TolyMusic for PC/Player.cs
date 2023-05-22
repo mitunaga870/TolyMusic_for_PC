@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,18 +13,28 @@ namespace TolyMusic_for_PC
     public class Player
     {
         //変数宣言
+        private enum Locaion
+        {
+            youtube,
+            local,
+            tois
+        }
+        private Locaion locaiton;
         ViewModel vm; 
         private bool isASIO;
         AsioOut asio;
         WasapiOut wasapi;
         public bool isPlaying = false;
-        private AudioFileReader reader;
+        private AudioFileReader afreader;
+        private MediaFoundationReader mfreader;
         private Task timesetter;
         public bool started = false;
+        private WebClient webClient;
         public Player(ViewModel vm)
         {
             this.vm = vm;
             isASIO = false;
+            webClient = new WebClient();
         }
         //初期化処理
         public void Init()
@@ -104,7 +115,19 @@ namespace TolyMusic_for_PC
             started = true;
             try
             {
-                reader = new AudioFileReader(vm.Curt_track.Path);
+                switch (vm.Curt_track.location)
+                {
+                    case 0://localトラックの時
+                        afreader = new AudioFileReader(vm.Curt_track.Path);
+                        locaiton = Locaion.local;
+                        break;
+                    case 1://youtubeトラックの時
+                        mfreader = new MediaFoundationReader(string.Format("https://youtube.com/watch/{0}", vm.Curt_track.youtube_id));
+                        locaiton = Locaion.youtube;
+                        break;
+                    default:
+                        throw new Exception();
+                }
             }
             catch (Exception e)
             {
@@ -112,13 +135,28 @@ namespace TolyMusic_for_PC
                 Dispose();
                 return;
             }
-            vm.Curt_length = reader.TotalTime.Ticks;
-            if(vm.Excl)
+
+            if (vm.Excl)
                 SetVol();
-            if(isASIO)
-                asio.Init(reader);
-            else
-                wasapi.Init(reader);
+            switch (locaiton)
+            {
+                case Locaion.local:
+                    vm.Curt_length = afreader.TotalTime.Ticks;
+                    if (vm.Excl)
+                        SetVol();
+                    if (isASIO)
+                        asio.Init(afreader);
+                    else
+                        wasapi.Init(afreader);
+                    break;
+                case Locaion.youtube:
+                    vm.Curt_length = mfreader.TotalTime.Ticks;
+                    if (isASIO)
+                        asio.Init(mfreader);
+                    else
+                        wasapi.Init(mfreader);
+                    break;
+            }
             Play();
         }
         //再生処理
@@ -148,7 +186,7 @@ namespace TolyMusic_for_PC
             isPlaying = false;
             if (vm.Loop == null)//一曲ループ処理
             {
-                reader.CurrentTime = TimeSpan.FromTicks(0);
+                vm.Next_time = 0;
                 Play();
             }else if(vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop)//キューの最後の終了処理
             {
@@ -172,7 +210,10 @@ namespace TolyMusic_for_PC
                 vm.Curt_queue_num++;
                 vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
             }
-            reader.Dispose();
+            if(afreader != null) 
+                afreader.Dispose();
+            if(mfreader != null)
+                mfreader.Dispose();
             Start();
         }
         //巻き戻し
@@ -182,32 +223,53 @@ namespace TolyMusic_for_PC
             {
                 if (vm.Curt_queue_num == 0)
                 {
-                    reader.CurrentTime = TimeSpan.FromTicks(0);
+                    vm.Next_time = 0;
                 }
                 else
                 {
                     vm.Curt_queue_num--;
                     vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-                    reader.Dispose();
+                    if(afreader != null) 
+                        afreader.Dispose();
+                    if(mfreader != null)
+                        mfreader.Dispose();
                     Start();
                 }
             }
             else
             {
-                reader.CurrentTime = TimeSpan.FromTicks(0);
+                vm.Next_time = 0;
             }
         }
         //再生位置の変更
         private void TimeControler()
         {
-            while (isPlaying)
+            switch (locaiton)
             {
-                vm.Curt_time = reader.CurrentTime.Ticks;
-                if (vm.Next_time != -1)
-                {
-                    reader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
-                    vm.Next_time = -1;
-                }
+                case Locaion.local:
+                    while (isPlaying)
+                    {
+                        vm.Curt_time = afreader.CurrentTime.Ticks;
+                        if (vm.Next_time != -1)
+                        {
+                            afreader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
+                            vm.Next_time = -1;
+                        }
+                    }
+
+                    break;
+                case Locaion.youtube:
+                    while (isPlaying)
+                    {
+                        vm.Curt_time = afreader.CurrentTime.Ticks;
+                        if (vm.Next_time != -1)
+                        {
+                            afreader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
+                            vm.Next_time = -1;
+                        }
+                    }
+
+                    break;
             }
         }
         //Volume
@@ -215,7 +277,7 @@ namespace TolyMusic_for_PC
         {
             if (started)
             {
-                reader.Volume = (float)vm.Volume / 100;
+                afreader.Volume = (float)vm.Volume / 100;
             }
         }
         //終了処理
@@ -235,8 +297,10 @@ namespace TolyMusic_for_PC
                 wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
                 wasapi.Dispose();
             }
-            if(reader != null) 
-                reader.Dispose();
+            if(afreader != null) 
+                afreader.Dispose();
+            if(mfreader != null)
+                mfreader.Dispose();
             isPlaying = false;
         }
     }

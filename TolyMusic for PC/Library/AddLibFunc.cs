@@ -11,12 +11,10 @@ namespace TolyMusic_for_PC.Library
     public class AddLibFunc
     {
         ViewModel vm;
-        DB lib;
         private Local.Main local;
         public AddLibFunc(ViewModel vm)
         {
             this.vm = vm;
-            lib = new DB();
             local = new Local.Main();
         }
         //local
@@ -35,12 +33,12 @@ namespace TolyMusic_for_PC.Library
             Collection<Artist> localArtists = local.GetArtists();
             //既存DB情報取得
             //既存トラック確認用
-            Collection<Dictionary<string, object>> tmp = lib.Read("select * from tracks");
+            Collection<Dictionary<string, object>> tmp = DB.Read("select * from tracks");
             Collection<Track> addedtracks = new Collection<Track>();
             foreach (var item in tmp)
                 addedtracks.Add(new Track(item));
             //既存ロケーション確認用
-            tmp = lib.Read("select path,device_id from location where location = 0");
+            tmp = DB.Read("select path,device_id from location where location = 0");
             Collection<Dictionary<string,string>> addedlocation = new Collection<Dictionary<string,string>>();
             foreach (var item in tmp)
             {
@@ -51,7 +49,7 @@ namespace TolyMusic_for_PC.Library
                 });
             }
             //既存アーティスト確認用
-            tmp = lib.Read("select * from artist");
+            tmp = DB.Read("select * from artist");
             Collection<Artist> addedartist = new Collection<Artist>();
             foreach (var item in tmp)
             {
@@ -74,7 +72,7 @@ namespace TolyMusic_for_PC.Library
                 }
             }
             //album重複確認
-            tmp = lib.Read("select * from album");
+            tmp = DB.Read("select * from album");
             Collection<Album> addedalbum = new Collection<Album>();//仮想ライブラリアルバムリスト
             foreach (var item in tmp)
             {
@@ -271,17 +269,17 @@ namespace TolyMusic_for_PC.Library
             album_artist_quary = album_artist_quary.Remove(album_artist_quary.Length - 1);
             //クエリ実行
             if (track_parameters.Count > 0)
-                lib.NonQuery(track_quary, track_parameters);
+                DB.NonQuery(track_quary, track_parameters);
             if (location_parameters.Count > 0)
-                lib.NonQuery(location_quary, location_parameters);
+                DB.NonQuery(location_quary, location_parameters);
             if (track_artist_parameters.Count > 0)
-                lib.NonQuery(track_artist_quary, track_artist_parameters);
+                DB.NonQuery(track_artist_quary, track_artist_parameters);
             if (artist_parameters.Count > 0)
-                lib.NonQuery(artist_quary, artist_parameters);
+                DB.NonQuery(artist_quary, artist_parameters);
             if (album_parameters.Count > 0)
-                lib.NonQuery(album_quary, album_parameters);
+                DB.NonQuery(album_quary, album_parameters);
             if (album_artist_parameters.Count > 0)
-                lib.NonQuery(album_artist_quary, album_artist_parameters);
+                DB.NonQuery(album_artist_quary, album_artist_parameters);
             if(track_parameters.Count+location_parameters.Count+track_artist_parameters.Count+artist_parameters.Count+album_parameters.Count+album_artist_parameters.Count > 0)
                 MessageBox.Show("データベースに曲を追加しました。");
             else
@@ -294,22 +292,22 @@ namespace TolyMusic_for_PC.Library
         {
             //既存DB情報取得
             //既存トラック確認用
-            Collection<Dictionary<string,object>> tmp = lib.Read("select * from tracks");
+            Collection<Dictionary<string,object>> tmp = DB.Read("select * from tracks");
             Collection<Track> addedtrack = new Collection<Track>();
             foreach (var item in tmp)
                 addedtrack.Add(new Track(item));
             //既存ロケーション
-            tmp = lib.Read("select track_id,youtube_id from location where location = 1");
+            tmp = DB.Read("select track_id,youtube_id from location where location = 1");
             Collection<Dictionary<string,string>> addedlocation = new Collection<Dictionary<string,string>>();
             foreach (var item in tmp)
                 addedlocation.Add(new Dictionary<string, string>(){{"track_id",item["track_id"].ToString()},{"youtube_id",item["youtube_id"].ToString()}});
             //既存アーティスト確認用
-            tmp = lib.Read("select * from artist");
+            tmp = DB.Read("select * from artist");
             Collection<Artist> addedartist = new Collection<Artist>();
             foreach (var item in tmp)
                 addedartist.Add(new Artist(item));
             //album重複確認
-            tmp = lib.Read("select * from album");
+            tmp = DB.Read("select * from album");
             Collection<Album> addedalbum = new Collection<Album>();//仮想ライブラリアルバムリスト
             foreach (var item in tmp)
                 addedalbum.Add(new Album(item));
@@ -458,17 +456,17 @@ namespace TolyMusic_for_PC.Library
             
             //クエリ実行
             if(album_parameters.Count != 0)
-                lib.NonQuery(album_quary, album_parameters);
+                DB.NonQuery(album_quary, album_parameters);
             if (album_artist_parameters.Count != 0)
-                lib.NonQuery(album_artist_quary, album_artist_parameters);
+                DB.NonQuery(album_artist_quary, album_artist_parameters);
             if(artist_parameters.Count != 0)
-                lib.NonQuery(artist_quary, artist_parameters);
+                DB.NonQuery(artist_quary, artist_parameters);
             if(track_parameters.Count != 0)
-                lib.NonQuery(track_quary, track_parameters);
+                DB.NonQuery(track_quary, track_parameters);
             if(location_parameters.Count != 0)
-                lib.NonQuery(location_quary, location_parameters);
+                DB.NonQuery(location_quary, location_parameters);
             if(track_artist_parameters.Count != 0)
-                lib.NonQuery(track_artist_quary, track_artist_parameters);
+                DB.NonQuery(track_artist_quary, track_artist_parameters);
             if(track_parameters.Count+location_parameters.Count+track_artist_parameters.Count+artist_parameters.Count+album_parameters.Count+album_artist_parameters.Count > 0)
                 MessageBox.Show("データベースに曲を追加しました。");
             else
@@ -480,12 +478,12 @@ namespace TolyMusic_for_PC.Library
         {
             Collection<MySqlParameter> parameters = new Collection<MySqlParameter>();
             parameters.Add(new MySqlParameter("@device_name", Environment.MachineName));
-            Collection<Dictionary<string,object>> res = lib.Read("select * from device where device_name = @device_name",parameters);
+            Collection<Dictionary<string,object>> res = DB.Read("select * from device where device_name = @device_name",parameters);
             if(res.Count == 0)
             {
                 string id = Guid.NewGuid().ToString();
                 parameters.Add(new MySqlParameter("@device_id", id));
-                lib.NonQuery("insert into device (device_id,device_name) values (@device_id,@device_name)", parameters);
+                DB.NonQuery("insert into device (device_id,device_name) values (@device_id,@device_name)", parameters);
                 Properties.Settings.Default.LibraryAddedMachine = true;
                 Properties.Settings.Default.MachineID = id;
                 Properties.Settings.Default.Save();

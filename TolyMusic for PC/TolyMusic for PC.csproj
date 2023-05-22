@@ -470,7 +470,6 @@
     <Content Include="bin\Debug\x86\vulkan-1.dll" />
     <Content Include="bin\Debug\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\Youtube\yt_outh.json" />
-    <Content Include="show.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />

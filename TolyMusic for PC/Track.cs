@@ -17,6 +17,8 @@ namespace TolyMusic_for_PC
         public int TrackNumber { get; set; }
         public string Album_id { get; set; }
         public Collection<Artist> Artists { get; set; }
+        public int location { get; set; }
+        public string youtube_id { get; set; }
 
         //コンストラクタ
         //SQL用

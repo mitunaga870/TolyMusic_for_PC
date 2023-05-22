@@ -253,7 +253,6 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/x86/vulkan-1.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/youtube/get_lib_song.py")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/youtube/yt_outh.json")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("show.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("chrome_100_percent.pak")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("chrome_200_percent.pak")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("chrome_elf.dll")]

@@ -33,7 +33,7 @@ public class Main
     public void Init()
     {
         //YoutubePlaylistの同期
-        string script = "script\\Youtube\\Get_Playlist_Track.py";
+        string script = "scripts\\Youtube\\Get_Playlist_Track.py";
         string youtube_playlist_id = Properties.Settings.Default.YoutubePlaylist;
         //スクリプトプロセス宣言
         var proc = new Process
@@ -87,6 +87,20 @@ public class Main
 
     public ObservableCollection<Track> GetTracks()
     {
-        
+        //DBから取得
+        var db_tmp = DB.Read("select * from tracks joid location on tracks.location_id = location.id");
+        ObservableCollection<Track> tracks = new ObservableCollection<Track>();
+        foreach (var db_row in db_tmp)
+        {
+            //重複削除
+            var track = new Track(db_row);
+            if (tracks.Count(t => t.Id == track.Id) == 0)
+                tracks.Add(track);
+            else
+            {
+                
+            }
+        }
+        return tracks;
     }
 }

@@ -7,9 +7,9 @@ namespace TolyMusic_for_PC.Library
     public class DB
     {
         //変数宣言
-        private MySqlConnection con;
+        static private MySqlConnection con;
         //通信開始
-        private void ConUP()
+        static private void ConUP()
         {
             string constring = "server=" + Properties.Settings.Default.LibraryServerAdress + ";";
             constring += "port=" + Properties.Settings.Default.LibraryServerPort + ";";
@@ -20,13 +20,13 @@ namespace TolyMusic_for_PC.Library
             con.Open();
         }
         //通信終了
-        private void ConDown()
+        static private void ConDown()
         {
             con.Close();
             con.Dispose();
         }
         //insert
-        public void NonQuery(string query, Collection<MySqlParameter> parameters)
+        static public void NonQuery(string query, Collection<MySqlParameter> parameters)
         {
             ConUP();
             MySqlCommand cmd = new MySqlCommand(query, con);
@@ -40,7 +40,7 @@ namespace TolyMusic_for_PC.Library
             ConDown();
         }
         //select
-        public Collection<Dictionary<string, object>> Read(string query)
+        static public Collection<Dictionary<string, object>> Read(string query)
         {
             ConUP();
             MySqlCommand cmd = new MySqlCommand(query, con);
@@ -60,7 +60,7 @@ namespace TolyMusic_for_PC.Library
             ConDown();
             return result;
         }
-        public Collection<Dictionary<string,object>> Read(string query, Collection<MySqlParameter> parameters)
+        static public Collection<Dictionary<string,object>> Read(string query, Collection<MySqlParameter> parameters)
         {
             ConUP();
             MySqlCommand cmd = new MySqlCommand(query, con);

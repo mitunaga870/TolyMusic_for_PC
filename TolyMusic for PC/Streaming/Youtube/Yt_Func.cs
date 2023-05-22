@@ -32,7 +32,7 @@ public class Yt_Func
     {
         //ライブラリ取得スクリプト
         //スクリプト用変数取得
-        string script = "script\\Youtube\\Get_Lib_Song.py";
+        string script = "scripts\\Youtube\\Get_Lib_Song.py";
         //スクリプトプロセス宣言
         var proc = new Process
         {
