@@ -1,1 +1,4 @@
 ﻿bin/Debug/*
+bin/Debug/*.sqlite3
+!bin/Debug/scripts
+/venv/*

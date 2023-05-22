@@ -70,5 +70,15 @@ namespace TolyMusic_for_PC.Local
             vm.DatabaseSeverPassword = Password;
             main.Children.Add(Password);
         }
+
+        public void go_streaming_youtube(StackPanel main)
+        {
+            //Playlist
+            main.Children.Add(new Label() { Content = "同期プレイリスト" });
+            TextBox Playlist = new TextBox();
+            Playlist.Name = "Playlist";
+            Playlist.SetBinding(TextBox.TextProperty, new Binding("YoutubePlaylist") { Source = vm });
+            main.Children.Add(Playlist);
+        }
     }
 }

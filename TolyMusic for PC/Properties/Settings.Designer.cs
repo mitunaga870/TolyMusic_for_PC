@@ -177,5 +177,29 @@ namespace TolyMusic_for_PC.Properties {
                 this["LibraryAddedMachine"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MachineID {
+            get {
+                return ((string)(this["MachineID"]));
+            }
+            set {
+                this["MachineID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string YoutubePlaylist {
+            get {
+                return ((string)(this["YoutubePlaylist"]));
+            }
+            set {
+                this["YoutubePlaylist"] = value;
+            }
+        }
     }
 }

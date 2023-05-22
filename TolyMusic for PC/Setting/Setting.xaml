@@ -22,6 +22,8 @@
             <Button Content="データベースサーバー" Click="Open_Library_DataBaseServer"/>
             <Label Content="ローカル" />
             <Button Content="ディレクトリ" Click="Open_Local_Directory"/>
+            <Label Content="ストリーミング" />
+            <Button Content="Youtube" Click="Open_Streaming_Youtube"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button Content="送信" Width="90" Click="Send"/>

@@ -1,0 +1,21 @@
+{
+  "accept": "*/*",
+  "accept-encoding": "gzip, deflate",
+  "accept-language": "ja,en-US;q=0.7,en;q=0.3",
+  "alt-used": "music.youtube.com",
+  "authorization": "SAPISIDHASH 1684582488_68c1a6a0c1fe1d0e88df72a3db3f61ea00a2a9d6",
+  "connection": "keep-alive",
+  "content-encoding": "gzip",
+  "content-type": "application/json",
+  "cookie": "VISITOR_INFO1_LIVE=b6gokA1i0os; _gcl_au=1.1.236698934.1684574678; HSID=AITUgHgjza7w_bNb4; SSID=AzAgua6ouORu6-_pU; APISID=586JiaCiEvqPU57Z/AFmFL54nidUf1IGUM; SAPISID=ysNYriLALMZ6YSLX/AiLSrSHRn4L4oK6-l; __Secure-1PAPISID=ysNYriLALMZ6YSLX/AiLSrSHRn4L4oK6-l; __Secure-3PAPISID=ysNYriLALMZ6YSLX/AiLSrSHRn4L4oK6-l; SID=WwjgXVI4N6R6lYFtNknXwQgvYxGaPeggz6KPhohtRQ4Xf59ZhG6t3pXfOBEfLFwDQXjSYw.; __Secure-1PSID=WwjgXVI4N6R6lYFtNknXwQgvYxGaPeggz6KPhohtRQ4Xf59ZMWElrwagt8M1dpmnDDb2nQ.; __Secure-3PSID=WwjgXVI4N6R6lYFtNknXwQgvYxGaPeggz6KPhohtRQ4Xf59ZtpPyr9Yj5RzLTqEdbwLjdA.; LOGIN_INFO=AFmmF2swRAIgT8uP5l85jOjkZ3CsTf3NZ4WP35SkOGyIIIcT-P62nAwCIAQ3lm8Ob7W39fuGhnpE4AJm2nDrYb42S4Ujp_mD84EL:QUQ3MjNmenZsc0ZjckphZ01EVDdkQWxyQzVUMC01RGx2VHN4Zlk0QUM5QkhoU3dLNVE3elhUampId21JUWxSenpNazNHY2hVQUlodm0tYXoxR1hQSWhXUndtdjZyVGhubTY5dlVTRGtIME1FVWxtQW5iRjR0Qlk5c3BCbXdUMWlRZjJ0ZGtfM2hwaG4tSVdtdDJ2RlpuOTRiQnFvWFhQX3Bn; SIDCC=AP8dLtwpzHTws3JvFo7LvkU7rBBCiJXKl_r1hxGAR7TpZ7WZ_U5OxReUfUBrUFvR3weCJp9yCLM; __Secure-1PSIDCC=AP8dLtxUNT384Es29TyvWDF9VzH0zTHRcKhMFEk_zjOAgoKltwAcmXxCvcUePmOyoKT2hU6c_g; __Secure-3PSIDCC=AP8dLtzzJXowDSODEBqHfsPbJ-AGFDp8aRHvpMi0OJI_192YxwCbLUgQsU1HkTVtGRPybjnNTWo; PREF=f6=40000080&f4=4000000&tz=Asia.Tokyo; YSC=Lkl2qdyrW9M; ST-mhbc14=; ST-1eyjsm5=; ST-jomz6n=",
+  "origin": "https://music.youtube.com",
+  "referer": "https://music.youtube.com/library",
+  "te": "trailers",
+  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0",
+  "x-goog-authuser": "1",
+  "x-goog-visitor-id": "CgtiNmdva0ExaTBvcyjW4KKjBg%3D%3D",
+  "x-origin": "https://music.youtube.com",
+  "x-youtube-bootstrap-logged-in": "true",
+  "x-youtube-client-name": "67",
+  "x-youtube-client-version": "1.20230517.01.00"
+}

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
+using CefSharp;
+using CefSharp.Wpf;
 using NAudio.Wave;
 using TolyMusic_for_PC.Library;
 using Label = System.Windows.Controls.Label;
@@ -20,7 +23,7 @@ namespace TolyMusic_for_PC
         private Queue queue;
         private bool seek_playing;
         private bool queue_opened;
-        private Main lib;
+        private AddLibFunc lib;
         //コンストラクタ
         public MainWindow()
         {
@@ -29,9 +32,17 @@ namespace TolyMusic_for_PC
             DataContext = vm;
             Player = new Player(vm);
             queue = new Queue(vm,queue_list);
-            lib = new Main(vm);
+            lib = new AddLibFunc(vm);
             pageController = new PageController(vm,MainGrid,PageFuncContainer,Player,queue);
             Go_library_tracks( null, null);
+            //CefSharp設定
+            CefSettings settings = new CefSettings();
+            settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 /CefSharp Browser" + Cef.CefSharpVersion;
+            settings.Locale = "ja";
+            settings.AcceptLanguageList = "ja,en-US;q=0.9,en;q=0.8";
+            settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
+            settings.PersistSessionCookies = true;
+            Cef.Initialize(settings);
         }
         //終了処理
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -81,10 +92,10 @@ namespace TolyMusic_for_PC
             closingPage();
             pageController.go("local", "artists");
         }
-        private void Go_local_playlists(object sender, RoutedEventArgs e)
+        private void go_youtube(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("local", "playlists");
+            pageController.go("streaming", "youtube");
         }
         //再生ボタン
         private void Toggle_Player(object sender, RoutedEventArgs e)
@@ -167,5 +178,6 @@ namespace TolyMusic_for_PC
                 vm.Listtypes.RemoveAt(vm.Listtypes.Count - 1);
             }
         }
+
     }
 }   

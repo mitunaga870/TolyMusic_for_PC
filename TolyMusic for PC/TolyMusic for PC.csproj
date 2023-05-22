@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.props')" />
+  <Import Project="..\packages\cef.redist.x86.113.1.4\build\cef.redist.x86.props" Condition="Exists('..\packages\cef.redist.x86.113.1.4\build\cef.redist.x86.props')" />
+  <Import Project="..\packages\cef.redist.x64.113.1.4\build\cef.redist.x64.props" Condition="Exists('..\packages\cef.redist.x64.113.1.4\build\cef.redist.x64.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3A202C7E-4A5D-4A01-B354-6AB5347FC006}</ProjectGuid>
@@ -36,6 +40,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.113.1.40\lib\net452\CefSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Core, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.113.1.40\lib\net452\CefSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Wpf, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Wpf.113.1.40\lib\net462\CefSharp.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.21.9.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.21.9\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.3.5.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.1.3.5\lib\net462\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4.Streams, Version=1.3.5.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.Streams.1.3.5\lib\net462\K4os.Compression.LZ4.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\net462\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
@@ -46,8 +74,8 @@
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="MySqlConnector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d33d3e53aa5f8c92, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySqlConnector.2.2.5\lib\net471\MySqlConnector.dll</HintPath>
+    <Reference Include="MySql.Data, Version=8.0.33.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.33\lib\net462\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>
@@ -70,10 +98,14 @@
     <Reference Include="NAudio.WinMM, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.WinMM.2.1.0\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.117.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\lib\net46\System.Data.SQLite.dll</HintPath>
@@ -81,6 +113,10 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.6.0.0\lib\net461\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Pipelines, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.5.0.2\lib\net461\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -126,9 +162,12 @@
     <Compile Include="Artist.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="Library\DB.cs" />
+    <Compile Include="Library\Lib_PC.cs" />
+    <Compile Include="Library\AddLibFunc.cs" />
     <Compile Include="Library\Main.cs" />
     <Compile Include="Local\DB.cs" />
     <Compile Include="Local\LocalFunc.cs" />
+    <Compile Include="Local\Local_PC.cs" />
     <Compile Include="Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -143,6 +182,8 @@
     <Compile Include="Setting\Setting_Page_general.cs" />
     <Compile Include="Setting\Setting_Page_Local.cs" />
     <Compile Include="Setting\Setting_ViewModel.cs" />
+    <Compile Include="Streaming\Streaming_PC.cs" />
+    <Compile Include="Streaming\Youtube\Yt_Func.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -173,6 +214,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="bin\Debug\TolyMusic for PC.exe.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -184,6 +226,254 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="bin\Debug\BouncyCastle.Crypto.dll" />
+    <Content Include="bin\Debug\BouncyCastle.Crypto.xml" />
+    <Content Include="bin\Debug\CefSharp.Core.dll" />
+    <Content Include="bin\Debug\CefSharp.Core.pdb" />
+    <Content Include="bin\Debug\CefSharp.Core.xml" />
+    <Content Include="bin\Debug\CefSharp.dll" />
+    <Content Include="bin\Debug\CefSharp.pdb" />
+    <Content Include="bin\Debug\CefSharp.Wpf.dll" />
+    <Content Include="bin\Debug\CefSharp.Wpf.pdb" />
+    <Content Include="bin\Debug\CefSharp.Wpf.xml" />
+    <Content Include="bin\Debug\CefSharp.xml" />
+    <Content Include="bin\Debug\DawnCache\data_0" />
+    <Content Include="bin\Debug\DawnCache\data_1" />
+    <Content Include="bin\Debug\DawnCache\data_2" />
+    <Content Include="bin\Debug\DawnCache\data_3" />
+    <Content Include="bin\Debug\DawnCache\index" />
+    <Content Include="bin\Debug\debug.log" />
+    <Content Include="bin\Debug\Get_Lib_Song.py" />
+    <Content Include="bin\Debug\Google.Protobuf.dll" />
+    <Content Include="bin\Debug\Google.Protobuf.pdb" />
+    <Content Include="bin\Debug\Google.Protobuf.xml" />
+    <Content Include="bin\Debug\GPUCache\data_0" />
+    <Content Include="bin\Debug\GPUCache\data_1" />
+    <Content Include="bin\Debug\GPUCache\data_2" />
+    <Content Include="bin\Debug\GPUCache\data_3" />
+    <Content Include="bin\Debug\GPUCache\index" />
+    <Content Include="bin\Debug\K4os.Compression.LZ4.dll" />
+    <Content Include="bin\Debug\K4os.Compression.LZ4.Streams.dll" />
+    <Content Include="bin\Debug\K4os.Compression.LZ4.Streams.xml" />
+    <Content Include="bin\Debug\K4os.Compression.LZ4.xml" />
+    <Content Include="bin\Debug\K4os.Hash.xxHash.dll" />
+    <Content Include="bin\Debug\K4os.Hash.xxHash.xml" />
+    <Content Include="bin\Debug\local.sqlite3" />
+    <Content Include="bin\Debug\Microsoft.Win32.Registry.dll" />
+    <Content Include="bin\Debug\Microsoft.Win32.Registry.xml" />
+    <Content Include="bin\Debug\Microsoft.WindowsAPICodePack.dll" />
+    <Content Include="bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll" />
+    <Content Include="bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml" />
+    <Content Include="bin\Debug\Microsoft.WindowsAPICodePack.xml" />
+    <Content Include="bin\Debug\MySql.Data.dll" />
+    <Content Include="bin\Debug\MySql.Data.xml" />
+    <Content Include="bin\Debug\NAudio.Asio.dll" />
+    <Content Include="bin\Debug\NAudio.Core.dll" />
+    <Content Include="bin\Debug\NAudio.dll" />
+    <Content Include="bin\Debug\NAudio.Midi.dll" />
+    <Content Include="bin\Debug\NAudio.Wasapi.dll" />
+    <Content Include="bin\Debug\NAudio.WinForms.dll" />
+    <Content Include="bin\Debug\NAudio.WinMM.dll" />
+    <Content Include="bin\Debug\NAudio.xml" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\scripts\Youtube\Get_Lib_Song.py" />
+    <Content Include="bin\Debug\scripts\Youtube\Get_Playlist_Track.py" />
+    <Content Include="bin\Debug\scripts\Youtube\yt_outh.json" />
+    <Content Include="bin\Debug\script\Youtube\Get_Lib_Song.py" />
+    <Content Include="bin\Debug\script\Youtube\Get_Playlist_Track.py" />
+    <Content Include="bin\Debug\script\Youtube\yt_outh.json" />
+    <Content Include="bin\Debug\System.Buffers.dll" />
+    <Content Include="bin\Debug\System.Buffers.xml" />
+    <Content Include="bin\Debug\System.Data.SQLite.dll" />
+    <Content Include="bin\Debug\System.Data.SQLite.xml" />
+    <Content Include="bin\Debug\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="bin\Debug\System.Diagnostics.DiagnosticSource.xml" />
+    <Content Include="bin\Debug\System.IO.Pipelines.dll" />
+    <Content Include="bin\Debug\System.IO.Pipelines.xml" />
+    <Content Include="bin\Debug\System.Memory.dll" />
+    <Content Include="bin\Debug\System.Memory.xml" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.dll" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.xml" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.dll" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.xml" />
+    <Content Include="bin\Debug\System.Security.AccessControl.dll" />
+    <Content Include="bin\Debug\System.Security.AccessControl.xml" />
+    <Content Include="bin\Debug\System.Security.Principal.Windows.dll" />
+    <Content Include="bin\Debug\System.Security.Principal.Windows.xml" />
+    <Content Include="bin\Debug\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="bin\Debug\System.Threading.Tasks.Extensions.xml" />
+    <Content Include="bin\Debug\TagLibSharp.dll" />
+    <Content Include="bin\Debug\TagLibSharp.pdb" />
+    <Content Include="bin\Debug\TagLibSharp.xml" />
+    <Content Include="bin\Debug\TolyMusic for PC.exe" />
+    <Content Include="bin\Debug\TolyMusic for PC.pdb" />
+    <Content Include="bin\Debug\x64\CefSharp.BrowserSubprocess.Core.dll" />
+    <Content Include="bin\Debug\x64\CefSharp.BrowserSubprocess.Core.pdb" />
+    <Content Include="bin\Debug\x64\CefSharp.BrowserSubprocess.exe" />
+    <Content Include="bin\Debug\x64\CefSharp.BrowserSubprocess.pdb" />
+    <Content Include="bin\Debug\x64\CefSharp.Core.Runtime.dll" />
+    <Content Include="bin\Debug\x64\CefSharp.Core.Runtime.pdb" />
+    <Content Include="bin\Debug\x64\CefSharp.Core.Runtime.xml" />
+    <Content Include="bin\Debug\x64\CefSharp.dll" />
+    <Content Include="bin\Debug\x64\chrome_100_percent.pak" />
+    <Content Include="bin\Debug\x64\chrome_200_percent.pak" />
+    <Content Include="bin\Debug\x64\chrome_elf.dll" />
+    <Content Include="bin\Debug\x64\d3dcompiler_47.dll" />
+    <Content Include="bin\Debug\x64\icudtl.dat" />
+    <Content Include="bin\Debug\x64\libcef.dll" />
+    <Content Include="bin\Debug\x64\libEGL.dll" />
+    <Content Include="bin\Debug\x64\libGLESv2.dll" />
+    <Content Include="bin\Debug\x64\LICENSE.txt" />
+    <Content Include="bin\Debug\x64\locales\af.pak" />
+    <Content Include="bin\Debug\x64\locales\am.pak" />
+    <Content Include="bin\Debug\x64\locales\ar.pak" />
+    <Content Include="bin\Debug\x64\locales\bg.pak" />
+    <Content Include="bin\Debug\x64\locales\bn.pak" />
+    <Content Include="bin\Debug\x64\locales\ca.pak" />
+    <Content Include="bin\Debug\x64\locales\cs.pak" />
+    <Content Include="bin\Debug\x64\locales\da.pak" />
+    <Content Include="bin\Debug\x64\locales\de.pak" />
+    <Content Include="bin\Debug\x64\locales\el.pak" />
+    <Content Include="bin\Debug\x64\locales\en-GB.pak" />
+    <Content Include="bin\Debug\x64\locales\en-US.pak" />
+    <Content Include="bin\Debug\x64\locales\es-419.pak" />
+    <Content Include="bin\Debug\x64\locales\es.pak" />
+    <Content Include="bin\Debug\x64\locales\et.pak" />
+    <Content Include="bin\Debug\x64\locales\fa.pak" />
+    <Content Include="bin\Debug\x64\locales\fi.pak" />
+    <Content Include="bin\Debug\x64\locales\fil.pak" />
+    <Content Include="bin\Debug\x64\locales\fr.pak" />
+    <Content Include="bin\Debug\x64\locales\gu.pak" />
+    <Content Include="bin\Debug\x64\locales\he.pak" />
+    <Content Include="bin\Debug\x64\locales\hi.pak" />
+    <Content Include="bin\Debug\x64\locales\hr.pak" />
+    <Content Include="bin\Debug\x64\locales\hu.pak" />
+    <Content Include="bin\Debug\x64\locales\id.pak" />
+    <Content Include="bin\Debug\x64\locales\it.pak" />
+    <Content Include="bin\Debug\x64\locales\ja.pak" />
+    <Content Include="bin\Debug\x64\locales\kn.pak" />
+    <Content Include="bin\Debug\x64\locales\ko.pak" />
+    <Content Include="bin\Debug\x64\locales\lt.pak" />
+    <Content Include="bin\Debug\x64\locales\lv.pak" />
+    <Content Include="bin\Debug\x64\locales\ml.pak" />
+    <Content Include="bin\Debug\x64\locales\mr.pak" />
+    <Content Include="bin\Debug\x64\locales\ms.pak" />
+    <Content Include="bin\Debug\x64\locales\nb.pak" />
+    <Content Include="bin\Debug\x64\locales\nl.pak" />
+    <Content Include="bin\Debug\x64\locales\pl.pak" />
+    <Content Include="bin\Debug\x64\locales\pt-BR.pak" />
+    <Content Include="bin\Debug\x64\locales\pt-PT.pak" />
+    <Content Include="bin\Debug\x64\locales\ro.pak" />
+    <Content Include="bin\Debug\x64\locales\ru.pak" />
+    <Content Include="bin\Debug\x64\locales\sk.pak" />
+    <Content Include="bin\Debug\x64\locales\sl.pak" />
+    <Content Include="bin\Debug\x64\locales\sr.pak" />
+    <Content Include="bin\Debug\x64\locales\sv.pak" />
+    <Content Include="bin\Debug\x64\locales\sw.pak" />
+    <Content Include="bin\Debug\x64\locales\ta.pak" />
+    <Content Include="bin\Debug\x64\locales\te.pak" />
+    <Content Include="bin\Debug\x64\locales\th.pak" />
+    <Content Include="bin\Debug\x64\locales\tr.pak" />
+    <Content Include="bin\Debug\x64\locales\uk.pak" />
+    <Content Include="bin\Debug\x64\locales\ur.pak" />
+    <Content Include="bin\Debug\x64\locales\vi.pak" />
+    <Content Include="bin\Debug\x64\locales\zh-CN.pak" />
+    <Content Include="bin\Debug\x64\locales\zh-TW.pak" />
+    <Content Include="bin\Debug\x64\README.txt" />
+    <Content Include="bin\Debug\x64\resources.pak" />
+    <Content Include="bin\Debug\x64\snapshot_blob.bin" />
+    <Content Include="bin\Debug\x64\SQLite.Interop.dll" />
+    <Content Include="bin\Debug\x64\v8_context_snapshot.bin" />
+    <Content Include="bin\Debug\x64\vk_swiftshader.dll" />
+    <Content Include="bin\Debug\x64\vk_swiftshader_icd.json" />
+    <Content Include="bin\Debug\x64\vulkan-1.dll" />
+    <Content Include="bin\Debug\x86\CefSharp.BrowserSubprocess.Core.dll" />
+    <Content Include="bin\Debug\x86\CefSharp.BrowserSubprocess.Core.pdb" />
+    <Content Include="bin\Debug\x86\CefSharp.BrowserSubprocess.exe" />
+    <Content Include="bin\Debug\x86\CefSharp.BrowserSubprocess.pdb" />
+    <Content Include="bin\Debug\x86\CefSharp.Core.Runtime.dll" />
+    <Content Include="bin\Debug\x86\CefSharp.Core.Runtime.pdb" />
+    <Content Include="bin\Debug\x86\CefSharp.Core.Runtime.xml" />
+    <Content Include="bin\Debug\x86\CefSharp.dll" />
+    <Content Include="bin\Debug\x86\chrome_100_percent.pak" />
+    <Content Include="bin\Debug\x86\chrome_200_percent.pak" />
+    <Content Include="bin\Debug\x86\chrome_elf.dll" />
+    <Content Include="bin\Debug\x86\d3dcompiler_47.dll" />
+    <Content Include="bin\Debug\x86\icudtl.dat" />
+    <Content Include="bin\Debug\x86\libcef.dll" />
+    <Content Include="bin\Debug\x86\libEGL.dll" />
+    <Content Include="bin\Debug\x86\libGLESv2.dll" />
+    <Content Include="bin\Debug\x86\LICENSE.txt" />
+    <Content Include="bin\Debug\x86\locales\af.pak" />
+    <Content Include="bin\Debug\x86\locales\am.pak" />
+    <Content Include="bin\Debug\x86\locales\ar.pak" />
+    <Content Include="bin\Debug\x86\locales\bg.pak" />
+    <Content Include="bin\Debug\x86\locales\bn.pak" />
+    <Content Include="bin\Debug\x86\locales\ca.pak" />
+    <Content Include="bin\Debug\x86\locales\cs.pak" />
+    <Content Include="bin\Debug\x86\locales\da.pak" />
+    <Content Include="bin\Debug\x86\locales\de.pak" />
+    <Content Include="bin\Debug\x86\locales\el.pak" />
+    <Content Include="bin\Debug\x86\locales\en-GB.pak" />
+    <Content Include="bin\Debug\x86\locales\en-US.pak" />
+    <Content Include="bin\Debug\x86\locales\es-419.pak" />
+    <Content Include="bin\Debug\x86\locales\es.pak" />
+    <Content Include="bin\Debug\x86\locales\et.pak" />
+    <Content Include="bin\Debug\x86\locales\fa.pak" />
+    <Content Include="bin\Debug\x86\locales\fi.pak" />
+    <Content Include="bin\Debug\x86\locales\fil.pak" />
+    <Content Include="bin\Debug\x86\locales\fr.pak" />
+    <Content Include="bin\Debug\x86\locales\gu.pak" />
+    <Content Include="bin\Debug\x86\locales\he.pak" />
+    <Content Include="bin\Debug\x86\locales\hi.pak" />
+    <Content Include="bin\Debug\x86\locales\hr.pak" />
+    <Content Include="bin\Debug\x86\locales\hu.pak" />
+    <Content Include="bin\Debug\x86\locales\id.pak" />
+    <Content Include="bin\Debug\x86\locales\it.pak" />
+    <Content Include="bin\Debug\x86\locales\ja.pak" />
+    <Content Include="bin\Debug\x86\locales\kn.pak" />
+    <Content Include="bin\Debug\x86\locales\ko.pak" />
+    <Content Include="bin\Debug\x86\locales\lt.pak" />
+    <Content Include="bin\Debug\x86\locales\lv.pak" />
+    <Content Include="bin\Debug\x86\locales\ml.pak" />
+    <Content Include="bin\Debug\x86\locales\mr.pak" />
+    <Content Include="bin\Debug\x86\locales\ms.pak" />
+    <Content Include="bin\Debug\x86\locales\nb.pak" />
+    <Content Include="bin\Debug\x86\locales\nl.pak" />
+    <Content Include="bin\Debug\x86\locales\pl.pak" />
+    <Content Include="bin\Debug\x86\locales\pt-BR.pak" />
+    <Content Include="bin\Debug\x86\locales\pt-PT.pak" />
+    <Content Include="bin\Debug\x86\locales\ro.pak" />
+    <Content Include="bin\Debug\x86\locales\ru.pak" />
+    <Content Include="bin\Debug\x86\locales\sk.pak" />
+    <Content Include="bin\Debug\x86\locales\sl.pak" />
+    <Content Include="bin\Debug\x86\locales\sr.pak" />
+    <Content Include="bin\Debug\x86\locales\sv.pak" />
+    <Content Include="bin\Debug\x86\locales\sw.pak" />
+    <Content Include="bin\Debug\x86\locales\ta.pak" />
+    <Content Include="bin\Debug\x86\locales\te.pak" />
+    <Content Include="bin\Debug\x86\locales\th.pak" />
+    <Content Include="bin\Debug\x86\locales\tr.pak" />
+    <Content Include="bin\Debug\x86\locales\uk.pak" />
+    <Content Include="bin\Debug\x86\locales\ur.pak" />
+    <Content Include="bin\Debug\x86\locales\vi.pak" />
+    <Content Include="bin\Debug\x86\locales\zh-CN.pak" />
+    <Content Include="bin\Debug\x86\locales\zh-TW.pak" />
+    <Content Include="bin\Debug\x86\README.txt" />
+    <Content Include="bin\Debug\x86\resources.pak" />
+    <Content Include="bin\Debug\x86\snapshot_blob.bin" />
+    <Content Include="bin\Debug\x86\SQLite.Interop.dll" />
+    <Content Include="bin\Debug\x86\v8_context_snapshot.bin" />
+    <Content Include="bin\Debug\x86\vk_swiftshader.dll" />
+    <Content Include="bin\Debug\x86\vk_swiftshader_icd.json" />
+    <Content Include="bin\Debug\x86\vulkan-1.dll" />
+    <Content Include="bin\Debug\Youtube\Get_Lib_Song.py" />
+    <Content Include="bin\Debug\Youtube\yt_outh.json" />
+    <Content Include="show.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -191,6 +481,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\cef.redist.x64.113.1.4\build\cef.redist.x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cef.redist.x64.113.1.4\build\cef.redist.x64.props'))" />
+    <Error Condition="!Exists('..\packages\cef.redist.x86.113.1.4\build\cef.redist.x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cef.redist.x86.113.1.4\build\cef.redist.x86.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.targets'))" />
   </Target>
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <Import Project="..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.113.1.40\build\CefSharp.Common.targets')" />
 </Project>

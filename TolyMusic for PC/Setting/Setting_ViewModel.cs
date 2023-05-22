@@ -18,6 +18,7 @@ namespace TolyMusic_for_PC
         private string database_sever_port;
         private string database_sever_user;
         private PasswordBox database_sever_password;
+        private string youtubeplaylist;
         //コンストラクタ
         public Setting_ViewModel()
         {
@@ -77,6 +78,10 @@ namespace TolyMusic_for_PC
              DatabaseSeverAdress = settingfile.LibraryServerAdress;
              DatabaseSeverPort = settingfile.LibraryServerPort;
              DatabaseSeverUser = settingfile.LibraryServerUser;
+             database_sever_password = new PasswordBox();
+             //streaming
+             //youtube
+             YoutubePlaylist = settingfile.YoutubePlaylist;
         }
         //変更時処理
         public event PropertyChangedEventHandler PropertyChanged;
@@ -89,6 +94,15 @@ namespace TolyMusic_for_PC
         public ObservableCollection<Driver> Share_driver_list { set; get; }
         public ObservableCollection<Driver> Excl_driver_list { set; get; }
 
+        public string YoutubePlaylist
+        {
+            get { return youtubeplaylist;}
+            set
+            {
+                youtubeplaylist = value;
+                OnPropertyChanged();
+            }
+        }
         public int Selected_excl
         {
             get { return selectid_excl;}

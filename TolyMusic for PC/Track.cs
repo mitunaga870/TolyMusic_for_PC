@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json.Linq;
 
 namespace TolyMusic_for_PC
 {
@@ -17,6 +18,8 @@ namespace TolyMusic_for_PC
         public string Album_id { get; set; }
         public Collection<Artist> Artists { get; set; }
 
+        //コンストラクタ
+        //SQL用
         public Track(Dictionary<string,object> dictionary)
         {
             Album_id = dictionary["album_id"].ToString();
@@ -24,7 +27,8 @@ namespace TolyMusic_for_PC
             Group_id = dictionary["group_id"].ToString();
             Id = dictionary["track_id"].ToString();
             Title = dictionary["track_title"].ToString();
-            Path = dictionary["path"].ToString();
+            if(dictionary.ContainsKey("path"))
+                Path = dictionary["path"].ToString();
             Title_pron = dictionary["track_title_pron"].ToString();
             Duration = (double) dictionary["duration"];
             var truck_num = dictionary["track_num"];
@@ -33,6 +37,19 @@ namespace TolyMusic_for_PC
             else
                 TrackNumber = 0;
             Artists = new Collection<Artist>();
+        }
+        //yuMusic用
+        public Track(JObject json)
+        {
+            Id = json["videoId"].ToString();
+            Title = json["title"].ToString();
+            var album = json["album"].ToString();
+            if(album != "none")
+                Album_id = json["album"]["id"].ToString();
+            Artists = new Collection<Artist>();
+            Duration = (double)json["duration_seconds"];
+            foreach (var artist in json["artists"])
+                Artists.Add(new Artist((JObject)artist));
         }
         public void addArtist(Dictionary<string,object> dictionary)
         {

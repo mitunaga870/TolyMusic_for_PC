@@ -1,8 +1,6 @@
-﻿using MySqlConnector;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
+using MySql.Data.MySqlClient;
 
 namespace TolyMusic_for_PC.Library
 {
@@ -13,10 +11,11 @@ namespace TolyMusic_for_PC.Library
         //通信開始
         private void ConUP()
         {
-            string constring = "Server=" + Properties.Settings.Default.LibraryServerAdress + ";";
-            constring += "Database=" + Properties.Settings.Default.LibraryServerPort + ";";
-            constring += "User ID=" + Properties.Settings.Default.LibraryServerUser + ";";
-            constring += "Password=" + Properties.Settings.Default.LibraryServerPass + ";";
+            string constring = "server=" + Properties.Settings.Default.LibraryServerAdress + ";";
+            constring += "port=" + Properties.Settings.Default.LibraryServerPort + ";";
+            constring += "database=toly_music;";
+            constring += "uid=" + Properties.Settings.Default.LibraryServerUser + ";";
+            constring += "pwd=" + Properties.Settings.Default.LibraryServerPass + ";";
             con = new MySqlConnection(constring);
             con.Open();
         }
@@ -33,6 +32,8 @@ namespace TolyMusic_for_PC.Library
             MySqlCommand cmd = new MySqlCommand(query, con);
             foreach (var param in parameters)
             {
+                if(param.Value == "")
+                    param.Value = null;
                 cmd.Parameters.Add(param);
             }
             cmd.ExecuteNonQuery();

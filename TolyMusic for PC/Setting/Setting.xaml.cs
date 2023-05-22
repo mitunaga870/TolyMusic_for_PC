@@ -77,7 +77,11 @@ namespace TolyMusic_for_PC
             send_obj.LibraryServerAdress = vm.DatabaseSeverAdress;
             send_obj.LibraryServerPort = vm.DatabaseSeverPort;
             send_obj.LibraryServerUser = vm.DatabaseSeverUser;
-            send_obj.LibraryServerPass = vm.DatabaseSeverPassword.Password;
+            if(vm.DatabaseSeverPassword.Password != "")
+                send_obj.LibraryServerPass = vm.DatabaseSeverPassword.Password;
+            //Streaming
+            //youtube
+            send_obj.YoutubePlaylist = vm.YoutubePlaylist;
             //send
             send_obj.Save();
             vm.Init();
@@ -96,6 +100,13 @@ namespace TolyMusic_for_PC
             Page_init();
             title = SettingPage.Library_DataBaseServer;
             spg.go_library_database(main);
+        }
+        
+        private void Open_Streaming_Youtube(object sender, RoutedEventArgs e)
+        {
+            Page_init();
+            title = SettingPage.Home;
+            spg.go_streaming_youtube(main);
         }
     }
 }
