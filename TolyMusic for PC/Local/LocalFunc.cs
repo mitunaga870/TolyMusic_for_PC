@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -95,7 +96,7 @@ namespace TolyMusic_for_PC.Local
             {
                 MessageBox.Show("リスト取得失敗");
                 return;
-            } 
+            }
             lib.AddLocalListTracks(tracks);
         }
         public void MakeTrackList()

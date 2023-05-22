@@ -3,7 +3,7 @@ from ytmusicapi import YTMusic
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # API呼び出し
-yt = YTMusic("script\\Youtube\\yt_outh.json", language="ja")
+yt = YTMusic("scripts\\Youtube\\yt_outh.json", language="ja")
 
 playlist_id = str(sys.argv[1])
 

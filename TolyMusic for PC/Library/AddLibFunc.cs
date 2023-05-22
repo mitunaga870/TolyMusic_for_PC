@@ -105,7 +105,7 @@ namespace TolyMusic_for_PC.Library
             Collection<MySqlParameter> track_artist_parameters = new Collection<MySqlParameter>();
             Uri cwd = new Uri(Properties.Settings.Default.LocalDirectryPath);
             //各トラックに応じてループによるクエリ作成
-            int i,k=0;
+            int i,k=0,l=0;
             for (i = 0; i < tracks.Count; i++)
             {
                 //トラック重複確認
@@ -118,6 +118,16 @@ namespace TolyMusic_for_PC.Library
                     tmp_path = Uri.UnescapeDataString(tmp_path);
                     if (tracks[i].Path == tmp_path)
                     {
+                        //locationに追加済みのときはスキップしこのデバイス出ない場合はこのデバイスを追加
+                        if(location["device_id"] != device_id)
+                        {
+                            //locationのみの追加
+                            location_quary += "(@track_id" + l + ",@location" + l + ",@device_id" + l + ",@path" + l + "),";
+                            location_parameters.Add(new MySqlParameter("@track_id" + l, tracks[i].Id));
+                            location_parameters.Add(new MySqlParameter("@location" + l, 0));
+                            location_parameters.Add(new MySqlParameter("@device_id" + l, device_id));
+                            location_parameters.Add(new MySqlParameter("@path" + l, tmp_path));
+                        }
                         continue_switch = true;
                         break;
                     }
@@ -169,7 +179,7 @@ namespace TolyMusic_for_PC.Library
 
                     //composer_id
                     string composer_id = tracks[i].Composer_id;
-                    if (composer_id != "")
+                    if (composer_id != null)
                     {
                         string composer_name = localArtists.Where(a => a.Id == composer_id).ToArray()[0].Name;
                         //IDの置き換え
@@ -186,7 +196,7 @@ namespace TolyMusic_for_PC.Library
                     track_parameters.Add(new MySqlParameter("@composer_id" + i, composer_id));
                     //group_id
                     string group_id = tracks[i].Group_id;
-                    if (group_id != "")
+                    if (group_id != null)
                     {
                         string group_name = localArtists.Where(a => a.Id == group_id).ToArray()[0].Name;
                         //IDの置き換え
@@ -205,17 +215,18 @@ namespace TolyMusic_for_PC.Library
                     track_parameters.Add(new MySqlParameter("@duration" + i, tracks[i].Duration));
                 }
                 //location
-                location_quary += "(@track_id" + i + ",@location" + i + ",@device_id" + i + ",@path" + i + "),";
-                location_parameters.Add(new MySqlParameter("@track_id" + i, tracks[i].Id));
-                location_parameters.Add(new MySqlParameter("@location" + i, "0"));
-                location_parameters.Add(new MySqlParameter("@device_id" + i, device_id));
+                location_quary += "(@track_id" + l + ",@location" + l + ",@device_id" + l + ",@path" + l + "),";
+                location_parameters.Add(new MySqlParameter("@track_id" + l, tracks[i].Id));
+                location_parameters.Add(new MySqlParameter("@location" + l, "0"));
+                location_parameters.Add(new MySqlParameter("@device_id" + l, device_id));
                 //パスを相対パスに変換
                 string postpath;
                 Uri path = new Uri(tracks[i].Path);
                 Uri postpathuri = cwd.MakeRelativeUri(path);
                 postpath = postpathuri.ToString();
                 postpath = postpath.Replace(cwd.Segments[cwd.Segments.Length - 1] + "/", "");
-                location_parameters.Add(new MySqlParameter("@path" + i, postpath));
+                location_parameters.Add(new MySqlParameter("@path" + l, postpath));
+                l++;
             }
             //artist
             string artist_quary = "INSERT INTO artist (artist_id,artist_name,artist_name_pron) VALUES ";
@@ -297,7 +308,7 @@ namespace TolyMusic_for_PC.Library
             foreach (var item in tmp)
                 addedtrack.Add(new Track(item));
             //既存ロケーション
-            tmp = DB.Read("select track_id,youtube_id from location where location = 1");
+            tmp = DB.Read("select track_id,youtube_id from location");
             Collection<Dictionary<string,string>> addedlocation = new Collection<Dictionary<string,string>>();
             foreach (var item in tmp)
                 addedlocation.Add(new Dictionary<string, string>(){{"track_id",item["track_id"].ToString()},{"youtube_id",item["youtube_id"].ToString()}});

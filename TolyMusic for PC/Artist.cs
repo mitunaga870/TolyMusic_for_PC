@@ -7,14 +7,12 @@ namespace TolyMusic_for_PC
 {
     public class Artist
     {
-        public Artist()
-        {
-        }
         public Artist(Dictionary<string, object> item)
         {
             Id = item["artist_id"].ToString();
             Name = item["artist_name"].ToString();
-            Name_pron = item["artist_name_pron"].ToString();
+            if(Other.CheckDBValue(item,"artist_name_pron"))
+                Name_pron = item["artist_name_pron"].ToString();
         }
         //ytMusic用
         public Artist(JObject json)

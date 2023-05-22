@@ -1,5 +1,3 @@
-﻿bin/*
-obj/*
-bin/Debug/*.sqlite3
-!bin/Debug/scripts
-/venv/*
+﻿obj/*
+bin/*
+!bin/Debug/script/*

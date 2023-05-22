@@ -34,7 +34,7 @@ namespace TolyMusic_for_PC
             queue = new Queue(vm,queue_list);
             lib = new AddLibFunc(vm);
             pageController = new PageController(vm,MainGrid,PageFuncContainer,Player,queue);
-            Go_library_tracks( null, null);
+            //Go_library_tracks( null, null);
             //CefSharp設定
             CefSettings settings = new CefSettings();
             settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 /CefSharp Browser" + Cef.CefSharpVersion;
@@ -47,7 +47,13 @@ namespace TolyMusic_for_PC
         //終了処理
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Player.Dispose();
+            try
+            {
+                Player.Dispose();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         //ページ切り替え事前処理
         private void closingPage(){

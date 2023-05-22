@@ -5,7 +5,7 @@
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\data\eclipse_workspece\TolyMusic for PC\TolyMusic for PC\TolyMusic for PC\bin\Debug\local.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/TolyMusic for PC/bin/Debug/local.sqlite3</jdbc-url>
     </data-source>
     <data-source source="LOCAL" name="@tois-systems.net" uuid="b52ae841-8ca5-44f0-a0ee-c063d790294a">
       <driver-ref>mysql.8</driver-ref>

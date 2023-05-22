@@ -472,9 +472,6 @@
     <Content Include="bin\Debug\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\Youtube\yt_outh.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

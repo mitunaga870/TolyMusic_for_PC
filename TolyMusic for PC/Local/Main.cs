@@ -318,8 +318,7 @@ namespace TolyMusic_for_PC.Local
             {
                 if (addedid.Contains(row["track_id"].ToString()))
                 {
-                    Track item = result[result.Count - 1];
-                    item.addArtist(row);
+                    result.Where(t => t.Id == row["track_id"].ToString()).ToArray()[0].addArtist(row);
                 }
                 else
                 {

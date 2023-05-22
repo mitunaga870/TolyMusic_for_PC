@@ -88,19 +88,7 @@ public class Main
     public ObservableCollection<Track> GetTracks()
     {
         //DBから取得
-        var db_tmp = DB.Read("select * from tracks joid location on tracks.location_id = location.id");
-        ObservableCollection<Track> tracks = new ObservableCollection<Track>();
-        foreach (var db_row in db_tmp)
-        {
-            //重複削除
-            var track = new Track(db_row);
-            if (tracks.Count(t => t.Id == track.Id) == 0)
-                tracks.Add(track);
-            else
-            {
-                
-            }
-        }
-        return tracks;
+        var db_tmp = DB.Read("select * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id");
+        return Other.LibDictoTrack(db_tmp);
     }
 }

@@ -51,7 +51,8 @@ namespace TolyMusic_for_PC.Library
                 Dictionary<string, object> row = new Dictionary<string, object>();
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    row.Add(reader.GetName(i), reader.GetValue(i));
+                    if(!row.ContainsKey(reader.GetName(i)))
+                        row.Add(reader.GetName(i), reader.GetValue(i));
                 }
                 result.Add(row);
             }
