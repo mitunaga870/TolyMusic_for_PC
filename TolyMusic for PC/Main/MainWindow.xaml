@@ -56,21 +56,26 @@
                 <CheckBox Width="27" Content="排他モード" IsChecked="{Binding Excl}" Checked="SetExcl" Unchecked="SetExcl"/>
             </StackPanel>
         </Grid>
-        
-        <StackPanel Grid.Column="0" Grid.Row="1" Background="#FF212121"><!--サイドバー-->
-            <Label Content="ライブラリ" Foreground= "#ececec" />
-                <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_tracks"/>
-                <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_albums"/>
-                <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_artists"/>
-                <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_playlists"/>
-            <Label Content="ローカル" Foreground= "#ececec" />
-                <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_tracks"/>
-                <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_albums"/>
-                <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_artists"/>
-            <Label Content="Streaming" Foreground= "#ececec" />
-                <Button Content="Youtube" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="go_youtube"/>
-        </StackPanel>
-        
+        <Grid Grid.Column="0" Grid.Row="1" Background="#FF212121"><!--サイドバー-->
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="135"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0">
+                <Label Content="ライブラリ" Foreground= "#ececec" />
+                    <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_tracks"/>
+                    <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_albums"/>
+                    <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_artists"/>
+                    <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_playlists"/>
+                <Label Content="ローカル" Foreground= "#ececec" />
+                    <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_tracks"/>
+                    <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_albums"/>
+                    <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_artists"/>
+                <Label Content="Streaming" Foreground= "#ececec" />
+                    <Button Content="Youtube" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="go_youtube"/>
+            </StackPanel>
+            <Grid Grid.Row="1" Name="VPlayer"></Grid>
+        </Grid>
         <Grid Grid.Row="1" Grid.Column="1"><!--メインコンテンツ:streaming以外-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

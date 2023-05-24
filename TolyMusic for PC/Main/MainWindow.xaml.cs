@@ -4,9 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using CefSharp;
 using CefSharp.Wpf;
-using NAudio.Wave;
+using CefSharp.OffScreen;
 using TolyMusic_for_PC.Library;
 using Label = System.Windows.Controls.Label;
 
@@ -30,13 +31,13 @@ namespace TolyMusic_for_PC
             InitializeComponent();
             vm = new ViewModel();
             DataContext = vm;
-            Player = new Player(vm);
+            Player = new Player(vm,VPlayer);
             queue = new Queue(vm,queue_list);
             lib = new AddLibFunc(vm);
             pageController = new PageController(vm,MainGrid,PageFuncContainer,Player,queue);
             //Go_library_tracks( null, null);
             //CefSharp設定
-            CefSettings settings = new CefSettings();
+            CefSharp.Wpf.CefSettings settings = new CefSharp.Wpf.CefSettings();
             settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 /CefSharp Browser" + Cef.CefSharpVersion;
             settings.Locale = "ja";
             settings.AcceptLanguageList = "ja,en-US;q=0.9,en;q=0.8";
@@ -147,6 +148,7 @@ namespace TolyMusic_for_PC
 
         private void Skip(object sender, RoutedEventArgs e)
         {
+            vm.skip = true;
             if (Player.started)
                 Player.next();
         }

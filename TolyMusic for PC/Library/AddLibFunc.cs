@@ -22,7 +22,7 @@ namespace TolyMusic_for_PC.Library
         public void AddLocalListTracks(Collection<Track> tracks)
         {
             //マシン名の取得
-            string device_id = Properties.Settings.Default.MachineID;
+            string device_id = Environment.MachineName;
             if (!Properties.Settings.Default.LibraryAddedMachine)
             {
                 device_id = AddMachine();

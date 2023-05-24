@@ -38,6 +38,8 @@ namespace TolyMusic_for_PC
         private TypeEnum curttype;
         private Artist curt_artist;
         private Album curt_album;
+        //public変数
+        public bool skip;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

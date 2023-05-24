@@ -49,6 +49,9 @@
     <Reference Include="CefSharp.Core, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
       <HintPath>..\packages\CefSharp.Common.113.1.40\lib\net452\CefSharp.Core.dll</HintPath>
     </Reference>
+    <Reference Include="CefSharp.OffScreen, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.OffScreen.113.1.40\lib\net462\CefSharp.OffScreen.dll</HintPath>
+    </Reference>
     <Reference Include="CefSharp.Wpf, Version=113.1.40.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
       <HintPath>..\packages\CefSharp.Wpf.113.1.40\lib\net462\CefSharp.Wpf.dll</HintPath>
     </Reference>
@@ -162,6 +165,7 @@
     <Compile Include="Artist.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="Library\DB.cs" />
+    <Compile Include="Library\LibFunc.cs" />
     <Compile Include="Library\Lib_PC.cs" />
     <Compile Include="Library\AddLibFunc.cs" />
     <Compile Include="Library\Main.cs" />
@@ -183,6 +187,7 @@
     <Compile Include="Setting\Setting_Page_general.cs" />
     <Compile Include="Setting\Setting_Page_Local.cs" />
     <Compile Include="Setting\Setting_ViewModel.cs" />
+    <Compile Include="Streaming\Handlar\YoutubeReqHandler.cs" />
     <Compile Include="Streaming\Streaming_PC.cs" />
     <Compile Include="Streaming\Youtube\Yt_Func.cs" />
     <Compile Include="Track.cs" />
