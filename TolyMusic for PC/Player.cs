@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CefSharp;
 using CefSharp.Wpf;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
@@ -23,8 +25,8 @@ namespace TolyMusic_for_PC
         private Locaion locaiton;
         ViewModel vm;
         private bool isASIO;
-        AsioOut asio;
-        WasapiOut wasapi;
+        public AsioOut asio;
+        public WasapiOut wasapi;
         public bool isPlaying = false;
         private AudioFileReader afreader;
         private MediaFoundationReader mfreader;
@@ -136,12 +138,13 @@ namespace TolyMusic_for_PC
                 switch (vm.Curt_track.location)
                 {
                     case 0: //localトラックの時
-                        afreader = new AudioFileReader(vm.Curt_track.Path);
+                        string path = Properties.Settings.Default.LocalDirectryPath.Replace('\\', '/') + "/" + vm.Curt_track.Path;
+                        afreader = new AudioFileReader(path);
                         locaiton = Locaion.local;
                         break;
                     case 1: //youtubeトラックの時
                         //パケットのsendURLを取得し、同期的に更新
-                        afreader = GetReqURLReader(String.Format("https://youtube.com/watch?id{0}&autoplay=1",
+                        afreader = GetReqURLReader(String.Format("https://youtube.com/watch?v={0}&autoplay=1",
                             vm.Curt_track.youtube_id));
                         locaiton = Locaion.youtube;
                         break;
@@ -170,6 +173,7 @@ namespace TolyMusic_for_PC
                     else
                         wasapi.Init(afreader);
                     break;
+                
             }
 
             Play();
@@ -322,13 +326,14 @@ namespace TolyMusic_for_PC
             if (!webloaded)
             {
                 browser = new ChromiumWebBrowser(url);
+                browser.RequestHandler = new YoutubeReqHandler(ref wasapi,ref asio);
                 container.Children.Add(browser);
                 webloaded = true;
             }
             else
                 browser.Address = url;
-            browser.RequestHandler = new YoutubeReqHandler(afreader);
-            return new AudioFileReader("https://rr4---sn-nvoxu-ioqk.googlevideo.com/videoplayback?expire=1684944254&ei=HuFtZI3JMfWTvcAP0da0kAs&ip=90.149.84.214&id=o-ABGe68XS-FJ_cXHUJdqhHrj3X8q-wVbFZtZyEoRzL4gF&itag=251&source=youtube&requiressl=yes&mh=GJ&mm=31%2C29&mn=sn-nvoxu-ioqk%2Csn-ogueln67&ms=au%2Crdu&mv=m&mvi=4&pl=18&ctier=A&pfa=5&initcwndbps=1728750&hightc=yes&spc=qEK7BwWlUCXoOqtI6KAFlH5MrY2I7ZMAdSp4ur4B04xL2ApgRtI2-0o&vprv=1&svpuc=1&mime=audio%2Fwebm&ns=kKA9GGB7xf7U9z1xiLcNWx8N&gir=yes&clen=4116968&dur=255.021&lmt=1684262764585279&mt=1684922008&fvip=3&keepalive=yes&fexp=24007246&beids=24350017&c=WEB_EMBEDDED_PLAYER&txp=5532434&n=2fkamfnaDBno0g&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cctier%2Cpfa%2Chightc%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIhAID20SfZoSP6Duxk7Iq8NYC2-A40aofJXaN7PPG-ui1dAiAmk3uBJ7g3BUybfaLWFxhU_-sKNbZFR-blbog3nhHoKA%3D%3D&alr=yes&sig=AOq0QJ8wRQIhAI-blidrJKnEIeIAxqKUK_If3nre_QDhgDOlYG1s-gOmAiBX1jYG27A7qkPpTeZaD9ajx-GTe9POjRIm9YB8bR6icg%3D%3D&cpn=0QUkyy_UjC66cWf4&cver=1.20230521.00.00&range=0-4116967&rn=19&rbuf=119284&pot=MmQoyCyVYnUzHyjwnTTYA4p8z64mo9nBNLfsV1wXHT3ipJkNLNbnb_147zXfn9zPK0FIlkmfEEVrBG6o4ETiA-9XfZHN9giWcoDeVuyIY4VYoFAi4bdpP-OijJwAmd0bg0slHQd0");
+            //ロード完了を待つ
+            return new AudioFileReader("https://rr1---sn-nvoxu-ioqel.googlevideo.com/videoplayback?expire=1684952699&ei=GwJuZNO1ELCXvcAPm-mJgAM&ip=240d%3A1a%3Ab2e%3Ad300%3A8873%3A2ab2%3Ac81%3A8d74&id=o-AA0-jS15WoIPtHId0XsVYA3a4Gfrpkm7Y-OxEN3YFcHA&itag=141&source=youtube&requiressl=yes&mh=mG&mm=31%2C29&mn=sn-nvoxu-ioqel%2Csn-oguesnds&ms=au%2Crdu&mv=m&mvi=1&pl=39&ctier=A&pfa=5&gcr=jp&initcwndbps=1446250&hightc=yes&spc=qEK7BwvFx7SHMufMGRAQahYz77d83diKcDzXEEF_Wi_K&vprv=1&svpuc=1&mime=audio%2Fmp4&ns=bD-pfrkr36Z27COlyO-empEN&gir=yes&clen=5121366&dur=158.999&lmt=1682668068591618&mt=1684930625&fvip=2&keepalive=yes&fexp=24007246&beids=24350017&c=WEB_REMIX&txp=2318224&n=o8TPjuvZRJmxPA&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cctier%2Cpfa%2Cgcr%2Chightc%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRAIgS_iMKY7o-ZJ3sP0d-W93xaUBT6RsvXsjw9A7b5_1D7oCIEDCTjUbhaxrOqtr67prD8cBW871LoMLhV3cOmF4jsrx&alr=yes&sig=AOq0QJ8wRAIgMBmUEP3m3QjD6RWv20ytSTVDFgwi2eWM-Pd9SpFDpVgCICfIfHQ-yvx6-hGue9AY8p33fh-1wrkl3XnFkIA8psur&cpn=z7_ExFfnjTRcqKAu&cver=1.20230517.01.00&range=0-5121365&rn=11&rbuf=76815&pot=MlunjWxGoTXaR6e1-JEZoxdqxZv8798XIutQ_6BSmptII-cJpSYjw-iRQ08RKIhqq7SSAlM_78TrDE-oZ9cU8-GolwgMqnnNJDZOEOtQZH4JiEFXSLFJTJ36YMFh");
         }
     }
 }

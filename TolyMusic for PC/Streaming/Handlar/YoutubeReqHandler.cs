@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Windows;
 using CefSharp;
@@ -8,12 +9,14 @@ namespace TolyMusic_for_PC.Streaming.Handlar;
 
 public class YoutubeReqHandler : IRequestHandler
 {
-    AudioFileReader afreader;
+    private AsioOut asioOut;
+    private WasapiOut wasapiOut;
     //コンストラクタ
     public YoutubeReqHandler(){}
-    public YoutubeReqHandler(AudioFileReader afreader)
+    public YoutubeReqHandler(ref WasapiOut wasapi,ref AsioOut asio)
     {
-        this.afreader = afreader;
+        asioOut = asio;
+        wasapiOut = wasapi;
     }
 
     public bool OnBeforeBrowse(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, bool userGesture,
@@ -36,8 +39,28 @@ public class YoutubeReqHandler : IRequestHandler
     public IResourceRequestHandler GetResourceRequestHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame,
         IRequest request, bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling)
     {
-        if(Regex.Match(request.Url,".*playback.*").Success)
-            MessageBox.Show(request.Url);
+        if (Regex.Match(request.Url, ".*audio.*").Success && Regex.Match(request.Url, ".*playback.*").Success)
+        {
+            Regex replace = new Regex("(.+range=)[0-9]+-([0-9]+)(.+)");
+            string tmp1 = replace.Replace(request.Url, "$1");
+            string length = replace.Replace(request.Url, "$2");
+            string tmp2 =replace.Replace(request.Url, "$3");
+            string url = tmp1 + "0-" + length + tmp2;
+            AudioFileReader tmpreader;
+            try
+            {
+                tmpreader = new AudioFileReader(url);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            WaveFormat format = tmpreader.WaveFormat;
+            float[] buffer = new float[Convert.ToInt32(length)];
+            tmpreader.Read(buffer, 0, buffer.Length);
+            MessageBox.Show(buffer[10].ToString());
+        }
         return null;
     }
 

@@ -58,8 +58,8 @@
         </Grid>
         <Grid Grid.Column="0" Grid.Row="1" Background="#FF212121"><!--サイドバー-->
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition />
-                <RowDefinition Height="135"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="0">
                 <Label Content="ライブラリ" Foreground= "#ececec" />
