@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using CefSharp;
 using CefSharp.Wpf;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
+using Org.BouncyCastle.Tls;
 using TolyMusic_for_PC.Streaming.Handlar;
 
 namespace TolyMusic_for_PC
@@ -36,6 +39,7 @@ namespace TolyMusic_for_PC
         private Grid container;
         private bool webloaded;
         private ChromiumWebBrowser browser;
+        private bool youtube_loaded;
 
         public Player(ViewModel vm, Grid container)
         {
@@ -129,7 +133,7 @@ namespace TolyMusic_for_PC
         }
 
         //キュー開始処理
-        public void Start()
+        public async void Start()
         {
             Init();
             started = true;
@@ -142,10 +146,58 @@ namespace TolyMusic_for_PC
                         afreader = new AudioFileReader(path);
                         locaiton = Locaion.local;
                         break;
-                    case 1: //youtubeトラックの時
-                        //パケットのsendURLを取得し、同期的に更新
-                        afreader = GetReqURLReader(String.Format("https://youtube.com/watch?v={0}&autoplay=1",
-                            vm.Curt_track.youtube_id));
+                    case 1: //youtubeトラックの
+                        //読み込み開始
+                        youtube_loaded = false;
+                        
+                        if (!webloaded)
+                        {
+                            browser = new ChromiumWebBrowser();
+                            container.Children.Add(browser);
+                            webloaded = true;
+                        }
+
+                        string html = "<html> <head> <script>";
+                        html += "var script = document.createElement( 'script' );script.src = \"//www.youtube.com/iframe_api\";var firstScript = document.getElementsByTagName( 'script' )[ 0 ];firstScript.parentNode.insertBefore( script , firstScript );";
+                        html += "var player;";
+                        html += "var loaded = false;";
+                        html += "function onYouTubeIframeAPIReady() {" +
+                                "player = new YT.Player(" +
+                                "'video'," +
+                                "{videoId:\'"+vm.Curt_track.youtube_id+"\'," +
+                                "playerVars: { 'autoplay': 1}," +
+                                "events:{'onReady':onPlayerReady}});}";
+                        html += "function onPlayerReady(event) {loaded= true;}";
+                        html += "function play() {player.playVideo();}";
+                        html += "function pause() {player.pauseVideo();}";
+                        html += "function checkload() {return loaded;}";
+                        html += "function settime(time) {player.seekTo(time);}";
+                        html += "function gettime() {return player.getCurrentTime();}";
+                        html += "function setvol(vol) {player.setVolume(vol);}";
+                        html += "function getvol() {return player.getVolume();}";
+                        html += "function getduration() {return player.getDuration();}";
+                        html += "</script> </head>";
+                        html += "<body> <div id=\"video\" style=\"width: 100%;height: 100%\"></div> </body>";
+                        html += "</html>";
+                        browser.LoadHtml(html, "http://example.com/");
+                        //ロード後クリック
+                        browser.LoadingStateChanged += (sender, args) =>
+                        {
+                            if (args.IsLoading == false)
+                            {
+                                KeyEvent k = new KeyEvent();
+                                k.WindowsKeyCode = 0x20;
+                                k.FocusOnEditableField = true;
+                                k.IsSystemKey = false;
+                                k.Type = KeyEventType.KeyDown;
+                                browser.GetBrowser().GetHost().SendKeyEvent(k);
+                                youtube_loaded = true;
+                            }
+                        };
+                        while (!youtube_loaded)
+                        {
+                            await Task.Delay(100);
+                        }
                         locaiton = Locaion.youtube;
                         break;
                     default:
@@ -158,13 +210,12 @@ namespace TolyMusic_for_PC
                 Dispose();
                 return;
             }
-
+            //ボリューム・シークバー最大処理
             if (vm.Excl)
                 SetVol();
             switch (locaiton)
             {
                 case Locaion.local:
-                case Locaion.youtube:
                     vm.Curt_length = afreader.TotalTime.Ticks;
                     if (vm.Excl)
                         SetVol();
@@ -173,19 +224,34 @@ namespace TolyMusic_for_PC
                     else
                         wasapi.Init(afreader);
                     break;
-                
+                case Locaion.youtube:
+                    SetVol();
+                    JavascriptResponse res = await browser.EvaluateScriptAsync("getduration();");
+                    
+                    vm.Curt_length = (long)res.Result;
+                    break;                           
             }
 
-            Play();
+            if(locaiton == Locaion.local)
+                Play();
+            isPlaying = true;
         }
 
         //再生処理
         public void Play()
         {
-            if (isASIO)
-                asio.Play();
-            else
-                wasapi.Play();
+            switch (locaiton)
+            {
+                case Locaion.local:
+                    if (isASIO)
+                        asio.Play();
+                    else
+                        wasapi.Play();
+                    break;
+                case Locaion.youtube:
+                    browser.ExecuteScriptAsync("play();");
+                    break;
+            }
             isPlaying = true;
             timesetter = new Task(TimeControler);
             timesetter.Start();
@@ -194,10 +260,18 @@ namespace TolyMusic_for_PC
         //一時停止処理
         public void Pause()
         {
-            if (isASIO)
-                asio.Pause();
-            else
-                wasapi.Pause();
+            switch (locaiton)
+            {
+                case Locaion.local:
+                    if (isASIO)
+                        asio.Pause();
+                    else
+                        wasapi.Pause();
+                    break;
+                case Locaion.youtube:
+                    browser.ExecuteScriptAsync("pause();");
+                    break;
+            }
             isPlaying = false;
         }
 
@@ -267,12 +341,11 @@ namespace TolyMusic_for_PC
         }
 
         //再生位置の変更
-        private void TimeControler()
+        private async void TimeControler()
         {
             switch (locaiton)
             {
                 case Locaion.local:
-                case Locaion.youtube:
                     while (isPlaying)
                     {
                         vm.Curt_time = afreader.CurrentTime.Ticks;
@@ -283,15 +356,38 @@ namespace TolyMusic_for_PC
                         }
                     }
                     break;
+                case Locaion.youtube:
+                    //ロード待ち
+                    while (!youtube_loaded)
+                    { Thread.Sleep(10); }
+                    //メイン
+                    while (true)
+                    {
+                        JavascriptResponse jsres = await browser.EvaluateScriptAsync("gettime();");
+                        vm.Curt_time = (long)(double)jsres.Result;
+                        if (vm.Next_time != -1)
+                        {
+                            browser.ExecuteScriptAsync("settime();", vm.Next_time);
+                            vm.Next_time = -1;
+                        }
+                    }
+                    break;
             }
         }
 
         //Volume
         public void SetVol()
         {
-            if (started)
+            switch (locaiton)
             {
-                afreader.Volume = (float)vm.Volume / 100;
+                case Locaion.local:
+                    if (started)
+                        afreader.Volume = (float)vm.Volume / 100;
+                    break;
+                case Locaion.youtube:
+                    if(browser != null)
+                        browser.ExecuteScriptAsync("setvol();", vm.Volume);
+                    break;
             }
         }
 
@@ -318,22 +414,6 @@ namespace TolyMusic_for_PC
             if (mfreader != null)
                 mfreader.Dispose();
             isPlaying = false;
-        }
-
-        //webstremingのとき
-         private AudioFileReader GetReqURLReader(string url)
-        {
-            if (!webloaded)
-            {
-                browser = new ChromiumWebBrowser(url);
-                browser.RequestHandler = new YoutubeReqHandler(ref wasapi,ref asio);
-                container.Children.Add(browser);
-                webloaded = true;
-            }
-            else
-                browser.Address = url;
-            //ロード完了を待つ
-            return new AudioFileReader("https://rr1---sn-nvoxu-ioqel.googlevideo.com/videoplayback?expire=1684952699&ei=GwJuZNO1ELCXvcAPm-mJgAM&ip=240d%3A1a%3Ab2e%3Ad300%3A8873%3A2ab2%3Ac81%3A8d74&id=o-AA0-jS15WoIPtHId0XsVYA3a4Gfrpkm7Y-OxEN3YFcHA&itag=141&source=youtube&requiressl=yes&mh=mG&mm=31%2C29&mn=sn-nvoxu-ioqel%2Csn-oguesnds&ms=au%2Crdu&mv=m&mvi=1&pl=39&ctier=A&pfa=5&gcr=jp&initcwndbps=1446250&hightc=yes&spc=qEK7BwvFx7SHMufMGRAQahYz77d83diKcDzXEEF_Wi_K&vprv=1&svpuc=1&mime=audio%2Fmp4&ns=bD-pfrkr36Z27COlyO-empEN&gir=yes&clen=5121366&dur=158.999&lmt=1682668068591618&mt=1684930625&fvip=2&keepalive=yes&fexp=24007246&beids=24350017&c=WEB_REMIX&txp=2318224&n=o8TPjuvZRJmxPA&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cctier%2Cpfa%2Cgcr%2Chightc%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRAIgS_iMKY7o-ZJ3sP0d-W93xaUBT6RsvXsjw9A7b5_1D7oCIEDCTjUbhaxrOqtr67prD8cBW871LoMLhV3cOmF4jsrx&alr=yes&sig=AOq0QJ8wRAIgMBmUEP3m3QjD6RWv20ytSTVDFgwi2eWM-Pd9SpFDpVgCICfIfHQ-yvx6-hGue9AY8p33fh-1wrkl3XnFkIA8psur&cpn=z7_ExFfnjTRcqKAu&cver=1.20230517.01.00&range=0-5121365&rn=11&rbuf=76815&pot=MlunjWxGoTXaR6e1-JEZoxdqxZv8798XIutQ_6BSmptII-cJpSYjw-iRQ08RKIhqq7SSAlM_78TrDE-oZ9cU8-GolwgMqnnNJDZOEOtQZH4JiEFXSLFJTJ36YMFh");
         }
     }
 }
