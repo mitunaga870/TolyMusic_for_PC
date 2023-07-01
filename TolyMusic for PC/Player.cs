@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CefSharp;
 using CefSharp.Wpf;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using Org.BouncyCastle.Tls;
@@ -40,6 +41,10 @@ namespace TolyMusic_for_PC
         private bool webloaded;
         private ChromiumWebBrowser browser;
         private bool youtube_loaded;
+        private bool anti_end = false;
+        private Task checkbuf;
+        private bool initializing = false;
+        private Task Ended_youtube;
 
         public Player(ViewModel vm, Grid container)
         {
@@ -48,89 +53,124 @@ namespace TolyMusic_for_PC
             webloaded = false;
             isASIO = false;
             webClient = new WebClient();
+            timesetter = new Task(TimeControler);
+            checkbuf = new Task(CheckBuf);
+            Ended_youtube = new Task(Ended_Youtube);
         }
 
         //初期化処理
         public void Init()
-        {
-            if (vm.Excl && Properties.Settings.Default.EDisASIO) //排他・ASIO
-            {
-                isASIO = true;
-                //ドライバ破棄
-                if (asio != null)
-                {
-                    asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    asio.Dispose();
-                }
-
-                if (wasapi != null)
-                {
-                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    wasapi.Dispose();
-                }
-
-                //ドライバ指定
-                asio = new AsioOut(vm.Excl_Driver.Name);
-                asio.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
-                asio.AutoStop = true;
-            }
-            else if (vm.Excl) //排他WASAPI
-            {
-                isASIO = false;
-                //ドライバ破棄
-                if (asio != null)
-                {
-                    asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    asio.Dispose();
-                }
-
-                if (wasapi != null)
-                {
-                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    wasapi.Dispose();
-                }
-
-                //ドライバ指定
-                if (Properties.Settings.Default.SDcustumized)
-                {
-                    wasapi = new WasapiOut(vm.Excl_Driver.mmdevice, AudioClientShareMode.Exclusive, false, 100);
-                }
-                else
-                {
-                    wasapi = new WasapiOut(AudioClientShareMode.Exclusive, 100);
-                }
-
-                wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
-            }
-            else //共有WASAPI
-            {
-                isASIO = false;
-                //ドライバ破棄
-                if (wasapi != null)
-                {
-                    wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    wasapi.Dispose();
-                }
-
-                if (asio != null)
-                {
-                    asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
-                    asio.Dispose();
-                }
-
-                //ドライバ指定
-                if (Properties.Settings.Default.SDcustumized)
-                {
-                    wasapi = new WasapiOut(vm.Share_Driver.mmdevice, AudioClientShareMode.Shared, false, 100);
-                }
-                else //デフォルト
-                {
-                    wasapi = new WasapiOut();
-                }
-
-                wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
-            }
-        }
+                              {
+                              initializing = true;
+                              anti_end = false;
+                              if (vm.Excl && Properties.Settings.Default.EDisASIO) //排他・ASIO
+                              {
+                              isASIO = true;
+                              //ドライバ破棄
+                              if (asio != null)
+                              {
+                              asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              asio.Dispose();
+                              }
+                              
+                              if (wasapi != null)
+                              {
+                              wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              wasapi.Dispose();
+                              }
+                              
+                              //ドライバ指定
+                              asio = new AsioOut(vm.Excl_Driver.Name);
+                              asio.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
+                              asio.AutoStop = true;
+                              }
+                              else if (vm.Excl) //排他WASAPI
+                              {
+                              isASIO = false;
+                              //ドライバ破棄
+                              if (asio != null)
+                              {
+                              asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              asio.Dispose();
+                              }
+                              
+                              if (wasapi != null)
+                              {
+                              wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              wasapi.Dispose();
+                              }
+                              
+                              //ドライバ指定
+                              if (Properties.Settings.Default.SDcustumized)
+                              {
+                              wasapi = new WasapiOut(vm.Excl_Driver.mmdevice, AudioClientShareMode.Exclusive, false, 100);
+                              }
+                              else
+                              {
+                              wasapi = new WasapiOut(AudioClientShareMode.Exclusive, 100);
+                              }
+                              
+                              wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
+                              }
+                              else //共有WASAPI
+                              {
+                              isASIO = false;
+                              //ドライバ破棄
+                              if (wasapi != null)
+                              {
+                              wasapi.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              wasapi.Dispose();
+                              }
+                              
+                              if (asio != null)
+                              {
+                              asio.PlaybackStopped -= new EventHandler<StoppedEventArgs>(Ended);
+                              asio.Dispose();
+                              }
+                              
+                              //ドライバ指定
+                              if (Properties.Settings.Default.SDcustumized)
+                              {
+                              wasapi = new WasapiOut(vm.Share_Driver.mmdevice, AudioClientShareMode.Shared, false, 100);
+                              }
+                              else //デフォルト
+                              {
+                              wasapi = new WasapiOut();
+                              }
+                              
+                              wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
+                              }
+                              //Browser初期化
+                              if(browser != null)
+                              browser.LoadHtml("<html><head></head><body></body></html>", "http://example.com/");
+                              
+                              //タスクの破棄確認
+                              while (true)
+                              {
+                              var res = checkbuf.Status;
+                              if (res == TaskStatus.RanToCompletion)
+                              {
+                              checkbuf.Dispose();
+                              checkbuf = new Task(CheckBuf);
+                              }
+                              var res2 = timesetter.Status;
+                              if (res2 == TaskStatus.RanToCompletion)
+                              {
+                              timesetter.Dispose();
+                              timesetter = new Task(TimeControler);
+                              }
+                              var res3 = Ended_youtube.Status;
+                              if (res3 == TaskStatus.RanToCompletion)
+                              {
+                              Ended_youtube.Dispose();
+                              Ended_youtube = new Task(Ended_Youtube);
+                              }
+                              if (res != TaskStatus.Running&&res2!=TaskStatus.Running&&res3!=TaskStatus.Running)
+                              break;
+                              }
+                              
+                              initializing = false;
+                              }
 
         //キュー開始処理
         public async void Start()
@@ -165,39 +205,38 @@ namespace TolyMusic_for_PC
                                 "player = new YT.Player(" +
                                 "'video'," +
                                 "{videoId:\'"+vm.Curt_track.youtube_id+"\'," +
-                                "playerVars: { 'autoplay': 1}," +
+                                "playerVars:{" +
+                                "controls:0," +
+                                "}," +
                                 "events:{'onReady':onPlayerReady}});}";
                         html += "function onPlayerReady(event) {loaded= true;}";
                         html += "function play() {player.playVideo();}";
                         html += "function pause() {player.pauseVideo();}";
                         html += "function checkload() {return loaded;}";
-                        html += "function settime(time) {player.seekTo(time);}";
+                        html += "function settime(time) {" +
+                                "if(time!=-1)" +
+                                "player.seekTo(time);}";
                         html += "function gettime() {return player.getCurrentTime();}";
                         html += "function setvol(vol) {player.setVolume(vol);}";
                         html += "function getvol() {return player.getVolume();}";
                         html += "function getduration() {return player.getDuration();}";
+                        html += "function getstate() {return player.getPlayerState();}";
                         html += "</script> </head>";
                         html += "<body> <div id=\"video\" style=\"width: 100%;height: 100%\"></div> </body>";
                         html += "</html>";
                         browser.LoadHtml(html, "http://example.com/");
                         //ロード後クリック
-                        browser.LoadingStateChanged += (sender, args) =>
+                        await browser.WaitForRenderIdleAsync();
+                        bool sw;
+                        do
                         {
-                            if (args.IsLoading == false)
-                            {
-                                KeyEvent k = new KeyEvent();
-                                k.WindowsKeyCode = 0x20;
-                                k.FocusOnEditableField = true;
-                                k.IsSystemKey = false;
-                                k.Type = KeyEventType.KeyDown;
-                                browser.GetBrowser().GetHost().SendKeyEvent(k);
-                                youtube_loaded = true;
-                            }
-                        };
-                        while (!youtube_loaded)
-                        {
-                            await Task.Delay(100);
-                        }
+                            var res = await browser.EvaluateScriptAsync("checkload();");
+                            sw = (bool)res.Result;
+                        }while (!sw);
+                        //バッファリング解除
+                        checkbuf.Start();
+                        //終了処理
+                        Ended_youtube.Start();
                         locaiton = Locaion.youtube;
                         break;
                     default:
@@ -211,13 +250,11 @@ namespace TolyMusic_for_PC
                 return;
             }
             //ボリューム・シークバー最大処理
-            if (vm.Excl)
-                SetVol();
             switch (locaiton)
             {
                 case Locaion.local:
                     vm.Curt_length = afreader.TotalTime.Ticks;
-                    if (vm.Excl)
+                    if (!vm.Excl)
                         SetVol();
                     if (isASIO)
                         asio.Init(afreader);
@@ -228,92 +265,124 @@ namespace TolyMusic_for_PC
                     SetVol();
                     JavascriptResponse res = await browser.EvaluateScriptAsync("getduration();");
                     
-                    vm.Curt_length = (long)res.Result;
+                    vm.Curt_length = (long)Convert.ToInt64(res.Result)*1000;
                     break;                           
             }
 
             if(locaiton == Locaion.local)
                 Play();
+            timesetter.Start();
             isPlaying = true;
         }
 
         //再生処理
         public void Play()
-        {
-            switch (locaiton)
-            {
-                case Locaion.local:
-                    if (isASIO)
-                        asio.Play();
-                    else
-                        wasapi.Play();
-                    break;
-                case Locaion.youtube:
-                    browser.ExecuteScriptAsync("play();");
-                    break;
-            }
-            isPlaying = true;
-            timesetter = new Task(TimeControler);
-            timesetter.Start();
-        }
+                              {
+                              switch (locaiton)
+                              {
+                              case Locaion.local:
+                              if (isASIO)
+                              asio.Play();
+                              else
+                              wasapi.Play();
+                              break;
+                              case Locaion.youtube:
+                              browser.ExecuteScriptAsync("play();");
+                              break;
+                              }
+                              isPlaying = true;
+                              }
 
         //一時停止処理
         public void Pause()
-        {
-            switch (locaiton)
-            {
-                case Locaion.local:
-                    if (isASIO)
-                        asio.Pause();
-                    else
-                        wasapi.Pause();
-                    break;
-                case Locaion.youtube:
-                    browser.ExecuteScriptAsync("pause();");
-                    break;
-            }
-            isPlaying = false;
-        }
+                               {
+                               switch (locaiton)
+                               {
+                               case Locaion.local:
+                               if (isASIO)
+                               asio.Pause();
+                               else
+                               wasapi.Pause();
+                               break;
+                               case Locaion.youtube:
+                               browser.ExecuteScriptAsync("pause();");
+                               break;
+                               }
+                               isPlaying = false;
+                               }
 
         //再生終了時の処理
         public void Ended(object obj, StoppedEventArgs e)
+                                                             {
+                                                             if(anti_end)
+                                                             return;
+                                                             //停止処理 
+                                                             isPlaying = false;
+                                                             if (vm.Loop == null) //一曲ループ処理
+                                                             {
+                                                             vm.Next_time = 0;
+                                                             Play();
+                                                             }
+                                                             else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
+                                                             {
+                                                             Dispose();
+                                                             }
+                                                             else
+                                                             {
+                                                             next();
+                                                             }
+                                                             }
+        //Youtubeの終了処理
+        private async void Ended_Youtube()
         {
-            //停止処理 
-            isPlaying = false;
-            if (vm.Loop == null) //一曲ループ処理
+            while (true)
             {
-                vm.Next_time = 0;
-                Play();
-            }
-            else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
-            {
-                Dispose();
-            }
-            else
-            {
-                next();
+                if(initializing)
+                    return;
+                var res = await browser.EvaluateScriptAsync("getstate();");
+                int state = Convert.ToInt32(res.Result);
+                if (state == 0)
+                {
+                 //停止処理 
+                     isPlaying = false;
+                     if (vm.Loop == null) //一曲ループ処理
+                     {
+                         vm.Next_time = 0;
+                         Play();
+                     }
+                     else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
+                     {
+                         Dispose();
+                     }
+                     else
+                     {
+                         next();
+                     }       
+                     return;
+                }
+                await Task.Delay(100);
             }
         }
         public void next()
-        {
-            if (vm.PlayQueue.Count -1 == vm.Curt_queue_num) //キューのループ処理
-            {
-                vm.Curt_queue_num = 0;
-                vm.Curt_track = vm.PlayQueue[0];
-            }
-            else
-            {
-                vm.Curt_queue_num++;
-                vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-            }
-
-            if (afreader != null)
-                afreader.Dispose();
-            if (mfreader != null)
-                mfreader.Dispose();
-            Start();
-        }
-
+                              {
+                              anti_end = true;
+                              if (vm.PlayQueue.Count -1 == vm.Curt_queue_num) //キューのループ処理
+                              {
+                              vm.Curt_queue_num = 0;
+                              vm.Curt_track = vm.PlayQueue[0];
+                              }
+                              else
+                              {
+                              vm.Curt_queue_num++;
+                              vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
+                              }
+                              
+                              if (afreader != null)
+                              afreader.Dispose();
+                              if (mfreader != null)
+                              mfreader.Dispose();
+                              Start();
+                              }
         //巻き戻し
         public void prev()
         {
@@ -339,42 +408,55 @@ namespace TolyMusic_for_PC
                 vm.Next_time = 0;
             }
         }
-
         //再生位置の変更
         private async void TimeControler()
         {
             switch (locaiton)
             {
                 case Locaion.local:
-                    while (isPlaying)
+                    while (afreader != null)
                     {
-                        vm.Curt_time = afreader.CurrentTime.Ticks;
-                        if (vm.Next_time != -1)
+                        try
                         {
-                            afreader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
-                            vm.Next_time = -1;
+                            if(isPlaying)
+                                vm.Curt_time = afreader.CurrentTime.Ticks;
+                            if (vm.Next_time != -1)
+                            {
+                                afreader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
+                                vm.Next_time = -1;
+                            }
                         }
+                        catch (ObjectDisposedException e)
+                        {
+                            return;
+                        }
+
+                        if (initializing)
+                            return;
                     }
+
                     break;
                 case Locaion.youtube:
-                    //ロード待ち
-                    while (!youtube_loaded)
-                    { Thread.Sleep(10); }
-                    //メイン
                     while (true)
                     {
-                        JavascriptResponse jsres = await browser.EvaluateScriptAsync("gettime();");
-                        vm.Curt_time = (long)(double)jsres.Result;
+                        if (isPlaying)
+                        {
+                            JavascriptResponse jsres = await browser.EvaluateScriptAsync("gettime();");
+                            vm.Curt_time = Convert.ToInt64(jsres.Result) * 1000;
+                        }
+
                         if (vm.Next_time != -1)
                         {
-                            browser.ExecuteScriptAsync("settime();", vm.Next_time);
+                            browser.ExecuteScriptAsync("settime(" + vm.Next_time/1000 + ");");
                             vm.Next_time = -1;
+                            await Task.Delay(10);
                         }
+                        if (initializing)
+                            return;
                     }
                     break;
             }
         }
-
         //Volume
         public void SetVol()
         {
@@ -385,12 +467,11 @@ namespace TolyMusic_for_PC
                         afreader.Volume = (float)vm.Volume / 100;
                     break;
                 case Locaion.youtube:
-                    if(browser != null)
-                        browser.ExecuteScriptAsync("setvol();", vm.Volume);
+                    if (browser != null)
+                        browser.ExecuteScriptAsync("setvol(" + vm.Volume + ");");
                     break;
             }
         }
-
         //終了処理
         public void Dispose()
         {
@@ -413,7 +494,39 @@ namespace TolyMusic_for_PC
                 afreader.Dispose();
             if (mfreader != null)
                 mfreader.Dispose();
+            
+            
             isPlaying = false;
         }
+        //checkbuf(Youtube自動再生エラー処理)
+        private async void CheckBuf()
+                                         {
+                                         for (int i = 0; i < 200; i++)
+                                         {
+                                         int state;
+                                         try
+                                         {
+                                         var res = await browser.EvaluateScriptAsync("getstate();");
+                                         state = (int)res.Result;
+                                         }
+                                         catch
+                                         {
+                                         return;
+                                         }
+                                         
+                                         if (state == 5 || state == -1)
+                                         {
+                                         browser.GetBrowserHost()
+                                         .SendMouseClickEvent(100, 100, MouseButtonType.Left, false, 1, CefEventFlags.None);
+                                         await Task.Delay(10);
+                                         browser.GetBrowserHost()
+                                         .SendMouseClickEvent(100, 100, MouseButtonType.Left, true, 1, CefEventFlags.None);
+                                         }
+                                         
+                                         await Task.Delay(50);
+                                         if (initializing)
+                                         return;
+                                         }
+                                         }
     }
 }

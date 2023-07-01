@@ -10,9 +10,7 @@
             player = new YT.Player('video',{
                 videoId:'LoK17z6xDwI',
                 playerVars: {
-                    autoplay:1,
                     //controls:0,
-                    mute:1,
                     rel:0,
                     enablejsapi:1,
                     modestbranding:1,
@@ -27,12 +25,6 @@
         function onPlayerStateChange(event) {
         }
         function onPlayerReady(event) {
-            while (true) {
-                if (player.getCurrentTime() > 0) {
-                    player.unMute();
-                    break;
-                }
-            }
             loaded= true;
         }
         function play() {

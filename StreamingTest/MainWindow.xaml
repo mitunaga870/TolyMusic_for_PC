@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:StreamingTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid Name="Main" Loaded="Loaded">
-    </Grid>
+    <StackPanel Loaded="Loaded">
+        <Button Click="ButtonBase_OnClick">ロード</Button>
+        <Grid Name="Main" Background="Black" Height="1000"></Grid>
+    </StackPanel>
 </Window>
