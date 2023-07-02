@@ -64,7 +64,7 @@ namespace TolyMusic_for_PC
         public void addArtist(Dictionary<string,object> dictionary)
         {
             var artist = new Artist(dictionary);
-            if(Artists.Contains(artist))
+            if(!Artists.Contains(artist))
                 Artists.Add(artist);
         }
     }

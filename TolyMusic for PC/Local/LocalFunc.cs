@@ -167,7 +167,6 @@ namespace TolyMusic_for_PC.Local
                 vm.Prev_title = vm.Page;
                 vm.Page = album.Title;
                 //アルバムページに移動(トラックページとほぼ同様)
-                local.GetTracks(album.Id, Main.id_type.album);
                 vm.Tracks = local.GetTracks(album.Id, Main.id_type.album);
                 vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                 MakeTrackList();

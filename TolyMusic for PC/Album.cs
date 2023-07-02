@@ -10,7 +10,13 @@ namespace TolyMusic_for_PC
         public string Title { get; set; }
         public string TitlePron { get; set; }
         public Collection<Artist> Artists { get; set; }
+        public Collection<Track> Tracks { get; set; }
         //コンストラクタ
+        public Album()
+        {
+            Tracks = new Collection<Track>();
+            Artists = new Collection<Artist>();
+        }
         public Album(Dictionary<string, object> dictionary)
         {
             Id = dictionary["album_id"].ToString();

@@ -18,6 +18,7 @@ public class Lib_PC
     private Main main;
     private LibFunc func;
     private bool loaded = false;
+    private string curt_page;
     //コンストラクタ
     public Lib_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
     {
@@ -28,67 +29,51 @@ public class Lib_PC
         this.func_container = funcContainer;
         //初期化
         main = new Main(vm, player, queue, container, func_container);
+        func = new LibFunc(vm, player, queue, container, funcContainer, main, this);
     }
     //ページ遷移
     public void Go(string page)
     {
+        curt_page = page;
         if (!loaded)
         {
             main.Init();
             loaded = true;
         }
+        //その他ボタンの作成
+        //順再生
+        Button playall = new Button();
+        playall.Content = "順再生";
+        playall.Click += func.PlayAll;
+        func_container.Children.Add(playall);
+        //シャッフル再生
+        Button Shuffleall = new Button();
+        Shuffleall.Content = "シャッフル再生";
+        Shuffleall.Click += func.ShuffleAll;
+        func_container.Children.Add(Shuffleall);
         switch (page)
         {
             case "tracks":
-                vm.Tracks = main.GetTracks();
+                vm.Tracks = main.GetTracks("",Main.FilterEnum.All);
                 vm.Curttype = ViewModel.TypeEnum.Track;
-                MakeTrackList();
+                func.MakeTrackList();
                 break;
             case "albums":
+                vm.Albums = main.GetAlbums("",Main.FilterEnum.All);
+                vm.Curttype = ViewModel.TypeEnum.Album;
+                func.MakeAlbumList();
                 break;
             case "artists":
+                vm.Artists = main.GetArtists("",Main.FilterEnum.All);
+                vm.Curttype = ViewModel.TypeEnum.Artist;
+                func.MakeArtistList();
                 break;
         }
     }
-    //要素作成関数
-    private void MakeTrackList()
+    //リフレッシュ
+    public void Refresh()
     {
-        //メインリスト作成
-        ListView mainlist = new ListView();
-        mainlist.ItemsSource = vm.Tracks;
-        mainlist.SelectionMode = SelectionMode.Single;
-        mainlist.HorizontalAlignment = HorizontalAlignment.Stretch;
-        //メインリスト用スタイル
-        Style mainlist_style = new Style(typeof(ListViewItem));
-        //トラック再生イベント
-        EventSetter play_event = new EventSetter();
-        play_event.Event = ListViewItem.MouseDoubleClickEvent;
-        play_event.Handler = new MouseButtonEventHandler((sender, args) =>
-        {
-                //キューの割当
-                vm.Curt_track = (Track)mainlist.SelectedItem;
-                vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
-                queue.set();
-                queue.showbutton();
-                for (int i = 0; i < vm.Tracks.Count; i++)
-                {
-                    if(vm.Curt_track.Id==vm.PlayQueue[i].Id)
-                        vm.Curt_queue_num = i;
-                }
-                //再生
-                player.Start();
-        });
-        mainlist_style.Setters.Add(play_event);
-        mainlist.ItemContainerStyle = mainlist_style;
-        //行テンプレート
-        GridView row = new GridView();
-        //タイトル
-        GridViewColumn title = new GridViewColumn();
-        title.Header = "タイトル";
-        title.DisplayMemberBinding = new System.Windows.Data.Binding("Title");
-        row.Columns.Add(title);
-        //最終処理
-        mainlist.View = row;
-        container.Children.Add(mainlist);
+        func_container.Children.Clear();
+        Go(curt_page);
     }
 }

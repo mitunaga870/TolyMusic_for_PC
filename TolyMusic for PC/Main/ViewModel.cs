@@ -40,6 +40,7 @@ namespace TolyMusic_for_PC
         private Album curt_album;
         //public変数
         public bool skip;
+        public string Preoperty_Id;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

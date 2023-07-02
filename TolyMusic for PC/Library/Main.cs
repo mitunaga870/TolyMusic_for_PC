@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,6 +14,13 @@ namespace TolyMusic_for_PC.Library;
 
 public class Main
 {
+    //フィルター用列挙
+    public enum FilterEnum
+    {
+        All,
+        Artist,
+        Album,
+    }
     //private変数
     private ViewModel vm;
     private Player player;
@@ -85,10 +94,101 @@ public class Main
         lib.AddYtmusic(yt_lib, yt_album, yt_artist);
     }
 
-    public ObservableCollection<Track> GetTracks()
+    public ObservableCollection<Track> GetTracks(string id,FilterEnum id_type)
     {
-        //DBから取得
-        var db_tmp = DB.Read("select * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id");
-        return Other.LibDictoTrack(db_tmp);
+        ObservableCollection<Track> result = new ObservableCollection<Track>();
+        Collection<Dictionary<string,object>> db_tmp;
+        Collection<MySqlParameter> param;
+        switch (id_type)
+        {
+            case FilterEnum.All:
+                //DBから取得
+                db_tmp = DB.Read(
+                    "select * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id");
+                result = Other.LibDictoTracks(db_tmp);
+                break;
+            case FilterEnum.Album:
+                if (Regex.Match(id, @"no_.*").Success)
+                {
+                    foreach (var track in vm.Curt_Album.Tracks)
+                        result.Add(track);
+                }
+                else
+                {
+                    param = new Collection<MySqlParameter>();
+                    param.Add(new MySqlParameter("@album_id", id));
+                    db_tmp = DB.Read(
+                        "select distinct * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id left join album_artist aa on al.album_id = aa.album_id where aa.album_id = @album_id",
+                        param);
+                    result = Other.LibDictoTracks(db_tmp);
+                }
+                break;
+            case FilterEnum.Artist:
+                param = new Collection<MySqlParameter>();
+                param.Add(new MySqlParameter("@artist_id", id));
+                db_tmp = DB.Read(
+                    "select distinct * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id where ar.artist_id = @artist_id"
+                    ,param);
+                result = Other.LibDictoTracks(db_tmp);
+                break;
+            default:
+                throw new Exception("Invalid FilterEnum");
+        }
+        return result;
+    }
+    public ObservableCollection<Album> GetAlbums(string id,FilterEnum id_type)
+    {
+        Collection<Dictionary<string,object>> db_tmp;
+        ObservableCollection<Album> result = new ObservableCollection<Album>();
+        switch (id_type)
+        {
+            case FilterEnum.All:
+                //DBから取得
+                db_tmp = DB.Read("SELECT distinct * from album join album_artist aa on album.album_id = aa.album_id join artist a on aa.artist_id = a.artist_id");
+                result = Other.LibDictoAlbums(db_tmp);
+                break;
+            case FilterEnum.Artist:
+                //DBから取得
+                var param = new Collection<MySqlParameter>();
+                param.Add(new MySqlParameter("@artist_id", id));
+                db_tmp = DB.Read("SELECT distinct * from album join album_artist aa on album.album_id = aa.album_id join artist a on aa.artist_id = a.artist_id where a.artist_id = @artist_id",param);
+                result = Other.LibDictoAlbums(db_tmp);
+                //アルバムを持たない曲を取得
+                db_tmp = DB.Read(
+                    "select distinct * from tracks t join location l on t.track_id= l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id left join album_artist aa on al.album_id = aa.album_id where ar.artist_id = @artist_id and al.album_id is null"
+                    ,param);
+                if (db_tmp.Count > 0)
+                {
+                    var noAlbum = new Album();
+                    noAlbum.Id = "no_" + id;
+                    noAlbum.Title = "No Album";
+                    foreach (var track in Other.LibDictoTracks(db_tmp))
+                    {
+                        noAlbum.Tracks.Add(track);
+                    }
+
+                    result.Add(noAlbum);
+                }
+                break;
+            default:
+                throw new Exception("Invalid FilterEnum");
+        }
+        return result;
+    }
+    public ObservableCollection<Artist> GetArtists(string id,FilterEnum id_type)
+    {
+        ObservableCollection<Artist> result = new ObservableCollection<Artist>();
+        Collection<Dictionary<string,object>> db_tmp;
+        switch (id_type)
+        {
+            case FilterEnum.All:
+                //DBから取得
+                db_tmp = DB.Read("SELECT distinct * from artist");
+                result = Other.LibDictoArtists(db_tmp);
+                break;
+            default:
+                throw new Exception("Invalid FilterEnum");
+        }
+        return result;
     }
 }

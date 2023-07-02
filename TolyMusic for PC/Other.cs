@@ -13,7 +13,7 @@ public class Other
         return dic.ContainsKey(key) && dic[key] != DBNull.Value;
     }
 
-    public static ObservableCollection<Track> LibDictoTrack(Collection<Dictionary<string, object>> dics)
+    public static ObservableCollection<Track> LibDictoTracks(Collection<Dictionary<string, object>> dics)
     {
         //リザルト作成
         var result = new ObservableCollection<Track>();
@@ -25,7 +25,8 @@ public class Other
                     continue;
             //track作成
             var track = new Track(dic);
-            track.addArtist(dic);
+            if(dic.ContainsKey("artist_id")&&dic["artist_id"] != DBNull.Value)
+                track.addArtist(dic);
             //重複確認
             if (result.Where(t => t.Id == track.Id).Count() > 0)
             {
@@ -47,6 +48,35 @@ public class Other
             }
             else
                 result.Add(track);
+        }
+        return result;
+    }
+
+    public static ObservableCollection<Album> LibDictoAlbums(Collection<Dictionary<string, object>> dics)
+    {
+        ObservableCollection<Album> result = new ObservableCollection<Album>();
+        foreach (var dic in dics)
+        {
+            string albumid = dic["album_id"].ToString();
+            //id重複を除き追加
+            if (result.Count(a => a.Id == albumid) == 0)
+                result.Add(new Album(dic));
+            //アーティストの追加
+            if (dic.ContainsKey("artist_id")&&dic["artist_id"] != DBNull.Value)
+                result.Where(a => a.Id == albumid).ToList()[0].addArtist(dic);
+        }
+        return result;
+    }
+
+    public static ObservableCollection<Artist> LibDictoArtists(Collection<Dictionary<string, object>> dics)
+    {
+        ObservableCollection<Artist> result = new ObservableCollection<Artist>();
+        foreach (var dic in dics)
+        {
+            string artistid = dic["artist_id"].ToString();
+            //id重複を除き追加
+            if (result.Count(a => a.Id == artistid) == 0)
+                result.Add(new Artist(dic));
         }
         return result;
     }

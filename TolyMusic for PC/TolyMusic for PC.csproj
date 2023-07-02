@@ -181,6 +181,10 @@
     <Compile Include="Main\ViewModel.cs" />
     <Compile Include="Other.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Property\DB_Func.cs" />
+    <Compile Include="Property\TrackPreoperty.xaml.cs">
+      <DependentUpon>TrackPreoperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setting\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
@@ -200,6 +204,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Property\TrackPreoperty.xaml" />
     <Page Include="Setting\Setting.xaml" />
   </ItemGroup>
   <ItemGroup>
