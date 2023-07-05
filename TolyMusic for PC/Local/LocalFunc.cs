@@ -1,31 +1,26 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TolyMusic_for_PC.Library;
+using TolyMusic_for_PC.Super;
 
 namespace TolyMusic_for_PC.Local
 {
-    public class LocalFunc
+    public class LocalFunc : PageFunc
     {
-        private ViewModel vm;
-        private Player player;
-        private Queue queue;
         private Local.Main local;
         private Library.AddLibFunc lib;
-        Grid container;
         //コンストラクタ
-        public LocalFunc(ViewModel vm, Player player, Queue queue, Main local, Grid container)
+        public LocalFunc(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer, object main, object PageControler) : base(vm, player, queue, container, funcContainer, main, PageControler)
         {
-            this.vm = vm;
-            this.player = player;
-            this.queue = queue;
-            this.local = local;
-            this.container = container;
-            lib = new Library.AddLibFunc(vm);
+            local = (Main)main;
+            lib = new AddLibFunc(vm);
         }
         //共通メソッド
-        private void MakeQueue()
+        protected override void MakeQueue()
         {
             switch (vm.Listtype)
             {
@@ -39,38 +34,6 @@ namespace TolyMusic_for_PC.Local
                     vm.PlayQueue = local.GetTracks(vm.Curt_Artist.Id,Main.id_type.artist);
                     break;
             }
-        }
-        //純再生
-        public void PlayAll(object sender = null, RoutedEventArgs e = null)
-        {
-            //キュー作成作業
-            MakeQueue();
-            vm.Curt_queue_num = 0;
-            vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-            //キュー生成
-            queue.set();
-            queue.showbutton();
-            //再生
-            player.Start();
-        }
-        //シャッフル再生
-        public void ShuffleAll(object sender = null, RoutedEventArgs e = null)
-        {
-            //キュー作成作業
-            MakeQueue();
-            vm.Curt_queue_num = 0;
-            for(int i = vm.PlayQueue.Count - 1; i > 0; i--)
-            {
-                int r = new System.Random().Next(i + 1);
-                Track tmp = vm.PlayQueue[i];
-                vm.PlayQueue[i] = vm.PlayQueue[r];
-                vm.PlayQueue[r] = tmp;
-            }
-            //キュー生成
-            queue.set();
-            queue.showbutton();
-            //再生
-            player.Start();
         }
         //ライブラリに追加
         public void AddLibAll(object sender = null, RoutedEventArgs e = null)
@@ -101,18 +64,12 @@ namespace TolyMusic_for_PC.Local
         }
         public void MakeTrackList()
         {
-            ListView ContentList = new ListView();
-            ContentList.SelectionMode = SelectionMode.Single;
-            ContentList.HorizontalAlignment = HorizontalAlignment.Stretch;
-            ContentList.ItemsSource = vm.Tracks;
-            Style style = new Style();
-            style.TargetType = typeof(ListViewItem);
-            EventSetter setter = new EventSetter();
-            setter.Event = ListViewItem.MouseDoubleClickEvent;
-            setter.Handler = new MouseButtonEventHandler((sender, args) =>
+            var head_path = new Dictionary<string, string>();
+            head_path.Add("タイトル", "Title");
+            var Event = new MouseButtonEventHandler((sender, args) =>
             {
                 //キューの割当
-                vm.Curt_track = (Track)ContentList.SelectedItem;
+                vm.Curt_track = (Track)((ListViewItem)sender).Content;
                 vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
                 queue.set();
                 queue.showbutton();
@@ -124,15 +81,9 @@ namespace TolyMusic_for_PC.Local
                 //再生
                 player.Start();
             });
-            style.Setters.Add(setter);
-            ContentList.ItemContainerStyle = style;
             //行の添付作成
             GridView row = new GridView();
-            //タイトル
-            GridViewColumn title = new GridViewColumn();
-            title.Header = "タイトル";
-            title.DisplayMemberBinding = new System.Windows.Data.Binding("Title");
-            row.Columns.Add(title);
+            var ContentList = MakeList(head_path, ViewModel.TypeEnum.Track, Event, ref row);
             //固定プレイリストに追加用ボタン
             GridViewColumn AddLib = new GridViewColumn();
             DataTemplate AddLibTemplate = new DataTemplate();
@@ -146,22 +97,15 @@ namespace TolyMusic_for_PC.Local
             AddLib.CellTemplate = AddLibTemplate;
             row.Columns.Add(AddLib);
             //最終処理
-            ContentList.View = row;
             container.Children.Add(ContentList);
         }
         public void MakeAlbumList()
         {
-            ListView AlbumList = new ListView();
-            AlbumList.SelectionMode = SelectionMode.Single;
-            AlbumList.HorizontalAlignment = HorizontalAlignment.Stretch;
-            AlbumList.ItemsSource = vm.Albums;
-            Style Albumstyle = new Style();
-            Albumstyle.TargetType = typeof(ListViewItem);
-            EventSetter Albumsetter = new EventSetter();
-            Albumsetter.Event = ListViewItem.MouseDoubleClickEvent;
-            Albumsetter.Handler = new MouseButtonEventHandler((sender, args) =>
+            var head_path = new Dictionary<string, string>();
+            head_path.Add("タイトル","Title");
+            var Event = new MouseButtonEventHandler((sender, args) =>
             {
-                Album album = (Album)AlbumList.SelectedItem;
+                Album album = (Album)((ListViewItem)sender).Content;
                 vm.Curt_Album = album;
                 //ページタイトル変更
                 vm.Prev_title = vm.Page;
@@ -171,29 +115,19 @@ namespace TolyMusic_for_PC.Local
                 vm.Listtypes.Add(ViewModel.TypeEnum.Album);
                 MakeTrackList();
             });
-            Albumstyle.Setters.Add(Albumsetter);
-            AlbumList.ItemContainerStyle = Albumstyle;
             GridView Albumrow = new GridView();
-            GridViewColumn Albumtitle = new GridViewColumn();
-            Albumtitle.Header = "タイトル";
-            Albumtitle.DisplayMemberBinding = new System.Windows.Data.Binding("Title");
-            Albumrow.Columns.Add(Albumtitle);
-            AlbumList.View = Albumrow;
+            var AlbumList = MakeList(head_path, ViewModel.TypeEnum.Album,Event,ref Albumrow);
             container.Children.Add(AlbumList);
         }
         public void MakeArtistList()
         {
+            GridView Artistrow = new GridView();
             ListView ArtistList = new ListView();
-            ArtistList.SelectionMode = SelectionMode.Single;
-            ArtistList.HorizontalAlignment = HorizontalAlignment.Stretch;
-            ArtistList.ItemsSource = vm.Artists;
-            Style Artiststyle = new Style();
-            Artiststyle.TargetType = typeof(ListViewItem);
-            EventSetter Artistsetter = new EventSetter();
-            Artistsetter.Event = ListViewItem.MouseDoubleClickEvent;
-            Artistsetter.Handler = new MouseButtonEventHandler(((sender, args) =>
+            var head_path = new Dictionary<string, string>();
+            head_path.Add("名前","Name");
+            var Event = new MouseButtonEventHandler(((sender, args) =>
             {
-                Artist artist = (Artist)ArtistList.SelectedItem;
+                Artist artist = (Artist)((ListViewItem)sender).Content;
                 vm.Curt_Artist = artist;
                 //ページタイトル変更
                 vm.Prev_title = vm.Page;
@@ -203,15 +137,9 @@ namespace TolyMusic_for_PC.Local
                 vm.Listtypes.Add(ViewModel.TypeEnum.Artist);
                 MakeAlbumList();
             }));
-            Artiststyle.Setters.Add(Artistsetter);
-            ArtistList.ItemContainerStyle = Artiststyle;
-            GridView Artistrow = new GridView();
-            GridViewColumn Artisttitle = new GridViewColumn();
-            Artisttitle.Header = "名前";
-            Artisttitle.DisplayMemberBinding = new System.Windows.Data.Binding("Name");
-            Artistrow.Columns.Add(Artisttitle);
-            ArtistList.View = Artistrow;
+            ArtistList = MakeList(head_path, ViewModel.TypeEnum.Artist, Event, ref Artistrow);
             container.Children.Add(ArtistList);
         }
+
     }
 }

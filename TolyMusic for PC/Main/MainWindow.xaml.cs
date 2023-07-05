@@ -18,7 +18,7 @@ namespace TolyMusic_for_PC
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PageController pageController;
+        private MainPageController _mainPageController;
         private Player Player;
         private ViewModel vm;
         private Queue queue;
@@ -34,7 +34,10 @@ namespace TolyMusic_for_PC
             Player = new Player(vm,VPlayer);
             queue = new Queue(vm,queue_list);
             lib = new AddLibFunc(vm);
-            pageController = new PageController(vm,MainGrid,PageFuncContainer,Player,queue);
+            //オンライン確認
+            CheckOnline();
+            //ページコントローラー初期化
+            _mainPageController = new MainPageController(vm,MainGrid,PageFuncContainer,Player,queue);
             //Go_library_tracks( null, null);
             //CefSharp設定
             CefSharp.Wpf.CefSettings settings = new CefSharp.Wpf.CefSettings();
@@ -56,6 +59,19 @@ namespace TolyMusic_for_PC
                 Console.WriteLine(ex.Message);
             }
         }
+        //オンライン確認処理
+        private void CheckOnline()
+        {
+            if(System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()&&DB.CheckOnline())
+            {
+                vm.isOnline = true;
+            }
+            else
+            {
+                MessageBox.Show("ネットワークに接続できません。オフラインモードで起動します");
+                vm.isOnline = false;
+            }
+        }
         //ページ切り替え事前処理
         private void closingPage(){
             PageFuncContainer.Children.Clear();
@@ -66,43 +82,43 @@ namespace TolyMusic_for_PC
         private void Go_library_tracks(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("library", "tracks");
+            _mainPageController.go("library", "tracks");
         }
         private void Go_library_albums(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("library", "albums");
+            _mainPageController.go("library", "albums");
         }
         private void Go_library_artists(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("library", "artists");
+            _mainPageController.go("library", "artists");
         }
         private void Go_library_playlists(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("library", "playlists");
+            _mainPageController.go("library", "playlists");
         }
         private void Go_local_tracks(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("local", "tracks");
+            _mainPageController.go("local", "tracks");
             
         }
         private void Go_local_albums(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("local", "albums");
+            _mainPageController.go("local", "albums");
         }
         private void Go_local_artists(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("local", "artists");
+            _mainPageController.go("local", "artists");
         }
         private void go_youtube(object sender, RoutedEventArgs e)
         {
             closingPage();
-            pageController.go("streaming", "youtube");
+            _mainPageController.go("streaming", "youtube");
         }
         //再生ボタン
         private void Toggle_Player(object sender, RoutedEventArgs e)

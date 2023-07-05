@@ -2,30 +2,20 @@
 
 namespace TolyMusic_for_PC.Local;
 
-public class Local_PC
+public class Local_PC : Super.PageController
 {
-    //private変数
-    private ViewModel vm;
-    private Player player;
-    private Queue queue;
-    private Grid container;
-    private StackPanel func_container;
     private bool loaded = false;
     private Main main;
     private LocalFunc localFunc;
     //コンストラクタ
-    public Local_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
+    public Local_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) 
+        : base(vm,player,queue,container,funcContainer)
     {
-        this.vm = vm;
-        this.player = player;
-        this.queue = queue;
-        this.container = container;
-        this.func_container = funcContainer;
         main = new Main(vm, player, queue, container, func_container);
-        localFunc = new LocalFunc(vm, player, queue, main, container);
+        localFunc = new LocalFunc(vm, player, queue, container,func_container ,main,this);
     }
     //ページ遷移
-    public void Go(string page)
+    public override void Go(string page)
     {
         if (!loaded)
         {
@@ -68,6 +58,11 @@ public class Local_PC
         AddLib.Content = "ライブラリに追加";
         AddLib.Click += localFunc.AddLibAll;
         func_container.Children.Add(AddLib);
+        //検索テキストボックスの作成
+        TextBox search = new TextBox();
+        search.Width = 200;
+        search.TextChanged += localFunc.Search;
+        func_container.Children.Add(search);
         //プレイリスト追加
         //その他
     }

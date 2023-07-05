@@ -1,11 +1,11 @@
-﻿<local:PropertyWindow x:Class="TolyMusic_for_PC.Property.TrackPreoperty"
+﻿<local:PropertyWindow x:Class="TolyMusic_for_PC.Property.AlbumPreoperty"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:TolyMusic_for_PC.Property"
         mc:Ignorable="d"
-        Title="PreopertyWindow" Height="550" Width="800">
+        Title="AlbumPreoperty" Height="450" Width="800">
     <local:PropertyWindow.Resources>
         <Style TargetType="Label">
            <Setter Property="Foreground" Value="#ececec"></Setter> 
@@ -20,9 +20,9 @@
         <Label Background="#FF212121" Name="Title" ></Label> 
         <StackPanel Grid.Row="1">
             <Label Content="タイトル"></Label>
-            <ComboBox Name="Title_ComboBox" IsEditable="True"></ComboBox>
+            <ComboBox Name="Title_Combobox" IsEditable="True"></ComboBox>
             <Label Content="タイトル（読み）"></Label>
-            <TextBox Name="TitlePron_TextBox"></TextBox>
+            <TextBox Name="TitlePron_Textbox"></TextBox>
             <Label Content="アーティスト"></Label>
             <ScrollViewer Height="100">
                 <ListView Name="Artist_List">
@@ -37,14 +37,6 @@
                 <ComboBox Name="Artist_ComboBox" IsEditable="True" Width="700"></ComboBox>
                 <Button Content="追加" Click="Add_Artist" Width="100"></Button>
             </StackPanel>
-            <Label Content="アルバム"></Label>
-            <ComboBox Name="Album_ComboBox" IsEditable="True"></ComboBox>
-            <Label Content="作曲者"></Label>
-            <ComboBox Name="Composer_ComboBox" IsEditable="True"></ComboBox>
-            <Label Content="グループ"></Label>
-            <ComboBox Name="Group_ComboBox" IsEditable="True"></ComboBox>
-            <Label Content="トラック番号"></Label>
-            <TextBox Name="TrackNumber_TextBox"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="2">
             <StackPanel Height="25" Orientation="Horizontal">

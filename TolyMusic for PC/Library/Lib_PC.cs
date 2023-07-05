@@ -7,32 +7,23 @@ using MySqlX.XDevAPI.Relational;
 
 namespace TolyMusic_for_PC.Library;
 
-public class Lib_PC
+public class Lib_PC : Super.PageController
 {
     //private変数
-    private ViewModel vm;
-    private Player player;
-    private Queue queue;
-    private Grid container;
-    private StackPanel func_container;
     private Main main;
     private LibFunc func;
     private bool loaded = false;
     private string curt_page;
     //コンストラクタ
-    public Lib_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
+    public Lib_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) 
+        : base (vm,player,queue,container,funcContainer)
     {
-        this.vm = vm;
-        this.player = player;
-        this.queue = queue;
-        this.container = container;
-        this.func_container = funcContainer;
         //初期化
-        main = new Main(vm, player, queue, container, func_container);
+        main = new Main(vm, player, queue, container, funcContainer);
         func = new LibFunc(vm, player, queue, container, funcContainer, main, this);
     }
     //ページ遷移
-    public void Go(string page)
+    public override void Go(string page)
     {
         curt_page = page;
         if (!loaded)
@@ -51,6 +42,11 @@ public class Lib_PC
         Shuffleall.Content = "シャッフル再生";
         Shuffleall.Click += func.ShuffleAll;
         func_container.Children.Add(Shuffleall);
+        //検索テキストボックスの作成
+        TextBox search = new TextBox();
+        search.Width = 200;
+        search.TextChanged += func.Search;
+        func_container.Children.Add(search);
         switch (page)
         {
             case "tracks":

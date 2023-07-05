@@ -8,32 +8,14 @@ using Guid = System.Guid;
 
 namespace TolyMusic_for_PC.Property;
 
-public partial class TrackPreoperty : Window
+public partial class TrackPreoperty : PropertyWindow
 {
-    private ViewModel vm;
-    private int Curt_num;
-    private Collection<Artist> AllArtist;
-    private Collection<Album> AllAlbum;
-    private Collection<Track> AllTrack;
-    public ObservableCollection<Artist> AddedArtist;
-    public TrackPreoperty(ViewModel vm, ViewModel.TypeEnum type)
+    public TrackPreoperty(ViewModel vm) : base(vm)
     {
-        this.vm = vm;
-        switch (type)
-        {
-            case ViewModel.TypeEnum.Track:
-                Curt_num = vm.Tracks.ToList().FindIndex(x => x.Id == vm.Preoperty_Id);
-                break;
-        }
-        AllArtist = DB_Func.GetAllArtist();
-        AllAlbum = DB_Func.GetAllAlbum();
-        AllTrack = DB_Func.GetAllTrack();
-        AddedArtist = new ObservableCollection<Artist>();
+        Curt_num = vm.Tracks.ToList().FindIndex(x => x.Id == vm.Preoperty_Id);
         InitializeComponent();
-        Load();
     }
-
-    private void Load()
+    protected override void Load()
     {
         //タイトル指定
         Title.Content = vm.Tracks[Curt_num].Title;
@@ -58,7 +40,7 @@ public partial class TrackPreoperty : Window
         //トラック番号
         TrackNumber_TextBox.Text = vm.Tracks[Curt_num].TrackNumber.ToString();
     }
-    private void Send_Data(object sender, RoutedEventArgs e)
+    protected override void Send_Data(object sender, RoutedEventArgs e)
     {
         //確認
         if(int.TryParse(TrackNumber_TextBox.Text,out int Tracknum) == false)
@@ -85,7 +67,7 @@ public partial class TrackPreoperty : Window
             //tracksの削除
             DB.NonQuery("delete from tracks where id = @prev_id",param);
             //track_artistの変更
-            DB.NonQuery("update track_artist set track_id = @track_id where track_id = @prev_id", param);
+            DB.NonQuery("update track_artist set track_id = @track_id where track_id = @prev_id and artist_id not in (select artist_id from track_artist where track_id = @track_id)", param);
             //locationの変更
             DB.NonQuery("update location set track_id = @track_id where track_id = @prev_id", param);
             //playlist_trackの変更

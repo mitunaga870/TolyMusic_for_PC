@@ -41,6 +41,7 @@ namespace TolyMusic_for_PC
         //public変数
         public bool skip;
         public string Preoperty_Id;
+        public bool isOnline;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -303,6 +304,5 @@ namespace TolyMusic_for_PC
         public ObservableCollection<Track> PlayQueue { get; set; }
         public ObservableCollection<Album> Albums { get; set; }
         public ObservableCollection<Artist> Artists { get; set; }
-        public ObservableCollection<string> Directories { get; set; }
     }
 }

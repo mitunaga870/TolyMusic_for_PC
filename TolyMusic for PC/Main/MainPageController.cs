@@ -11,7 +11,7 @@ using TolyMusic_for_PC.Streaming;
 
 namespace TolyMusic_for_PC
 {
-    public class PageController
+    public class MainPageController
     {
         private bool loadedlocal = false;
         private string type;
@@ -25,7 +25,7 @@ namespace TolyMusic_for_PC
         private Lib_PC library;
         private Local_PC local;
         LocalFunc localFunc;
-        public PageController(ViewModel vm, Grid container, StackPanel funcContainer, Player player, Queue queue)
+        public MainPageController(ViewModel vm, Grid container, StackPanel funcContainer, Player player, Queue queue)
         {
             this.vm = vm;
             this.container = container;
@@ -35,10 +35,20 @@ namespace TolyMusic_for_PC
             local = new Local_PC(vm,player,queue,this.container,this.func_container);
             streaming = new Streaming_PC(vm,player,queue,this.container,this.func_container);
             library = new Lib_PC(vm,player,queue,this.container,this.func_container);
-            go("library", "tracks");
+            if(vm.isOnline)
+                go("library", "tracks");
+            else
+                go("local", "tracks");
         }
         public void go(string type, string page)
         {
+            //オフライン時はローカル以外に飛ばない
+            if (!vm.isOnline&&type!="local")
+            {
+                MessageBox.Show("オフライン時はローカルのみ利用可能です。");
+                go(this.type, this.page);
+                return;
+            }
             this.type = type;
             this.page = page;
             //ページタイトル変更

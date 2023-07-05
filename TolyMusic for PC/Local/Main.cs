@@ -12,8 +12,9 @@ using System.Windows.Media.Media3D;
 
 namespace TolyMusic_for_PC.Local
 {
-    public class Main
+    public class Main : Super.Main
     {
+        public Main(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) : base(vm, player, queue, container, funcContainer) { }
         //変数宣言
         public enum id_type
         {
@@ -21,24 +22,7 @@ namespace TolyMusic_for_PC.Local
             album,
             track
         }
-        //private変数
-        private ViewModel vm;
-        private Player player;
-        private Queue queue;
-        private Grid container;
-        private StackPanel func_container;
-
-        public Main(){}
-        public Main(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
-        {
-            this.vm = vm;
-            this.player = player;
-            this.queue = queue;
-            this.container = container;
-            this.func_container = funcContainer;
-        }
-
-        public void Init()//ローカル内ファイル用DBの初期化
+        public override void Init()//ローカル内ファイル用DBの初期化
         {
             
             //ファイルのパスを配列で取得
@@ -351,5 +335,6 @@ namespace TolyMusic_for_PC.Local
             }
             return result;
         }
+
     }
 }

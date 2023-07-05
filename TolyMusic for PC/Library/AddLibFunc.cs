@@ -15,7 +15,6 @@ namespace TolyMusic_for_PC.Library
         public AddLibFunc(ViewModel vm)
         {
             this.vm = vm;
-            local = new Local.Main();
         }
         //local
         //トラックリストからライブラリに追加
