@@ -524,7 +524,8 @@ namespace TolyMusic_for_PC
                     return;
                 }
 
-                if (state == 5 || state == -1)
+                //クリック前だったら・   
+                if (state == 5 || state == -1 || (state == 1 && !isPlaying) || (state == 2 && isPlaying))
                 {
                     browser.GetBrowserHost()
                         .SendMouseClickEvent(100, 100, MouseButtonType.Left, false, 1, CefEventFlags.None);

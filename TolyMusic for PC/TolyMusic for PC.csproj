@@ -204,6 +204,7 @@
     <Compile Include="Super\Main.cs" />
     <Compile Include="Super\PageController.cs" />
     <Compile Include="Super\PageFunc.cs" />
+    <Compile Include="Super\StreamingReqHandler.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -300,6 +301,7 @@
     <Content Include="bin\Debug\NAudio.xml" />
     <Content Include="bin\Debug\Newtonsoft.Json.dll" />
     <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\scripts\Youtube\AddListItem.js" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Playlist_Track.py" />
     <Content Include="bin\Debug\scripts\Youtube\yt_outh.json" />

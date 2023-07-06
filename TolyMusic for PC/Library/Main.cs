@@ -184,4 +184,44 @@ public class Main
         }
         return result;
     }
+
+    public void Del_track(string track_id)
+    {
+        //値の確認
+        if (String.IsNullOrEmpty(track_id))
+            throw new Exception("Invalid Value");
+        //パラメータ・クエリ作成
+        var param = new Collection<MySqlParameter>();
+        param.Add(new MySqlParameter("@track_id", track_id));
+        var tracks_q = "delete from tracks where track_id = @track_id";
+        var ta_q = "delete from track_artist where track_id = @track_id";
+        var pa_q = "delete from playlist_track where track_id = @track_id";
+        var location_q = "delete from location where track_id = @track_id";
+        var history_q = "delete from history_tracks where track_id = @track_id";
+        //BAN
+        int i = 0;
+        var res =DB.Read("select location,youtube_id,tois_id from location where track_id = @track_id", param);
+        var ban_quary = "insert into ban_track (location,youtube_id) ";
+        var ban_param = new Collection<MySqlParameter>();
+        foreach (var dic in res)
+        {
+            ban_param.Add(new MySqlParameter("@location"+i, dic["location"]));
+            switch (dic["location"])
+            {
+                case 1://youtube
+                    ban_quary += "values (@location"+i+",@ban_id"+i+");";
+                    ban_param.Add(new MySqlParameter("@ban_id"+i, dic["youtube_id"]));
+                    break;
+            }
+
+            i++;
+        }
+        //実行
+        DB.NonQuery(tracks_q, param);
+        DB.NonQuery(ta_q, param);
+        DB.NonQuery(pa_q, param);
+        DB.NonQuery(location_q, param);
+        DB.NonQuery(history_q, param);
+        DB.NonQuery(ban_quary, ban_param);
+    }
 }

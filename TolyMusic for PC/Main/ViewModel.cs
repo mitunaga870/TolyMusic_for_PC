@@ -19,6 +19,12 @@ namespace TolyMusic_for_PC
             Playlist = 1,
             Artist = 2,
         }
+        public enum LocationEnum
+        {
+            Local = 0,
+            Youtube = 1,
+            ToIS = 2,
+        }
         //変数宣言
         private bool excl;
         private object loop;

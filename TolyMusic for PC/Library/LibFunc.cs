@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CefSharp.DevTools.Debugger;
 using TolyMusic_for_PC.Property;
 using TolyMusic_for_PC.Super;
 
@@ -165,8 +166,22 @@ public class LibFunc : PageFunc
                 };
                 break;
         }
-
         menu.Items.Add(property);
+        //トラック削除
+        if (type == ViewModel.TypeEnum.Track)
+        {
+            var del = new MenuItem();
+            del.Header = "ライブラリから削除";
+            del.Click += (sender, args) =>
+            {
+                if (MessageBox.Show("このトラックをライブラリから削除します。\nよろしいですか？", "確認", MessageBoxButton.OKCancel) ==
+                    MessageBoxResult.Cancel)
+                    return;
+                main.Del_track(vm.Preoperty_Id);
+                libPc.Refresh();
+            };
+            menu.Items.Add(del);
+        }
         other_button.SetValue(Button.ContextMenuProperty, menu);
         other_button.AddHandler(Button.ClickEvent, new RoutedEventHandler((sender, args) =>
         {

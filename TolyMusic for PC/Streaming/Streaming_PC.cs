@@ -1,7 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using CefSharp;
+using CefSharp.Internals;
 using CefSharp.Wpf;
 using TolyMusic_for_PC.Streaming.Handlar;
 
@@ -37,7 +39,8 @@ public class Streaming_PC
                     //ページ遷移
                     web.Address = "https://music.youtube.com/";
                     container.Children.Add(web);
-                    //追加イベント
+                    //再生時追加イベント
+                    web.RequestHandler = new YoutubeReqHandler(vm);
                     //一括追加イベント実装
                     Button add_bt = new Button();
                     add_bt.Content = "一括追加";
