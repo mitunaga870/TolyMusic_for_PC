@@ -184,6 +184,9 @@
     <Compile Include="Property\AlbumPreoperty.xaml.cs">
       <DependentUpon>AlbumPreoperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Property\ArtistProperty.xaml.cs">
+      <DependentUpon>ArtistProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Property\DB_Func.cs" />
     <Compile Include="Property\PropertyWindow.cs" />
     <Compile Include="Property\TrackPreoperty.xaml.cs">
@@ -212,6 +215,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Property\AlbumPreoperty.xaml" />
+    <Page Include="Property\ArtistProperty.xaml" />
     <Page Include="Property\TrackPreoperty.xaml" />
     <Page Include="Setting\Setting.xaml" />
   </ItemGroup>

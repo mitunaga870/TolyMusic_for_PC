@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using MySql.Data.MySqlClient;
 using TolyMusic_for_PC.Library;
@@ -16,6 +18,8 @@ public partial class AlbumPreoperty : PropertyWindow
 
     protected override void Load()
     {
+        //変更前のID
+        prev_id = vm.Albums[Curt_num].Id;
         //タイトル
         Title.Content = vm.Albums[Curt_num].Title;
         Title_Combobox.ItemsSource = AllAlbum;
@@ -32,18 +36,17 @@ public partial class AlbumPreoperty : PropertyWindow
 
     protected override void Send_Data(object sender, RoutedEventArgs e)
     {
-        string album_id = vm.Albums[Curt_num].Id;
+        string album_id = AllAlbum[Title_Combobox.SelectedIndex].Id;
         //タイトル
         string title;
-        if (Title_Combobox.SelectedIndex == -1)
-        {//曲名が変えられた場合
+        if (Title_Combobox.SelectedIndex == -1 || Regex.IsMatch(album_id,prev_id))
+        {//曲名が変えられた場合・そのままの場合
             title = Title_Combobox.Text;
         }
         else
-        {//他の曲と合併する場合
+        { //他の曲と合併する場合
             if (MessageBox.Show("アルバム情報を統合します。\nよろしいですか？", "確認", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 return;
-            string prev_id = album_id;
             album_id = AllAlbum[Title_Combobox.SelectedIndex].Id;
             //アルバム情報の統合
             var param = new Collection<MySqlParameter>();
@@ -64,14 +67,30 @@ public partial class AlbumPreoperty : PropertyWindow
         album_param.Add(new MySqlParameter("@title_pron", title_pron));
         //アーティスト
         var reset_query = "Delete from album_artist where album_id = @album_id";
-        string artist_query = "INSERT INTO album_artist (album_id, artist_id) VALUES (@album_id, @artist_id)";
+        var reset_param = new Collection<MySqlParameter>();
+        reset_param.Add(new MySqlParameter("@album_id", album_id));
+        string artist_query = "INSERT INTO album_artist (album_id, artist_id) VALUES ";
         var artist_param = new Collection<MySqlParameter>();
         int i = 0;
         foreach (var artist in AddedArtist)
         {
-            artist_query += "(@album_id" + i + ",@artist_id" + i + ")";
-            album_param.Add(new MySqlParameter());
+            string id = artist.Id;
+            if (id == null)
+            {//新規アーティストの場合
+                id = Guid.NewGuid().ToString();
+                string name = artist.Name;
+                //アーティスト追加
+                DB_Func.AddArtist(id, name);
+            }
+            artist_query += "(@album_id" + i + ",@artist_id" + i + "),";
+            artist_param.Add(new MySqlParameter("@album_id" + i, album_id));
+            artist_param.Add(new MySqlParameter("@artist_id" + i, id));
         }
+        artist_query = artist_query.Substring(0, artist_query.Length - 1);
+        //クエリ実行
+        DB.NonQuery(album_query, album_param);
+        DB.NonQuery(reset_query, reset_param);
+        DB.NonQuery(artist_query, artist_param);
     }
 
     private void Add_Artist(object sender, RoutedEventArgs e)

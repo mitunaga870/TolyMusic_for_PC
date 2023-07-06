@@ -77,6 +77,7 @@ namespace TolyMusic_for_PC
             PageFuncContainer.Children.Clear();
             MainGrid.Children.Clear();
             queue.hide();
+            vm.Filter = String.Empty;
         }
         //ページ遷移イベント
         private void Go_library_tracks(object sender, RoutedEventArgs e)
@@ -200,6 +201,7 @@ namespace TolyMusic_for_PC
                 MainGrid.Children.Remove(MainGrid.Children[MainGrid.Children.Count - 1]);
                 vm.Page = vm.Prev_title;
                 vm.Listtypes.RemoveAt(vm.Listtypes.Count - 1);
+                vm.Filter = null;
             }
         }
 

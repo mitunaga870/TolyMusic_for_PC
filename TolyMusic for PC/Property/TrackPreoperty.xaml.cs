@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using MySql.Data.MySqlClient;
 using TolyMusic_for_PC.Library;
@@ -17,6 +18,8 @@ public partial class TrackPreoperty : PropertyWindow
     }
     protected override void Load()
     {
+        //変更前のID
+        prev_id = vm.Tracks[Curt_num].Id;
         //タイトル指定
         Title.Content = vm.Tracks[Curt_num].Title;
         Title_ComboBox.ItemsSource = AllTrack;
@@ -48,19 +51,18 @@ public partial class TrackPreoperty : PropertyWindow
             MessageBox.Show("トラック番号が不正です。");
             return;
         }
-        string track_id = vm.Tracks[Curt_num].Id;
+        string track_id = AllTrack[Title_ComboBox.SelectedIndex].Id;
         string title;
         //タイトル
-        if (Title_ComboBox.SelectedIndex == -1)
+        if (Title_ComboBox.SelectedIndex == -1 || Regex.IsMatch(track_id,prev_id))
         {//曲名が変えられた場合
             title = Title_ComboBox.Text;
         }
         else
-        {//他の曲と合併する場合
+        {
+            //他の曲と合併する場合
             if(MessageBox.Show("楽曲情報を統合します。\nよろしいですか？", "確認", MessageBoxButton.YesNo) == MessageBoxResult.No)
                 return;
-            string prev_id = track_id;
-            track_id = AllTrack[Title_ComboBox.SelectedIndex].Id;
             var param = new Collection<MySqlParameter>();
             param.Add(new MySqlParameter("@prev_id", prev_id));
             param.Add(new MySqlParameter("@track_id", track_id));

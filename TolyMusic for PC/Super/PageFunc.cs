@@ -54,7 +54,7 @@ namespace TolyMusic_for_PC.Super
                 vm.PlayQueue[i] = vm.PlayQueue[r];
                 vm.PlayQueue[r] = tmp;
             }
-
+            vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
             //キュー生成
             queue.set();
             queue.showbutton();
@@ -102,7 +102,7 @@ namespace TolyMusic_for_PC.Super
 
         public void Search(object sender, RoutedEventArgs e)
         {
-            ListView mainlist = (ListView)container.Children[0];
+            ListView mainlist = (ListView)container.Children[container.Children.Count - 1];
             string keyword = ((TextBox)sender).Text;
             var list = mainlist.ItemsSource;
             switch (vm.Listtype)

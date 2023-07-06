@@ -224,11 +224,16 @@ namespace TolyMusic_for_PC
                         browser.LoadHtml(html, "http://example.com/");
                         //ロード後クリック
                         await browser.WaitForRenderIdleAsync();
-                        bool sw;
+                        bool sw = false;
                         do
                         {
                             var res = await browser.EvaluateScriptAsync("checkload();");
-                            sw = (bool)res.Result;
+                            if (res.Success)
+                                sw = (bool)res.Result;
+                            else
+                            {
+                                sw = false;
+                            }
                         }while (!sw);
                         //バッファリング解除
                         checkbuf.Start();
@@ -243,8 +248,7 @@ namespace TolyMusic_for_PC
             catch (Exception e)
             {
                 MessageBox.Show("ファイルが見つかりませんでした。");
-                Dispose();
-                return;
+                next();
             }
             //ボリューム・シークバー最大処理
             switch (locaiton)
@@ -274,61 +278,64 @@ namespace TolyMusic_for_PC
 
         //再生処理
         public void Play()
-                              {
-                              switch (locaiton)
-                              {
-                              case Locaion.local:
-                              if (isASIO)
-                              asio.Play();
-                              else
-                              wasapi.Play();
-                              break;
-                              case Locaion.youtube:
-                              browser.ExecuteScriptAsync("play();");
-                              break;
-                              }
-                              isPlaying = true;
-                              }
+        {
+            switch (locaiton)
+            {
+                case Locaion.local:
+                    if (isASIO)
+                        asio.Play();
+                    else
+                        wasapi.Play();
+                    break;
+                case Locaion.youtube:
+                    browser.ExecuteScriptAsync("play();");
+                    break;
+            }
+
+            isPlaying = true;
+        }
 
         //一時停止処理
         public void Pause()
-                               {
-                               switch (locaiton)
-                               {
-                               case Locaion.local:
-                               if (isASIO)
-                               asio.Pause();
-                               else
-                               wasapi.Pause();
-                               break;
-                               case Locaion.youtube:
-                               browser.ExecuteScriptAsync("pause();");
-                               break;
-                               }
-                               isPlaying = false;
-                               }
+        {
+            switch (locaiton)
+            {
+                case Locaion.local:
+                    if (isASIO)
+                        asio.Pause();
+                    else
+                        wasapi.Pause();
+                    break;
+                case Locaion.youtube:
+                    browser.ExecuteScriptAsync("pause();");
+                    break;
+            }
+
+            isPlaying = false;
+        }
 
         //再生終了時の処理
         public void Ended(object obj, StoppedEventArgs e)
-                                                             {
-                                                             if(anti_end)
-                                                             return;
-                                                             //停止処理 
-                                                             isPlaying = false;
-                                                             if (vm.Loop == null) //一曲ループ処理
-                                                             {
-                                                             vm.Next_time = 0;
-                                                             Play();
-                                                             }
-                                                             else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
-                                                             {
-                                                             Dispose();
-                                                             }
-                                                             else
-                                                             {
-                                                             next();
-                                                             }
-                                                             }
+        {
+            if (anti_end)
+                return;
+            //停止処理 
+            isPlaying = false;
+            if (vm.Loop == null) //一曲ループ処理
+            {
+                vm.Next_time = 0;
+                Play();
+            }
+            else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
+            {
+                Dispose();
+            }
+            else
+            {
+                next();
+            }
+        }
+
         //Youtubeの終了処理
         private async void Ended_Youtube()
         {
@@ -360,26 +367,28 @@ namespace TolyMusic_for_PC
                 await Task.Delay(100);
             }
         }
+
         public void next()
-                              {
-                              anti_end = true;
-                              if (vm.PlayQueue.Count -1 == vm.Curt_queue_num) //キューのループ処理
-                              {
-                              vm.Curt_queue_num = 0;
-                              vm.Curt_track = vm.PlayQueue[0];
-                              }
-                              else
-                              {
-                              vm.Curt_queue_num++;
-                              vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-                              }
-                              
-                              if (afreader != null)
-                              afreader.Dispose();
-                              if (mfreader != null)
-                              mfreader.Dispose();
-                              Start();
-                              }
+        {
+            anti_end = true;
+            if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num) //キューのループ処理
+            {
+                vm.Curt_queue_num = 0;
+                vm.Curt_track = vm.PlayQueue[0];
+            }
+            else
+            {
+                vm.Curt_queue_num++;
+                vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
+            }
+
+            if (afreader != null)
+                afreader.Dispose();
+            if (mfreader != null)
+                mfreader.Dispose();
+            Start();
+        }
+
         //巻き戻し
         public void prev()
         {
@@ -424,6 +433,10 @@ namespace TolyMusic_for_PC
                             }
                         }
                         catch (ObjectDisposedException e)
+                        {
+                            return;
+                        }
+                        catch (NullReferenceException e)
                         {
                             return;
                         }

@@ -50,17 +50,17 @@ public class Lib_PC : Super.PageController
         switch (page)
         {
             case "tracks":
-                vm.Tracks = main.GetTracks("",Main.FilterEnum.All);
+                vm.Tracks = main.GetTracks("",ViewModel.TypeEnum.All);
                 vm.Curttype = ViewModel.TypeEnum.Track;
                 func.MakeTrackList();
                 break;
             case "albums":
-                vm.Albums = main.GetAlbums("",Main.FilterEnum.All);
+                vm.Albums = main.GetAlbums("",ViewModel.TypeEnum.All);
                 vm.Curttype = ViewModel.TypeEnum.Album;
                 func.MakeAlbumList();
                 break;
             case "artists":
-                vm.Artists = main.GetArtists("",Main.FilterEnum.All);
+                vm.Artists = main.GetArtists("",ViewModel.TypeEnum.All);
                 vm.Curttype = ViewModel.TypeEnum.Artist;
                 func.MakeArtistList();
                 break;

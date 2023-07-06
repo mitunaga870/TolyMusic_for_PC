@@ -13,6 +13,7 @@ namespace TolyMusic_for_PC
             Name = item["artist_name"].ToString();
             if(Other.CheckDBValue(item,"artist_name_pron"))
                 Name_pron = item["artist_name_pron"].ToString();
+            Groups = new ObservableCollection<Artist>();
         }
         //ytMusic用
         public Artist(JObject json)
@@ -20,9 +21,11 @@ namespace TolyMusic_for_PC
             Id = json["id"].ToString();
             Name = json["name"].ToString();
             Name_pron = null;
+            Groups = new ObservableCollection<Artist>();
         }
         public string Id { get; set; }
         public string Name { get; set; }
         public string Name_pron { get; set; }
+        public ObservableCollection<Artist> Groups { get; set; }
     }
 }

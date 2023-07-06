@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -287,6 +288,7 @@ namespace TolyMusic_for_PC
                 OnPropertyChanged();
             }
         }
+        //リストのアイテムのリスト
         public TypeEnum? Listtype
         {
             get
@@ -298,8 +300,48 @@ namespace TolyMusic_for_PC
                 return Listtypes[Listtypes.Count - 1];
             }
         }
-
         public ObservableCollection<TypeEnum> Listtypes { set; get; }
+        
+        //シャッフル・順再生のためのフィルターのリスト
+        public string Filter
+        {
+            get
+            {
+                if (filters.Count == 0)
+                {
+                    return null;
+                }
+
+                return filters[filters.Count - 1];
+            }
+            set
+            {
+                if (value == null)
+                {
+                    filters.RemoveAt(filters.Count - 1);
+                    return;
+                }
+                if (value == String.Empty)
+                {
+                    filters.Clear();
+                    return;
+                }
+                filters.Add(value);
+            }
+        }
+        public TypeEnum Filtertype
+        {
+            get
+            {
+                if (Listtypes.Count == 0)
+                {
+                    return TypeEnum.All;
+                }
+
+                return Listtypes[Listtypes.Count - 2];
+            }
+        }
+        private Collection<string> filters = new Collection<string>();
         public ObservableCollection<Track> Tracks { get; set; }
         public ObservableCollection<Track> PlayQueue { get; set; }
         public ObservableCollection<Album> Albums { get; set; }

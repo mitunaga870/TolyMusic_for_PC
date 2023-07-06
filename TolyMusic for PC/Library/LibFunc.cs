@@ -22,18 +22,12 @@ public class LibFunc : PageFunc
 
     protected override void MakeQueue()
     {
-        switch (vm.Curttype)
-        {
-            case ViewModel.TypeEnum.Track:
-                vm.PlayQueue = vm.Tracks;
-                break;
-            case ViewModel.TypeEnum.Album:
-                vm.PlayQueue = main.GetTracks(vm.Curt_Album.Id, Main.FilterEnum.Album);
-                break;
-            case ViewModel.TypeEnum.Artist:
-                vm.PlayQueue = main.GetTracks(vm.Curt_Artist.Id, Main.FilterEnum.Artist);
-                break;
+        if (vm.Filter == null)
+        {//フィルターが未設定の時
+            vm.PlayQueue = main.GetTracks(null, ViewModel.TypeEnum.All);
+            return;
         }
+        vm.PlayQueue = main.GetTracks(vm.Filter, vm.Filtertype);
     }
 
     //リスト生成関数
@@ -80,11 +74,12 @@ public class LibFunc : PageFunc
         {
             Album album = (Album)((ListViewItem)sender).Content;
             vm.Curt_Album = album;
+            vm.Filter = album.Id;
             //タイトル変更
             vm.Prev_title = vm.Page;
             vm.Page = album.Title;
             //トラック取得
-            vm.Tracks = main.GetTracks(album.Id, Main.FilterEnum.Album);
+            vm.Tracks = main.GetTracks(album.Id, ViewModel.TypeEnum.Album);
             MakeTrackList();
         });
         var mainlist = MakeList(head_path, ViewModel.TypeEnum.Album,Event, ref row);
@@ -106,11 +101,12 @@ public class LibFunc : PageFunc
         {
             Artist artist = (Artist)((ListViewItem)sender).Content;
             vm.Curt_Artist = artist;
+            vm.Filter = artist.Id;
             //タイトル変更
             vm.Prev_title = vm.Page;
             vm.Page = artist.Name;
             //アルバム取得
-            vm.Albums = main.GetAlbums(artist.Id, Main.FilterEnum.Artist);
+            vm.Albums = main.GetAlbums(artist.Id, ViewModel.TypeEnum.Artist);
             MakeAlbumList();
         });
         head_path.Add("名前", "Name");
@@ -152,6 +148,16 @@ public class LibFunc : PageFunc
                 property.Click += (sender, args) =>
                 {
                     AlbumPreoperty window = new AlbumPreoperty(vm);
+                    window.Owner = Application.Current.MainWindow;
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    window.ShowDialog();
+                    libPc.Refresh();
+                };
+                break;
+            case ViewModel.TypeEnum.Artist:
+                property.Click += (sender, args) =>
+                {
+                    ArtistProperty window = new ArtistProperty(vm);
                     window.Owner = Application.Current.MainWindow;
                     window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     window.ShowDialog();
