@@ -26,6 +26,7 @@ namespace TolyMusic_for_PC.Super
         public virtual bool OnOpenUrlFromTab(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, string targetUrl,
             WindowOpenDisposition targetDisposition, bool userGesture)
         {
+            chromiumWebBrowser.LoadUrl(targetUrl);
             return true;
         }
         //リソース読み込み時

@@ -39,12 +39,14 @@ public class Streaming_PC
                     //ページ遷移
                     web.Address = "https://music.youtube.com/";
                     container.Children.Add(web);
-                    //再生時追加イベント
+                    //再生id取得
                     web.RequestHandler = new YoutubeReqHandler(vm);
-                    //一括追加イベント実装
+                    //再生アイテム追加
                     Button add_bt = new Button();
-                    add_bt.Content = "一括追加";
+                    add_bt.Content = "追加";
+                    add_bt.Click += yt_func.Add_PlayingTrack;
                     func_container.Children.Add(add_bt);
+                    //ライブラリ同期
                     Button add_lib_bt = new Button();
                     add_lib_bt.Content = "ライブラリを同期";
                     add_lib_bt.Click += yt_func.SyncLib;

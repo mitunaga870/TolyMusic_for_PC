@@ -298,6 +298,10 @@ namespace TolyMusic_for_PC.Library
         
         //Ytmusic
         //追加
+        public void AddYtmusic(string youtube_id)
+        {
+            
+        }
         public void AddYtmusic(Collection<Track> tracks, Collection<Album> albums, Collection<Artist> artists)
         {
             //既存DB情報取得

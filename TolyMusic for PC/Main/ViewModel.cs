@@ -49,7 +49,7 @@ namespace TolyMusic_for_PC
         public bool skip;
         public string Preoperty_Id;
         public bool isOnline;
-
+        public string Curt_YoutubeId;
         public event PropertyChangedEventHandler PropertyChanged;
 
         //コンストラクタ

@@ -79,4 +79,9 @@ public class Yt_Func
         //ライブラリに送信
         lib.AddYtmusic(yt_lib, yt_album, yt_artist);
     }
+
+    public void Add_PlayingTrack(object sender, RoutedEventArgs e)
+    {
+        lib.AddYtmusic(vm.Curt_YoutubeId);
+    }
 }
