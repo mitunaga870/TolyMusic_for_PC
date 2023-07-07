@@ -2,3 +2,4 @@
 bin/*
 !bin/Debug/*.dll
 !bin/Debug/script/*
+bin/Debug/script/yt_outh.json

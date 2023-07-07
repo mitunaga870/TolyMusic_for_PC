@@ -311,6 +311,7 @@
     <Content Include="bin\Debug\Newtonsoft.Json.dll" />
     <Content Include="bin\Debug\Newtonsoft.Json.xml" />
     <Content Include="bin\Debug\scripts\Youtube\AddListItem.js" />
+    <Content Include="bin\Debug\scripts\Youtube\GetTrackData.py" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Playlist_Track.py" />
     <Content Include="bin\Debug\scripts\Youtube\yt_outh.json" />
