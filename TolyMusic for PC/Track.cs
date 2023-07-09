@@ -53,9 +53,12 @@ namespace TolyMusic_for_PC
         {
             Id = json["videoId"].ToString();
             Title = json["title"].ToString();
-            var album = json["album"].ToString();
-            if(album != "none")
-                Album_id = json["album"]["id"].ToString();
+            if (json.ContainsKey("album"))
+            {
+                var album = json["album"].ToString();
+                if (album != "none")
+                    Album_id = json["album"]["id"].ToString();
+            }
             Artists = new Collection<Artist>();
             Duration = (double)json["duration_seconds"];
             foreach (var artist in json["artists"])

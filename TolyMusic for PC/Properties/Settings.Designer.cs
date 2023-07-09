@@ -201,5 +201,17 @@ namespace TolyMusic_for_PC.Properties {
                 this["YoutubePlaylist"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VenvPath {
+            get {
+                return ((string)(this["VenvPath"]));
+            }
+            set {
+                this["VenvPath"] = value;
+            }
+        }
     }
 }

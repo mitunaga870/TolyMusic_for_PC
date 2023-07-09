@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Google.Protobuf;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using Newtonsoft.Json.Linq;
 
 namespace TolyMusic_for_PC;
 
@@ -78,6 +80,18 @@ public class Other
             if (result.Count(a => a.Id == artistid) == 0)
                 result.Add(new Artist(dic));
         }
+        return result;
+    }
+
+    public static JObject JsonParse(string str)
+    {
+        //予約語置き換え
+        string str_after = str.Replace("True", "\"true\"");
+        str_after = str_after.Replace("False", "\"false\"");
+        str_after = str_after.Replace("None", "\"none\"");
+        //変換
+        var result = JObject.Parse(str_after);
+        
         return result;
     }
 }

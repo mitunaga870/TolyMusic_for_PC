@@ -149,6 +149,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -201,6 +202,7 @@
     <Compile Include="Property\TrackPreoperty.xaml.cs">
       <DependentUpon>TrackPreoperty.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Python.cs" />
     <Compile Include="Setting\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
@@ -314,6 +316,7 @@
     <Content Include="bin\Debug\scripts\Youtube\GetTrackData.py" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\scripts\Youtube\Get_Playlist_Track.py" />
+    <Content Include="bin\Debug\scripts\Youtube\Get_ytouth.py" />
     <Content Include="bin\Debug\scripts\Youtube\yt_outh.json" />
     <Content Include="bin\Debug\script\Youtube\Get_Lib_Song.py" />
     <Content Include="bin\Debug\script\Youtube\Get_Playlist_Track.py" />

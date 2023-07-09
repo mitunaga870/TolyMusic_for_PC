@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using MySqlX.XDevAPI;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TolyMusic_for_PC.Library;
 
@@ -18,7 +16,7 @@ public class Yt_Func
     private Player player;
     private Queue queue;
     private Grid container;
-    private Library.AddLibFunc lib;
+    private AddLibFunc lib;
     public Yt_Func(ViewModel vm, Player player, Queue queue, Grid container)
     {
         this.vm = vm;
@@ -33,45 +31,23 @@ public class Yt_Func
         //ライブラリ取得スクリプト
         //スクリプト用変数取得
         string script = "scripts\\Youtube\\Get_Lib_Song.py";
-        //スクリプトプロセス宣言
-        var proc = new Process
-        {
-            StartInfo = new ProcessStartInfo("py")
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                StandardOutputEncoding = Encoding.UTF8,
-                Arguments = script 
-            }
-        };
-        //スクリプト実行・取得
-        proc.Start();
-        var stream = proc.StandardOutput;
-        //スクリプト終了
-        var sc_res = stream.ReadToEnd();
-        proc.WaitForExit();
-        proc.Close();
         //スクリプト結果をjson配列に変換
-        string[] sc_res_ary = sc_res.Split(Convert.ToChar("\n"));
+        string[] sc_res_ary = Python.Get(script);
         //スクリプト結果をリストに格納
-        System.Collections.ObjectModel.Collection<Track> yt_lib = new System.Collections.ObjectModel.Collection<Track>();
-        System.Collections.ObjectModel.Collection<Album> yt_album = new System.Collections.ObjectModel.Collection<Album>();
-        System.Collections.ObjectModel.Collection<Artist> yt_artist = new System.Collections.ObjectModel.Collection<Artist>();
+        Collection<Track> yt_lib = new Collection<Track>();
+        Collection<Album> yt_album = new Collection<Album>();
+        Collection<Artist> yt_artist = new Collection<Artist>();
         foreach (string sc_res_line in sc_res_ary)
         {
             if(sc_res_line == "")
                 continue;
             //予約後置き換え・Jsonに変換
-            string sc_res_line_after = sc_res_line.Replace("True", "\"true\"");
-            sc_res_line_after = sc_res_line_after.Replace("False", "\"false\"");
-            sc_res_line_after = sc_res_line_after.Replace("None", "\"none\"");
-            var sc_res_json = JObject.Parse(sc_res_line_after);
+            JObject sc_res_json = Other.JsonParse(sc_res_line);
             //tracks
             yt_lib.Add(new Track(sc_res_json));
             //albums
             if (yt_album.Count(a => a.Id == (string)sc_res_json["album"]["id"]) == 0)
-                yt_album.Add(new Album((JObject)sc_res_json));
+                yt_album.Add(new Album(sc_res_json));
             foreach (var artist in sc_res_json["artists"])
                 if(yt_artist.Count(a => a.Id == (string)artist["id"]) == 0)
                     yt_artist.Add(new Artist((JObject)artist));
@@ -82,6 +58,30 @@ public class Yt_Func
 
     public void Add_PlayingTrack(object sender, RoutedEventArgs e)
     {
-        lib.AddYtmusic(vm.Curt_YoutubeId);
+        Add_Track(vm.Curt_YoutubeId);
+    }
+
+    public void Add_Track(string id)
+    {
+        string[] res;
+        try
+        {
+            res = Python.Get("scripts\\Youtube\\GetTrackData.py", new[] {id});
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            return;
+        }
+        JObject TrackData = Other.JsonParse(res[0]);
+        Track track = new Track(TrackData);
+        var albums = new Collection<Album>();
+        if (TrackData.ContainsKey("album"))
+            albums.Add(new Album(TrackData));
+        var artists = new Collection<Artist>();
+        foreach (var artist in TrackData["artists"])
+            artists.Add(new Artist((JObject)artist));
+        //ライブラリに送信
+        lib.AddYtmusic(new Collection<Track> {track}, albums, artists);
     }
 }

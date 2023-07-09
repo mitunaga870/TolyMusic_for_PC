@@ -12,10 +12,10 @@ namespace TolyMusic_for_PC.Streaming.Handlar;
 
 public class YoutubeReqHandler : StreamingReqHandler
 {
-    private AddLibFunc lib;
-    public YoutubeReqHandler(ViewModel vm) : base(vm)
+    Yt_Func func;
+    public YoutubeReqHandler(ViewModel vm,Yt_Func func) : base(vm)
     {
-        lib = new AddLibFunc(vm);
+        this.func = func;
     }
 
     //再生id取得
@@ -23,7 +23,7 @@ public class YoutubeReqHandler : StreamingReqHandler
         IRequest request, bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling)
     {
         string url = request.Url; 
-        if (Regex.Match(url, @".*docid=.*").Success)
+        if (Regex.Match(url, @".*cat=streaming.*").Success)
         {
             string id = Regex.Match(url, @"docid=.{11}").Value.Substring(6);
             vm.Curt_YoutubeId = id;
@@ -38,7 +38,7 @@ public class YoutubeReqHandler : StreamingReqHandler
         if(Regex.Match(targetUrl,".*youtube\\.com/watch.*").Success)
         {
             string id = Regex.Match(targetUrl, @"v=.{11}").Value.Substring(2);
-            lib.AddYtmusic(id);
+            func.Add_Track(id);
             return true;
         }
         return base.OnOpenUrlFromTab(chromiumWebBrowser, browser, frame, targetUrl, targetDisposition, userGesture);

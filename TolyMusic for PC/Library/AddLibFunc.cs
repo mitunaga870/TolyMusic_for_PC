@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using MySql.Data.MySqlClient;
+using MessageBox = System.Windows.MessageBox;
 
 namespace TolyMusic_for_PC.Library
 {
@@ -298,10 +300,6 @@ namespace TolyMusic_for_PC.Library
         
         //Ytmusic
         //追加
-        public void AddYtmusic(string youtube_id)
-        {
-            
-        }
         public void AddYtmusic(Collection<Track> tracks, Collection<Album> albums, Collection<Artist> artists)
         {
             //既存DB情報取得
@@ -421,6 +419,13 @@ namespace TolyMusic_for_PC.Library
                 //追加済み確認変数
                 bool location_added = addedlocation.Count(at => at["youtube_id"] == tracks[i].Id) != 0;
                 bool track_added = addedtrack.Count(t => t.Title == tracks[i].Title) != 0;
+                //同名トラック時どうするか
+                if (track_added)
+                {
+                    var res = MessageBox.Show("同名トラックが存在します。新規追加しますか？", "確認", MessageBoxButton.OKCancel);
+                    if(res == MessageBoxResult.OK)
+                        track_added = false;
+                }
                 string track_id;
                 //track
                 if(location_added)
