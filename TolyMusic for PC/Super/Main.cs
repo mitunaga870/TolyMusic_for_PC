@@ -10,7 +10,11 @@ namespace TolyMusic_for_PC.Super
         protected Queue queue;
         protected Grid container;
         protected StackPanel func_container;
-        
+
+        public Main(ViewModel vm)
+        {
+            this.vm = vm;
+        }
         public Main(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
         {
             this.vm = vm;

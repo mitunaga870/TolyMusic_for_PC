@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using MySql.Data.MySqlClient;
 using TolyMusic_for_PC.Library;
 using Guid = System.Guid;
@@ -153,6 +154,9 @@ public partial class TrackPreoperty : PropertyWindow
         tracks_param.Add(new MySqlParameter("@group_id", group_id));
         tracks_param.Add(new MySqlParameter("@track_number", Tracknum));
         //track_artist
+        string ta_reset = "delete from track_artist where track_id = @track_id";
+        var ta_reset_param = new Collection<MySqlParameter>();
+        ta_reset_param.Add(new MySqlParameter("@track_id", track_id));
         string ta_quary = "insert into track_artist (track_id, artist_id) values ";
         var ta_param = new Collection<MySqlParameter>();
         int i = 0;
@@ -174,6 +178,7 @@ public partial class TrackPreoperty : PropertyWindow
         ta_quary = ta_quary.Substring(0, ta_quary.Length - 1);
         //曲情報の書き込み
         DB.NonQuery("update tracks set track_title = @title, track_title_pron = @title_pron, album_id = @album_id, composer_id = @composer_id, group_id = @group_id, track_num = @track_number where track_id = @track_id", tracks_param);
+        DB.NonQuery(ta_reset, ta_reset_param);
         DB.NonQuery(ta_quary, ta_param);
     }
 
@@ -182,5 +187,12 @@ public partial class TrackPreoperty : PropertyWindow
         Artist Add_Artist = AllArtist[Artist_ComboBox.SelectedIndex];
         if(AddedArtist.Count(x => x.Id == Add_Artist.Id) == 0)
             AddedArtist.Add(Add_Artist);
+    }
+
+    private void DelArtist(object sender, RoutedEventArgs e)
+    {
+        Button button = sender as Button;
+        int index = AddedArtist.IndexOf(AddedArtist.First(a => a.Id == button.Uid));
+        AddedArtist.RemoveAt(index);
     }
 }

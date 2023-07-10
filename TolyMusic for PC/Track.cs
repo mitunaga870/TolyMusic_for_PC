@@ -15,10 +15,23 @@ namespace TolyMusic_for_PC
         public string Title_pron { get; set; }
         public double Duration { get; set; }
         public int TrackNumber { get; set; }
+        public string Album { get; set; }
         public string Album_id { get; set; }
         public Collection<Artist> Artists { get; set; }
         public int location { get; set; }
         public string youtube_id { get; set; }
+        //表示用
+        public string Artist
+        {
+            get
+            {
+                string res = "";
+                foreach (var artist in Artists)
+                    res += artist.Name + ",";
+                res = res.Remove(res.Length - 1);
+                return res;
+            }
+        }
 
         //コンストラクタ
         //SQL用
@@ -26,6 +39,8 @@ namespace TolyMusic_for_PC
         {
             Id = dictionary["track_id"].ToString();
             Title = dictionary["track_title"].ToString();
+            if(Other.CheckDBValue(dictionary,"album_title"))
+                Album = dictionary["album_title"].ToString();
             if(Other.CheckDBValue(dictionary,"album_id"))
                 Album_id = dictionary["album_id"].ToString();
             if(Other.CheckDBValue(dictionary,"composer_id"))

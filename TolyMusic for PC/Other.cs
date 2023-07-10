@@ -36,8 +36,14 @@ public class Other
                 //アーティストの存在確認
                 if(track.Artists.Count == 0)
                     continue;
-                else//重複していたらアーティストを追加
-                    result.Where(t => t.Id == track.Id).ToList()[0].Artists.Add(track.Artists[0]);
+                else //重複していたらアーティストを追加
+                {
+                    foreach (var artist in track.Artists)
+                    {
+                        if(added_track.Artists.Where(a => a.Id == artist.Id).Count() == 0)
+                            added_track.Artists.Add(artist); 
+                    }
+                }
                 //登録済みがローカルあるいは重複よりも優先度が高ければやめる
                 if(added_track.location == 0||added_track.location <= track.location)
                     continue;

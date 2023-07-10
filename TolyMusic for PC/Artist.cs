@@ -27,5 +27,17 @@ namespace TolyMusic_for_PC
         public string Name { get; set; }
         public string Name_pron { get; set; }
         public ObservableCollection<Artist> Groups { get; set; }
+        //表示用
+        public string Group
+        {
+            get
+            {
+                string res = "";
+                foreach (var group in Groups)
+                    res += group.Name + ",";
+                res = res.Remove(res.Length - 1);
+                return res;
+            }
+        }
     }
 }

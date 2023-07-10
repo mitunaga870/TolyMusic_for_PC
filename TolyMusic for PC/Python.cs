@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Shapes;
 
 namespace TolyMusic_for_PC;
 
@@ -10,10 +11,14 @@ public class Python
     
     private static void Init(string path)
     {
-        string venv = "C:\\Users\\mitu\\RiderProjects\\TolyMusic_for_PC\\venv";
+        string venv = Properties.Settings.Default.VenvPath;
+        if (System.IO.File.Exists(venv))
+            venv += "\\Scripts\\python.exe";
+        else
+            venv = "py";
         proc = new Process
         {
-            StartInfo = new ProcessStartInfo(venv + "\\Scripts\\python.exe", path)
+            StartInfo = new ProcessStartInfo(venv, path)
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -23,6 +28,7 @@ public class Python
                 StandardErrorEncoding = Encoding.UTF8
             }
         };
+        
     }
     public static void Run(string path)
     {

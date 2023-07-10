@@ -39,6 +39,8 @@ public class LibFunc : PageFunc
         GridView row = new GridView();
         var head_path = new Dictionary<string, string>();
         head_path.Add("タイトル", "Title");
+        head_path.Add("アーティスト", "Artist");
+        head_path.Add("アルバム", "Album");
         //ダブルクリックイベント
         var Event = new MouseButtonEventHandler((sender, args) =>
         {
@@ -70,6 +72,7 @@ public class LibFunc : PageFunc
         GridView row = new GridView();
         var head_path = new Dictionary<string, string>();
         head_path.Add("タイトル", "Title");
+        head_path.Add("アーティスト", "Group");
         //ダブルクリックイベント
         var Event = new MouseButtonEventHandler((sender, args) =>
         {

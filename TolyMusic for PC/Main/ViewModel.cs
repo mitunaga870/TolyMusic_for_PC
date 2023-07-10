@@ -236,6 +236,7 @@ namespace TolyMusic_for_PC
             set
             {
                 curt_track = value;
+                Curt_Title = value.Title;
                 OnPropertyChanged();
             }
         }
@@ -352,5 +353,21 @@ namespace TolyMusic_for_PC
         public ObservableCollection<Track> PlayQueue { get; set; }
         public ObservableCollection<Album> Albums { get; set; }
         public ObservableCollection<Artist> Artists { get; set; }
+        //ヘッダ表示用
+        public string Curt_Title
+        {
+            set
+            {
+                OnPropertyChanged();
+            }
+            get
+            {
+                if(Curt_track == null)
+                {
+                    return "";
+                }
+                return Curt_track.Title + " - " + Curt_track.Artist;
+            }
+        }
     }
 }

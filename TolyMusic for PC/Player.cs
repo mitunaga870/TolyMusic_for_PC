@@ -8,6 +8,7 @@ using CefSharp.Wpf;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
+
 namespace TolyMusic_for_PC
 {
     public class Player
@@ -41,6 +42,7 @@ namespace TolyMusic_for_PC
 
         public Player(ViewModel vm, Grid container)
         {
+            
             this.vm = vm;
             this.container = container;
             webloaded = false;

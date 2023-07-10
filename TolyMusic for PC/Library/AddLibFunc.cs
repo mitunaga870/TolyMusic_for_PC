@@ -17,13 +17,16 @@ namespace TolyMusic_for_PC.Library
         public AddLibFunc(ViewModel vm)
         {
             this.vm = vm;
+            local = new Local.Main(vm);
         }
         //local
         //トラックリストからライブラリに追加
         public void AddLocalListTracks(Collection<Track> tracks)
         {
             //マシン名の取得
-            string device_id = Environment.MachineName;
+            string device_name = Environment.MachineName;
+            var tmp = DB.Read("select * from device where device_name = '" + device_name + "'");
+            string device_id = tmp[0]["device_id"].ToString();
             if (!Properties.Settings.Default.LibraryAddedMachine)
             {
                 device_id = AddMachine();
@@ -34,7 +37,7 @@ namespace TolyMusic_for_PC.Library
             Collection<Artist> localArtists = local.GetArtists();
             //既存DB情報取得
             //既存トラック確認用
-            Collection<Dictionary<string, object>> tmp = DB.Read("select * from tracks");
+            tmp = DB.Read("select * from tracks");
             Collection<Track> addedtracks = new Collection<Track>();
             foreach (var item in tmp)
                 addedtracks.Add(new Track(item));
@@ -117,7 +120,7 @@ namespace TolyMusic_for_PC.Library
                     string tmp_path = cwd.AbsolutePath + "/" + location["path"];
                     tmp_path = tmp_path.Replace("/","\\");
                     tmp_path = Uri.UnescapeDataString(tmp_path);
-                    if (tracks[i].Path == tmp_path)
+                    if (string.Equals(tracks[i].Path,tmp_path))
                     {
                         //locationに追加済みのときはスキップしこのデバイス出ない場合はこのデバイスを追加
                         if(location["device_id"] != device_id)
@@ -323,6 +326,11 @@ namespace TolyMusic_for_PC.Library
             Collection<Album> addedalbum = new Collection<Album>();//仮想ライブラリアルバムリスト
             foreach (var item in tmp)
                 addedalbum.Add(new Album(item));
+            //BAN確認
+            tmp = DB.Read("select youtube_id from ban_track where location = 1");
+            Collection<string> ban_ytid = new Collection<string>();
+            foreach (var item in tmp)
+                ban_ytid.Add(item["youtube_id"].ToString());
             
             //Artist
             //youtubeid_artistid変換用
@@ -416,20 +424,33 @@ namespace TolyMusic_for_PC.Library
             j = 0;
             for (i = 0; i < tracks.Count; i++)
             {
+                //表示用文字列
+                string track_print = tracks[i].Title + "/";
+                foreach (var artist in tracks[i].Artists)
+                    track_print += artist.Name + "/";
+                track_print = track_print.Remove(track_print.Length - 1);
                 //追加済み確認変数
                 bool location_added = addedlocation.Count(at => at["youtube_id"] == tracks[i].Id) != 0;
                 bool track_added = addedtrack.Count(t => t.Title == tracks[i].Title) != 0;
-                //同名トラック時どうするか
-                if (track_added)
-                {
-                    var res = MessageBox.Show("同名トラックが存在します。新規追加しますか？", "確認", MessageBoxButton.OKCancel);
-                    if(res == MessageBoxResult.OK)
-                        track_added = false;
-                }
+                //BAN確認
+                bool baned = ban_ytid.Contains(tracks[i].Id);
                 string track_id;
                 //track
                 if(location_added)
                     continue;
+                //BANされているとき
+                if (baned)
+                    continue;
+                //同名トラック時どうするか
+                if (track_added)
+                {
+                    var res = MessageBox.Show("同名トラックが存在します。新規追加しますか？："+track_print, "確認", MessageBoxButton.OKCancel);
+                    if (res == MessageBoxResult.OK)
+                    {
+                        tracks[i].Title += "-dup";
+                        track_added = false;
+                    }
+                }
                 if (track_added)
                     //trackid取得
                     track_id = addedtrack.Where(t => t.Title == tracks[i].Title).ToArray()[0].Id;

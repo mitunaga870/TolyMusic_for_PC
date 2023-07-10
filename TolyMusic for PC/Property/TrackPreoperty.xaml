@@ -29,6 +29,13 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="名前" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="X" Uid="{Binding Id}" Click="DelArtist"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>

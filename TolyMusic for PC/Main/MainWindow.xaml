@@ -47,7 +47,7 @@
                     PreviewMouseUp="Seeked" PreviewMouseDown="Seeking" />
             
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"><!--再生曲情報-->
-                <Label FontSize="30" Content="{Binding Curt_track.Title}" />
+                <Label FontSize="30" Content="{Binding Curt_Title}" />
             </StackPanel>
             
             <StackPanel Grid.Column="2" Orientation="Horizontal" FlowDirection="RightToLeft"><!--その他ヘッダー要素-->

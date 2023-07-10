@@ -11,7 +11,7 @@ public class Local_PC : Super.PageController
     public Local_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) 
         : base(vm,player,queue,container,funcContainer)
     {
-        main = new Main(vm, player, queue, container, func_container);
+        main = new Main(vm);
         localFunc = new LocalFunc(vm, player, queue, container,func_container ,main,this);
     }
     //ページ遷移

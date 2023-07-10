@@ -14,7 +14,9 @@ namespace TolyMusic_for_PC.Local
 {
     public class Main : Super.Main
     {
-        public Main(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) : base(vm, player, queue, container, funcContainer) { }
+        public Main(ViewModel vm) : base(vm)
+        {
+        }
         //変数宣言
         public enum id_type
         {

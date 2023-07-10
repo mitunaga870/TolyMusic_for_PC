@@ -41,8 +41,6 @@ public class Streaming_PC
                     container.Children.Add(web);
                     //再生id取得
                     web.RequestHandler = new YoutubeReqHandler(vm,yt_func);
-                    //再生ページを開くとき追加
-                    
                     //再生アイテム追加
                     Button add_bt = new Button();
                     add_bt.Content = "再生中コンテンツを追加";
