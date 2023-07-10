@@ -15,5 +15,5 @@ pythonによるスクレイピングにより、youtubemusicとの統合がと�
 現在、パッケージ化されたバージョンはありませんが、最新のブランチを用いてビルドし、ビルドを行ったファイルにDebug内のScriptsファイルをコピーすることで利用することができます。<br>
 <br><br>
 スクリーンショット：
-![image](https://github.com/mitunaga870/TolyMusic_for_PC/assets/94438265/089cbb40-8e93-4fd9-9831-4bb107e11f00)
-![image](https://github.com/mitunaga870/TolyMusic_for_PC/assets/94438265/ffaf5ba6-c6a3-40dd-a3a4-2c71ce9236c4)
+![image](https://github.com/mitunaga870/TolyMusic_for_PC/assets/94438265/0f9d959d-34a8-4e40-9af2-b32b0c7d1e95)
+![image](https://github.com/mitunaga870/TolyMusic_for_PC/assets/94438265/d6b03830-927a-4861-be3f-ac7a4172194f)
