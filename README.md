@@ -13,7 +13,7 @@ C#と一部にpython,javascriptを用いた音楽プレーヤー<br>
 pythonによるスクレイピングにより、youtubemusicとの統合がとても容易に行うことができます。
 <br>
 現在、パッケージ化されたバージョンはありませんが、最新のブランチを用いてビルドし、ビルドを行ったファイルにDebug内のScriptsファイルをコピーすることで利用することができます。<br>
-
+<br><br>
 スクリーンショット：
 メイン画面
 ![image](https://github.com/mitunaga870/TolyMusic_for_PC/assets/94438265/089cbb40-8e93-4fd9-9831-4bb107e11f00)
