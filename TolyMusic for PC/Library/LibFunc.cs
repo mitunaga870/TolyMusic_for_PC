@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -122,6 +124,33 @@ public class LibFunc : PageFunc
         container.Children.Add(mainlist);
     }
 
+    public void MakePlaylistList()
+    {
+        vm.Listtypes.Add(ViewModel.TypeEnum.Playlist);
+        //リスト作成
+        var row = new GridView();
+        var head_path = new Dictionary<string, string>();
+        var Event = new MouseButtonEventHandler((sender, args) =>
+        {
+            Playlist playlist = (Playlist)((ListViewItem)sender).Content;
+            vm.Curt_Playlist = playlist;
+            vm.Filter = playlist.Id;
+            //タイトル変更
+            vm.Prev_title = vm.Page;
+            vm.Page = playlist.Title;
+            //トラック取得
+            vm.Tracks = main.GetTracks(playlist.Id, ViewModel.TypeEnum.Playlist);
+            MakeTrackList();
+        });
+        head_path.Add("タイトル", "Title");
+        var mainlist = MakeList(head_path, ViewModel.TypeEnum.Playlist, Event, ref row);
+        //その他ボタン
+        var other = MakeOtheBT(ViewModel.TypeEnum.Playlist);
+        row.Columns.Add(other);
+        //最終処理
+        container.Children.Add(mainlist);
+    }
+    
     private GridViewColumn MakeOtheBT(ViewModel.TypeEnum type)
     {
         //その他ボタン
@@ -168,31 +197,116 @@ public class LibFunc : PageFunc
                     libPc.Refresh();
                 };
                 break;
+            case ViewModel.TypeEnum.Playlist:
+                StackPanel container = new StackPanel();
+                container.Orientation = Orientation.Horizontal;
+                TextBox title = new TextBox();
+                title.Width = 200;
+                container.Children.Add(title);
+                Button update = new Button();
+                update.Content = "更新";
+                update.Click += (sender, args) =>
+                {
+                    if (MessageBox.Show("このプレイリストのタイトルを変更します。\nよろしいですか？", "確認", MessageBoxButton.OKCancel) ==
+                        MessageBoxResult.Cancel)
+                        return;
+                    main.Update_playlist(vm.Curt_Playlist.Id, title.Text);
+                    libPc.Refresh();
+                };
+                container.Children.Add(update);
+                property.Items.Add(container);
+                break;
         }
         menu.Items.Add(property);
         //トラック削除
-        if (type == ViewModel.TypeEnum.Track)
+        switch (type)
         {
-            var del = new MenuItem();
-            del.Header = "ライブラリから削除";
-            del.Click += (sender, args) =>
-            {
-                if (MessageBox.Show("このトラックをライブラリから削除します。\nよろしいですか？", "確認", MessageBoxButton.OKCancel) ==
-                    MessageBoxResult.Cancel)
-                    return;
-                main.Del_track(vm.Preoperty_Id);
-                libPc.Refresh();
-            };
-            menu.Items.Add(del);
+            case ViewModel.TypeEnum.Track:
+                var del = new MenuItem();
+                del.Header = "ライブラリから削除";
+                del.Click += (sender, args) =>
+                {
+                    if (MessageBox.Show("このトラックをライブラリから削除します。\nよろしいですか？", "確認", MessageBoxButton.OKCancel) ==
+                        MessageBoxResult.Cancel)
+                        return;
+                    main.Del_track(vm.Othermenu_Id);
+                    libPc.Refresh();
+                };
+                menu.Items.Add(del);
+                break;
+            case ViewModel.TypeEnum.Playlist:
+                var del_playlist = new MenuItem();
+                del_playlist.Header = "プレイリストから削除";
+                del_playlist.Click += (sender, args) =>
+                {
+                    if (MessageBox.Show("このプレイリストを削除します。\nよろしいですか？", "確認", MessageBoxButton.OKCancel) ==
+                        MessageBoxResult.Cancel)
+                        return;
+                    main.Del_playlist(vm.Othermenu_Id);
+                    libPc.Refresh();
+                };
+                menu.Items.Add(del_playlist);
+                break;
         }
+        //プレイリストに追加
+        var add_playlist = new MenuItem();
+        add_playlist.Header = "プレイリストに追加";
+        menu.Items.Add(add_playlist);
+        //ボタンにメニューを割り当て
         other_button.SetValue(Button.ContextMenuProperty, menu);
         other_button.AddHandler(Button.ClickEvent, new RoutedEventHandler((sender, args) =>
         {
-            vm.Preoperty_Id = ((Button)sender).Uid;
+            //ボタンのUidにIdを入れておく
+            vm.Othermenu_Id = ((Button)sender).Uid;
+            AddPlaylistMenu(ref add_playlist, type);
+            //コンテキストメニューを開く
             ((Button)sender).ContextMenu.IsOpen = true;
         }));
         other_template.VisualTree = other_button;
         other.CellTemplate = other_template;
         return other;
     }
+
+    private void AddPlaylistMenu(ref MenuItem add_playlist , ViewModel.TypeEnum type)
+    {
+        //プレイリストメニューリセット
+        add_playlist.Items.Clear();
+        //新規プレイリスト
+        var new_playlist = new StackPanel();
+        new_playlist.Orientation = Orientation.Horizontal;
+        var new_plalist_label = new Label();
+        new_plalist_label.Content = "新規プレイリスト";
+        new_playlist.Children.Add(new_plalist_label);
+        var new_playlist_title = new TextBox();
+        new_playlist_title.Width = 100;
+        new_playlist.Children.Add(new_playlist_title);
+        var new_playlist_add = new Button();
+        new_playlist_add.Content = "追加";
+        new_playlist_add.Click += (sender, args) =>
+        {
+            main.Make_playlist(new_playlist_title.Text, vm.Othermenu_Id ,type);
+            libPc.Refresh();
+        };
+        new_playlist.Children.Add(new_playlist_add);
+        add_playlist.Items.Add(new_playlist);
+        //プレイリスト取得
+        var playlists = main.GetPlaylists();
+        foreach (var playlist in playlists)
+        {
+            var item = new MenuItem();
+            item.IsCheckable = true;
+            item.Header = playlist.Title;
+            //チェック状態
+            if (playlist.Tracks.Count(t => t.Id == vm.Othermenu_Id) > 0)
+                item.IsChecked = true;
+            else
+                item.IsChecked = false;
+            //追加イベント
+            item.Checked += (sender2, args2) => { main.Add_playlist(playlist.Id, vm.Othermenu_Id, type); };
+            //削除イベント
+            item.Unchecked += (sender2, args2) => { main.Del_playlist(playlist.Id, vm.Othermenu_Id ,type); };
+            add_playlist.Items.Add(item);
+        }
+}
+
 }

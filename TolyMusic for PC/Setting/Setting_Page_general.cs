@@ -42,6 +42,11 @@ namespace TolyMusic_for_PC.Local
             }));
             vm.Selected_excl = ex_cb.SelectedIndex;
             sp.Children.Add(ex_cb);
+            sp.Children.Add(new Label() { Content = "pythonインタープリター" });
+            TextBox py = new TextBox();
+            py.Name = "Python_Path";
+            py.SetBinding(TextBox.TextProperty, new Binding("PythonPath") { Source = vm });
+            sp.Children.Add(py);
         }
         public void go_library_database(StackPanel main)
         {
@@ -70,7 +75,6 @@ namespace TolyMusic_for_PC.Local
             vm.DatabaseSeverPassword = Password;
             main.Children.Add(Password);
         }
-
         public void go_streaming_youtube(StackPanel main)
         {
             //Playlist

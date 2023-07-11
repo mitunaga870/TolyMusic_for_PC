@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -78,6 +79,11 @@ namespace TolyMusic_for_PC.Super
                 case ViewModel.TypeEnum.Artist:
                     mainlist.ItemsSource = vm.Artists;
                     break;
+                case ViewModel.TypeEnum.Playlist:
+                    mainlist.ItemsSource = vm.Playlists;
+                    break;
+                default:
+                    throw new Exception();
             }
             mainlist.HorizontalAlignment = HorizontalAlignment.Stretch;
             ////メインリスト用スタイル

@@ -72,6 +72,8 @@ namespace TolyMusic_for_PC
             else
                 send_obj.ExclutionDriver = "";
             send_obj.EDcustumized = custumized_excl;
+            //python
+            send_obj.VenvPath = vm.PythonPath;
             //Library
             //DataBaseServer
             send_obj.LibraryServerAdress = vm.DatabaseSeverAdress;

@@ -14,7 +14,7 @@ public partial class TrackPreoperty : PropertyWindow
 {
     public TrackPreoperty(ViewModel vm) : base(vm)
     {
-        Curt_num = vm.Tracks.ToList().FindIndex(x => x.Id == vm.Preoperty_Id);
+        Curt_num = vm.Tracks.ToList().FindIndex(x => x.Id == vm.Othermenu_Id);
         InitializeComponent();
     }
     protected override void Load()

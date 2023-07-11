@@ -16,8 +16,8 @@ namespace TolyMusic_for_PC
             Track = 0,
             All = 0,
             Album = 1,
-            Playlist = 1,
-            Artist = 2,
+            Playlist = 2,
+            Artist = 3,
         }
         public enum LocationEnum
         {
@@ -45,9 +45,10 @@ namespace TolyMusic_for_PC
         private TypeEnum curttype;
         private Artist curt_artist;
         private Album curt_album;
+        private Playlist curt_playlist;
         //public変数
         public bool skip;
-        public string Preoperty_Id;
+        public string Othermenu_Id;
         public bool isOnline;
         public string Curt_YoutubeId;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -105,6 +106,18 @@ namespace TolyMusic_for_PC
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        public Playlist Curt_Playlist
+        {
+            get
+            {
+                return curt_playlist;
+            }
+            set
+            {
+                curt_playlist = value;
+                OnPropertyChanged();
+            }
         }
         public Album Curt_Album
         {
@@ -353,6 +366,7 @@ namespace TolyMusic_for_PC
         public ObservableCollection<Track> PlayQueue { get; set; }
         public ObservableCollection<Album> Albums { get; set; }
         public ObservableCollection<Artist> Artists { get; set; }
+        public ObservableCollection<Playlist> Playlists { get; set; }
         //ヘッダ表示用
         public string Curt_Title
         {

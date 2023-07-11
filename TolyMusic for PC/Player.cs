@@ -536,7 +536,7 @@ namespace TolyMusic_for_PC
                         .SendMouseClickEvent(100, 100, MouseButtonType.Left, true, 1, CefEventFlags.None);
                 }
 
-                await Task.Delay(50);
+                await Task.Delay(100);
                 if (initializing)
                     return;
             }

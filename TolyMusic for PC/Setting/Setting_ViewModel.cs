@@ -19,6 +19,7 @@ namespace TolyMusic_for_PC
         private string database_sever_user;
         private PasswordBox database_sever_password;
         private string youtubeplaylist;
+        private string python_path;
         //コンストラクタ
         public Setting_ViewModel()
         {
@@ -157,6 +158,16 @@ namespace TolyMusic_for_PC
             set
             {
                 database_sever_user = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public string PythonPath
+        {
+            get { return python_path;}
+            set
+            {
+                python_path = value;
                 OnPropertyChanged();
             }
         }

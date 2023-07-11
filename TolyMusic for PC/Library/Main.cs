@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -124,6 +125,12 @@ public class Main
                     ,param);
                 result = Other.LibDictoTracks(db_tmp);
                 break;
+            case ViewModel.TypeEnum.Playlist:
+                param = new Collection<MySqlParameter>();
+                param.Add(new MySqlParameter("@playlist_id", id));
+                db_tmp = DB.Read("select distinct * from tracks t join location l on t.track_id = l.track_id left join album al on t.album_id = al.album_id left join track_artist ta on t.track_id = ta.track_id left join artist ar on ta.artist_id = ar.artist_id left join device d on l.device_id = d.device_id left join playlist_track pt on t.track_id = pt.track_id where pt.playlist_id = @playlist_id",param);
+                result = Other.LibDictoTracks(db_tmp);
+                break;
             default:
                 throw new Exception("Invalid ViewModel.TypeEnum");
         }
@@ -144,7 +151,7 @@ public class Main
                 //DBから取得
                 var param = new Collection<MySqlParameter>();
                 param.Add(new MySqlParameter("@artist_id", id));
-                db_tmp = DB.Read("SELECT distinct * from album join album_artist aa on album.album_id = aa.album_id join artist a on aa.artist_id = a.artist_id where a.artist_id = @artist_id",param);
+                db_tmp = DB.Read("SELECT distinct * from album join album_artist aa on album.album_id = aa.album_id left join artist a on aa.artist_id = a.artist_id where a.artist_id = @artist_id",param);
                 result = Other.LibDictoAlbums(db_tmp);
                 //アルバムを持たない曲を取得
                 db_tmp = DB.Read(
@@ -223,5 +230,122 @@ public class Main
         DB.NonQuery(location_q, param);
         DB.NonQuery(history_q, param);
         DB.NonQuery(ban_quary, ban_param);
+    }
+
+    public ObservableCollection<Playlist> GetPlaylists()
+    {
+        var result = new ObservableCollection<Playlist>();
+        var dics = DB.Read("select * from playlist left join playlist_track pt on playlist.playlist_id = pt.playlist_id left join tracks t on pt.track_id = t.track_id");
+        foreach (var dic in dics)
+        {
+            var playlist = new Playlist(dic);
+            if (result.Count(p => p.Id == playlist.Id) > 0)
+                playlist = result.First(p => p.Id == playlist.Id);
+            else
+                result.Add(playlist);
+            playlist.AddTrack(new Track(dic));
+        }
+        return result;
+    }
+
+    public void Add_playlist(string playlistId, string Id, ViewModel.TypeEnum type)
+    {
+        Collection<MySqlParameter> param = new Collection<MySqlParameter>();
+        param.Add(new MySqlParameter("@playlist_id", playlistId));
+        string query = "insert into playlist_track (playlist_id,track_id) values ";
+        switch (type)
+        {
+            case ViewModel.TypeEnum.Track:
+                query += "(@playlist_id,@track_id)";
+                param.Add(new MySqlParameter("@track_id", Id));
+                break;
+            default:
+                var tracks = GetTracks(Id, type);
+                int i = 0;
+                foreach (var track in tracks)
+                {
+                    query += "(@playlist_id,@track_id" + i + "),";
+                    param.Add(new MySqlParameter("@track_id"+i, track.Id));
+                    i++;
+                }
+                query = query.Remove(query.Length - 1);
+                break;
+        }
+        DB.NonQuery(query , param);
+    }
+
+    public void Make_playlist(string title, string Id, ViewModel.TypeEnum type)
+    {
+        string playlistId = Guid.NewGuid().ToString();
+        var playlist_param = new Collection<MySqlParameter>();
+        playlist_param.Add(new MySqlParameter("@playlist_id", playlistId));
+        playlist_param.Add(new MySqlParameter("@playlist_title", title));
+        
+        string tp_query = "insert into playlist_track (playlist_id,track_id) values ";
+        var tp_param = new Collection<MySqlParameter>();
+        tp_param.Add(new MySqlParameter("@playlist_id", playlistId));
+        switch (type)
+        {
+            case ViewModel.TypeEnum.Track:
+                tp_query += "(@playlist_id,@track_id)";
+                tp_param.Add(new MySqlParameter("@track_id", Id));
+                break;
+            default:
+                var tracks = GetTracks(Id, type);
+                int i = 0;
+                foreach (var track in tracks)
+                {
+                    tp_query += "(@playlist_id,@track_id" + i + "),";
+                    tp_param.Add(new MySqlParameter("@track_id"+i, track.Id));
+                    i++;
+                }
+                tp_query = tp_query.Remove(tp_query.Length - 1);
+                break;
+        }
+        
+        DB.NonQuery("insert into playlist (playlist_id,playlist_title) values (@playlist_id,@playlist_title)", playlist_param);
+        DB.NonQuery(tp_query , tp_param);
+    }
+
+    public void Del_playlist(string playlistId, string Id, ViewModel.TypeEnum type)
+    {
+        var query = "delete from playlist_track where playlist_id = @playlist_id";
+        var param = new Collection<MySqlParameter>();
+        param.Add(new MySqlParameter("@playlist_id", playlistId));
+        switch (type)
+        {
+            case ViewModel.TypeEnum.Track:
+                query += " and track_id = @track_id";
+                param.Add(new MySqlParameter("@track_id", Id));
+                break;
+            default:
+                var tracks = GetTracks(Id, type);
+                int i = 0;
+                foreach (var track in tracks)
+                {
+                    query += " and track_id = @track_id" + i;
+                    param.Add(new MySqlParameter("@track_id"+i, track.Id));
+                    i++;
+                }
+                break;
+        }
+
+        DB.NonQuery(query, param);
+    }
+
+    public void Update_playlist(string id, string titleText)
+    {
+        var param = new Collection<MySqlParameter>();
+        param.Add(new MySqlParameter("@playlist_id", id));
+        param.Add(new MySqlParameter("@playlist_title", titleText));
+        DB.NonQuery("update playlist set playlist_title = @playlist_title where playlist_id = @playlist_id", param);
+    }
+    
+    public void Del_playlist(string id)
+    {
+        var param = new Collection<MySqlParameter>();
+        param.Add(new MySqlParameter("@playlist_id", id));
+        DB.NonQuery("delete from playlist where playlist_id = @playlist_id", param);
+        DB.NonQuery("delete from playlist_track where playlist_id = @playlist_id", param);
     }
 }

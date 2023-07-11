@@ -191,6 +191,7 @@
     <Compile Include="Main\ViewModel.cs" />
     <Compile Include="Other.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Playlist.cs" />
     <Compile Include="Property\AlbumPreoperty.xaml.cs">
       <DependentUpon>AlbumPreoperty.xaml</DependentUpon>
     </Compile>

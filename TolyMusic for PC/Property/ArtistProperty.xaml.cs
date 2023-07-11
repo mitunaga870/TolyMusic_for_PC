@@ -10,7 +10,7 @@ public partial class ArtistProperty : PropertyWindow
 {
     public ArtistProperty(ViewModel vm) : base(vm)
     {
-        Curt_num = vm.Artists.ToList().FindIndex(x => x.Id == vm.Preoperty_Id);
+        Curt_num = vm.Artists.ToList().FindIndex(x => x.Id == vm.Othermenu_Id);
         InitializeComponent();
     }
 

@@ -26,9 +26,12 @@ namespace TolyMusic_for_PC
             get
             {
                 string res = "";
-                foreach (var artist in Artists)
-                    res += artist.Name + ",";
-                res = res.Remove(res.Length - 1);
+                if (Artists.Count > 0)
+                {
+                    foreach (var artist in Artists)
+                        res += artist.Name + ",";
+                    res = res.Remove(res.Length - 1);
+                }
                 return res;
             }
         }

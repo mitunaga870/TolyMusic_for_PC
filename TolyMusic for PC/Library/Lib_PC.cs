@@ -64,6 +64,11 @@ public class Lib_PC : Super.PageController
                 vm.Curttype = ViewModel.TypeEnum.Artist;
                 func.MakeArtistList();
                 break;
+            case "playlists":
+                vm.Playlists = main.GetPlaylists();
+                vm.Curttype = ViewModel.TypeEnum.Playlist;
+                func.MakePlaylistList();
+                break;
         }
     }
     //リフレッシュ
