@@ -214,6 +214,9 @@
     <Compile Include="Setting\Setting_ViewModel.cs" />
     <Compile Include="Streaming\Handlar\YoutubeReqHandler.cs" />
     <Compile Include="Streaming\Streaming_PC.cs" />
+    <Compile Include="Streaming\ToIS\ToIS_func.cs" />
+    <Compile Include="Streaming\ToIS\ToIS_Main.cs" />
+    <Compile Include="Streaming\ToIS\ToIS_PC.cs" />
     <Compile Include="Streaming\Youtube\Yt_Func.cs" />
     <Compile Include="Super\Main.cs" />
     <Compile Include="Super\PageController.cs" />

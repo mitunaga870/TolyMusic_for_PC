@@ -164,7 +164,7 @@ namespace TolyMusic_for_PC
                     Ended_youtube = new Task(Ended_Youtube);
                 }
 
-                if (res != TaskStatus.Running && res2 != TaskStatus.Running && res3 != TaskStatus.Running)
+                if (res == TaskStatus.Created && res2 == TaskStatus.Created && res3 == TaskStatus.Created)
                     break;
             }
 
@@ -534,6 +534,7 @@ namespace TolyMusic_for_PC
                     await Task.Delay(10);
                     browser.GetBrowserHost()
                         .SendMouseClickEvent(100, 100, MouseButtonType.Left, true, 1, CefEventFlags.None);
+                    await Task.Delay(900);
                 }
 
                 await Task.Delay(100);

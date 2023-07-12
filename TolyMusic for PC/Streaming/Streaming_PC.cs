@@ -52,6 +52,8 @@ public class Streaming_PC
                     add_lib_bt.Click += yt_func.SyncLib;
                     func_container.Children.Add(add_lib_bt);
                     break;
+                case "tois":
+                    break;
             }
         }
         else

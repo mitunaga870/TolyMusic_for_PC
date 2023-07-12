@@ -81,6 +81,14 @@
                     <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_local_artists"/>
                 <Label Content="Streaming" Foreground= "#ececec" />
                     <Button Content="Youtube" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="go_youtube"/>
+                    <Expander Header="ToIS" IsExpanded="False" Margin="100,0,0,0" Foreground="#ececec">
+                        <StackPanel>
+                            <Button Content="曲" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_tracks"/>
+                            <Button Content="アルバム" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_albums"/>
+                            <Button Content="アーティスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_artists"/>
+                            <Button Content="プレイリスト" Foreground= "#ececec" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Click="Go_library_playlists"/>
+                        </StackPanel>
+                    </Expander>
             </StackPanel>
             <Grid Grid.Row="1" Name="VPlayer"></Grid>
         </Grid>
