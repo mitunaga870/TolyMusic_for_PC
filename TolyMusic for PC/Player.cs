@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
 using NAudio.CoreAudioApi;
@@ -30,7 +31,6 @@ namespace TolyMusic_for_PC
         private MediaFoundationReader mfreader;
         private Task timesetter;
         public bool started;
-        private WebClient webClient;
         private Grid container;
         private bool webloaded;
         private ChromiumWebBrowser browser;
@@ -47,7 +47,6 @@ namespace TolyMusic_for_PC
             this.container = container;
             webloaded = false;
             isASIO = false;
-            webClient = new WebClient();
             timesetter = new Task(TimeControler);
             checkbuf = new Task(CheckBuf);
             Ended_youtube = new Task(Ended_Youtube);
@@ -192,6 +191,9 @@ namespace TolyMusic_for_PC
                         if (!webloaded)
                         {
                             browser = new ChromiumWebBrowser();
+                            browser.PreviewMouseMove += new MouseEventHandler(((sender, args) => { args.Handled = true; }));
+                            browser.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(((sender, args) =>{args.Handled = true;} ));
+                            browser.PreviewMouseRightButtonDown += new MouseButtonEventHandler(((sender, args) => { args.Handled = true; }));
                             container.Children.Add(browser);
                             webloaded = true;
                         }
@@ -355,6 +357,7 @@ namespace TolyMusic_for_PC
                      {
                          vm.Next_time = 0;
                          Play();
+                         continue;
                      }
                      else if (vm.PlayQueue.Count - 1 == vm.Curt_queue_num && !(bool)vm.Loop) //キューの最後の終了処理
                      {
