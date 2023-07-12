@@ -14,10 +14,10 @@ public class Yt_Func
 {
     private ViewModel vm;
     private Player player;
-    private Queue queue;
+    private Queue.Main queue;
     private Grid container;
     private AddLibFunc lib;
-    public Yt_Func(ViewModel vm, Player player, Queue queue, Grid container)
+    public Yt_Func(ViewModel vm, Player player, Queue.Main queue, Grid container)
     {
         this.vm = vm;
         this.player = player;

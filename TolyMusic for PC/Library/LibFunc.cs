@@ -16,7 +16,7 @@ public class LibFunc : PageFunc
     private Lib_PC libPc;
     private Main main;
 
-    public LibFunc(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer, Main main,
+    public LibFunc(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer, Main main,
         Lib_PC PegeController) : base(vm, player, queue, container, funcContainer, main, PegeController)
     {
         this.main = (Main)main;
@@ -44,22 +44,7 @@ public class LibFunc : PageFunc
         head_path.Add("アーティスト", "Artist");
         head_path.Add("アルバム", "Album");
         //ダブルクリックイベント
-        var Event = new MouseButtonEventHandler((sender, args) =>
-        {
-            ListViewItem item = (ListViewItem)sender;
-            //キューの割当
-            vm.Curt_track = (Track)item.Content;
-            vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
-            queue.set();
-            queue.showbutton();
-            for (int i = 0; i < vm.Tracks.Count; i++)
-            {
-                if (vm.Curt_track.Id == vm.PlayQueue[i].Id)
-                    vm.Curt_queue_num = i;
-            }
-            //再生
-            player.Start();
-        });
+        var Event = new MouseButtonEventHandler(listEvent.PlayTrack);
         var mainlist = MakeList(head_path, ViewModel.TypeEnum.Track, Event, ref row);
         var other = MakeOtheBT(ViewModel.TypeEnum.Track);
         row.Columns.Add(other);

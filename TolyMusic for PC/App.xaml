@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:TolyMusic_for_PC"
              StartupUri="Main/MainWindow.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

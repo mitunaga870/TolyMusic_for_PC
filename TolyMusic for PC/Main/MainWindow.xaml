@@ -25,9 +25,9 @@
         
         <Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#FF212121" ><!--ヘッダー-->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="270"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -42,9 +42,17 @@
                 <CheckBox Width="54" Content="リピート" Foreground="#ececec" IsChecked="{Binding Loop}" IsThreeState="True"/>
             </StackPanel>
             
-            <Slider Name = "Seekbar" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Opacity="1" 
-                    Value="{Binding Curt_time}" Maximum="{Binding Curt_length}" IsMoveToPointEnabled="True" 
-                    PreviewMouseUp="Seeked" PreviewMouseDown="Seeking" />
+            <Slider 
+                Name = "Seekbar" 
+                Grid.Column="0" 
+                Grid.Row="1" 
+                Grid.ColumnSpan="3" 
+                Opacity="1" 
+                Value="{Binding Curt_time}" 
+                Maximum="{Binding Curt_length}" 
+                IsMoveToPointEnabled="True" 
+                PreviewMouseUp="Seeked" 
+                PreviewMouseDown="Seeking" />
             
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"><!--再生曲情報-->
                 <Label FontSize="30" Content="{Binding Curt_Title}" />
@@ -89,11 +97,25 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Content="キュー　🔻" Margin="0" Padding="0" Height="{Binding Queue_bt_height}" Click="Open_queuelist"/>
-                <ListView Grid.Row="1" Name="queue_list" SelectionMode="Single" HorizontalContentAlignment="Stretch" Height="{Binding Queue_list_height}" >
+                <Button
+                    Grid.Row="0" 
+                    Content="キュー　🔻" 
+                    Margin="0" 
+                    Padding="0" 
+                    Height="{Binding Queue_bt_height}" 
+                    Click="Open_queuelist"/>
+                <ListView Grid.Row="1" 
+                          Name="queue_list" 
+                          SelectionMode="Single" 
+                          HorizontalContentAlignment="Stretch" 
+                          Height="{Binding Queue_list_height}" 
+                          AllowDrop="True"
+                          SelectedIndex="{Binding Curt_queue_num}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="タイトル" DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="アーティスト" DisplayMemberBinding="{Binding Artist}"></GridViewColumn>
+                            <GridViewColumn Header="アルバム" DisplayMemberBinding="{Binding Album}"></GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>

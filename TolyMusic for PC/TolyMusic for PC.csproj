@@ -179,6 +179,7 @@
     <Compile Include="Library\Lib_PC.cs" />
     <Compile Include="Library\AddLibFunc.cs" />
     <Compile Include="Library\Main.cs" />
+    <Compile Include="ListEvent.cs" />
     <Compile Include="Local\DB.cs" />
     <Compile Include="Local\LocalFunc.cs" />
     <Compile Include="Local\Local_PC.cs" />
@@ -187,7 +188,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Main\MainPageController.cs" />
-    <Compile Include="Main\Queue.cs" />
     <Compile Include="Main\ViewModel.cs" />
     <Compile Include="Other.cs" />
     <Compile Include="Player.cs" />
@@ -204,6 +204,8 @@
       <DependentUpon>TrackPreoperty.xaml</DependentUpon>
     </Compile>
     <Compile Include="Python.cs" />
+    <Compile Include="Queue\Event.cs" />
+    <Compile Include="Queue\Main.cs" />
     <Compile Include="Setting\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>

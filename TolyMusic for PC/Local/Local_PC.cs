@@ -8,7 +8,7 @@ public class Local_PC : Super.PageController
     private Main main;
     private LocalFunc localFunc;
     //コンストラクタ
-    public Local_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) 
+    public Local_PC(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer) 
         : base(vm,player,queue,container,funcContainer)
     {
         main = new Main(vm);

@@ -18,12 +18,12 @@ public class Main
     //private変数
     private ViewModel vm;
     private Player player;
-    private Queue queue;
+    private Queue.Main queue;
     private Grid container;
     private StackPanel func_container;
     private AddLibFunc lib;
     //コンストラクタ
-    public Main(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
+    public Main(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer)
     {
         this.vm = vm;
         this.player = player;

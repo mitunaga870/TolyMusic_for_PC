@@ -13,18 +13,20 @@ namespace TolyMusic_for_PC.Super
     {
         protected ViewModel vm;
         protected Player player;
-        protected Queue queue;
+        protected Queue.Main queue;
         protected Grid container;
         protected StackPanel func_container;
+        protected ListEvent listEvent;
 
         //コンストラクタ
-        public PageFunc(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer, object main, object PageControler)
+        public PageFunc(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer, object main, object PageControler)
         {
             this.vm = vm;
             this.player = player;
             this.queue = queue;
             this.container = container;
             this.func_container = funcContainer;
+            listEvent = new ListEvent(vm, player, queue);
         }
 
         protected abstract void MakeQueue();

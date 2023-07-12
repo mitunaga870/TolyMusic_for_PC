@@ -15,7 +15,7 @@ public class Lib_PC : Super.PageController
     private bool loaded = false;
     private string curt_page;
     //コンストラクタ
-    public Lib_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer) 
+    public Lib_PC(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer) 
         : base (vm,player,queue,container,funcContainer)
     {
         //初期化

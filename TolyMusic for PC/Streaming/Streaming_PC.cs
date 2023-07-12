@@ -13,11 +13,11 @@ public class Streaming_PC
 {
     private ViewModel vm;
     private Player player;
-    private Queue queue;
+    private Queue.Main queue;
     private Grid container;
     private StackPanel func_container;
     private Yt_Func yt_func;
-    public Streaming_PC(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer)
+    public Streaming_PC(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer)
     {
         this.vm = vm;
         this.player = player;

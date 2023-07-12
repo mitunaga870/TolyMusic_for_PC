@@ -19,13 +19,13 @@ namespace TolyMusic_for_PC
         private ViewModel vm;
         private Grid container;
         private Player player;
-        private Queue queue;
+        private Queue.Main queue;
         private StackPanel func_container;
         private Streaming_PC streaming;
         private Lib_PC library;
         private Local_PC local;
         LocalFunc localFunc;
-        public MainPageController(ViewModel vm, Grid container, StackPanel funcContainer, Player player, Queue queue)
+        public MainPageController(ViewModel vm, Grid container, StackPanel funcContainer, Player player, Queue.Main queue)
         {
             this.vm = vm;
             this.container = container;

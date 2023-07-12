@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace TolyMusic_for_PC
+namespace TolyMusic_for_PC.Queue
 {
-    public class Queue
+    public class Main
     {
         private ViewModel vm;
         private bool opened;
         private ListView list;
-        public Queue(ViewModel vm, ListView list)
+        public Main(ViewModel vm, ListView list)
         {
             this.vm = vm;
             this.list = list;

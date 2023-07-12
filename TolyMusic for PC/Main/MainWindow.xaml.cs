@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
 using CefSharp.OffScreen;
@@ -21,10 +22,12 @@ namespace TolyMusic_for_PC
         private MainPageController _mainPageController;
         private Player Player;
         private ViewModel vm;
-        private Queue queue;
+        private Queue.Main queue;
         private bool seek_playing;
         private bool queue_opened;
         private AddLibFunc lib;
+        //キューのイベント用
+        public Queue.Event QEvent;
         //コンストラクタ
         public MainWindow()
         {
@@ -32,8 +35,9 @@ namespace TolyMusic_for_PC
             vm = new ViewModel();
             DataContext = vm;
             Player = new Player(vm,VPlayer);
-            queue = new Queue(vm,queue_list);
+            queue = new Queue.Main(vm,queue_list);
             lib = new AddLibFunc(vm);
+            QEvent = new Queue.Event(vm,Player,queue,queue_list);
             //オンライン確認
             CheckOnline();
             //ページコントローラー初期化

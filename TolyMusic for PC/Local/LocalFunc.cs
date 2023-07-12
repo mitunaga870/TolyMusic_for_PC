@@ -14,7 +14,7 @@ namespace TolyMusic_for_PC.Local
         private Local.Main local;
         private Library.AddLibFunc lib;
         //コンストラクタ
-        public LocalFunc(ViewModel vm, Player player, Queue queue, Grid container, StackPanel funcContainer, object main, object PageControler) : base(vm, player, queue, container, funcContainer, main, PageControler)
+        public LocalFunc(ViewModel vm, Player player, Queue.Main queue, Grid container, StackPanel funcContainer, object main, object PageControler) : base(vm, player, queue, container, funcContainer, main, PageControler)
         {
             local = (Main)main;
             lib = new AddLibFunc(vm);
@@ -66,21 +66,7 @@ namespace TolyMusic_for_PC.Local
         {
             var head_path = new Dictionary<string, string>();
             head_path.Add("タイトル", "Title");
-            var Event = new MouseButtonEventHandler((sender, args) =>
-            {
-                //キューの割当
-                vm.Curt_track = (Track)((ListViewItem)sender).Content;
-                vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
-                queue.set();
-                queue.showbutton();
-                for (int i = 0; i < vm.Tracks.Count; i++)
-                {
-                    if(vm.Curt_track.Id==vm.PlayQueue[i].Id)
-                        vm.Curt_queue_num = i;
-                }
-                //再生
-                player.Start();
-            });
+            var Event = new MouseButtonEventHandler(listEvent.PlayTrack);
             //行の添付作成
             GridView row = new GridView();
             var ContentList = MakeList(head_path, ViewModel.TypeEnum.Track, Event, ref row);
