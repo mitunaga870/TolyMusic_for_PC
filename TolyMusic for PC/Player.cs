@@ -540,7 +540,7 @@ namespace TolyMusic_for_PC
                     await Task.Delay(900);
                 }
 
-                await Task.Delay(100);
+                await Task.Delay(10);
                 if (initializing)
                     return;
             }
