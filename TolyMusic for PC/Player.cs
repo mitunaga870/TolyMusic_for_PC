@@ -37,7 +37,7 @@ namespace TolyMusic_for_PC
         private bool youtube_loaded;
         private bool anti_end;
         private Task checkbuf;
-        private bool initializing;
+        private bool closing;
         private Task Ended_youtube;
 
         public Player(ViewModel vm, Grid container)
@@ -47,15 +47,11 @@ namespace TolyMusic_for_PC
             this.container = container;
             webloaded = false;
             isASIO = false;
-            timesetter = new Task(TimeControler);
-            checkbuf = new Task(CheckBuf);
-            Ended_youtube = new Task(Ended_Youtube);
         }
 
         //初期化処理
         public void Init()
         {
-            initializing = true;
             anti_end = false;
             if (vm.Excl && Properties.Settings.Default.EDisASIO) //排他・ASIO
             {
@@ -135,39 +131,20 @@ namespace TolyMusic_for_PC
                 wasapi.PlaybackStopped += new EventHandler<StoppedEventArgs>(Ended);
             }
 
-            //Browser初期化
-            if (browser != null)
-                browser.LoadHtml("<html><head></head><body></body></html>", "http://example.com/");
 
-            //タスクの破棄確認
-            while (true)
+            checkbuf = new Task(()=>
             {
-                var res = checkbuf.Status;
-                if (res == TaskStatus.RanToCompletion)
-                {
-                    checkbuf.Dispose();
-                    checkbuf = new Task(CheckBuf);
-                }
+                CheckBuf();
+            });
+            timesetter = new Task(() =>
+            {
+                TimeControler();
+            });
+            Ended_youtube = new Task(() =>
+            {
+                Ended_Youtube();
+            });
 
-                var res2 = timesetter.Status;
-                if (res2 == TaskStatus.RanToCompletion)
-                {
-                    timesetter.Dispose();
-                    timesetter = new Task(TimeControler);
-                }
-
-                var res3 = Ended_youtube.Status;
-                if (res3 == TaskStatus.RanToCompletion)
-                {
-                    Ended_youtube.Dispose();
-                    Ended_youtube = new Task(Ended_Youtube);
-                }
-
-                if (res == TaskStatus.Created && res2 == TaskStatus.Created && res3 == TaskStatus.Created)
-                    break;
-            }
-
-            initializing = false;
         }
 
         //キュー開始処理
@@ -345,11 +322,11 @@ namespace TolyMusic_for_PC
         {
             while (true)
             {
-                if(initializing)
+                if(closing)
                     return;
-                var res = await browser.EvaluateScriptAsync("getstate();");
+                JavascriptResponse res = await browser.EvaluateScriptAsync("getstate();");
                 int state = Convert.ToInt32(res.Result);
-                if (state == 0)
+                if (state == 0 && vm.Curt_time == vm.Curt_length)
                 {
                  //停止処理 
                      isPlaying = false;
@@ -369,7 +346,7 @@ namespace TolyMusic_for_PC
                      }       
                      return;
                 }
-                await Task.Delay(100);
+                await Task.Delay(10);
             }
         }
 
@@ -387,10 +364,7 @@ namespace TolyMusic_for_PC
                 vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
             }
 
-            if (afreader != null)
-                afreader.Dispose();
-            if (mfreader != null)
-                mfreader.Dispose();
+            Close();
             Start();
         }
 
@@ -407,10 +381,7 @@ namespace TolyMusic_for_PC
                 {
                     vm.Curt_queue_num--;
                     vm.Curt_track = vm.PlayQueue[vm.Curt_queue_num];
-                    if (afreader != null)
-                        afreader.Dispose();
-                    if (mfreader != null)
-                        mfreader.Dispose();
+                    Close();
                     Start();
                 }
             }
@@ -431,10 +402,12 @@ namespace TolyMusic_for_PC
                         {
                             if(isPlaying)
                                 vm.Curt_time = afreader.CurrentTime.Ticks;
-                            if (vm.Next_time != -1)
+                            long time = vm.Next_time;
+                            if (time != -1)
                             {
-                                afreader.CurrentTime = TimeSpan.FromTicks(vm.Next_time);
+                                afreader.CurrentTime = TimeSpan.FromTicks(time);
                                 vm.Next_time = -1;
+                                await Task.Delay(10);
                             }
                         }
                         catch (ObjectDisposedException e)
@@ -446,8 +419,9 @@ namespace TolyMusic_for_PC
                             return;
                         }
 
-                        if (initializing)
+                        if (closing)
                             return;
+                        
                     }
 
                     break;
@@ -466,7 +440,7 @@ namespace TolyMusic_for_PC
                             vm.Next_time = -1;
                             await Task.Delay(10);
                         }
-                        if (initializing)
+                        if (closing)
                             return;
                     }
                     break;
@@ -486,6 +460,36 @@ namespace TolyMusic_for_PC
                         browser.ExecuteScriptAsync("setvol(" + vm.Volume + ");");
                     break;
             }
+        }
+        //ファイルを閉じる
+        public void Close()
+        {
+            //Task 終了処理
+            closing = true;
+            if (timesetter != null && timesetter.Status != TaskStatus.Created)
+            {
+                timesetter.Wait();
+                timesetter.Dispose();
+            }
+            if (checkbuf != null && checkbuf.Status != TaskStatus.Created)
+            {
+                checkbuf.Wait();
+                checkbuf.Dispose();
+            }
+            if (Ended_youtube != null && Ended_youtube.Status != TaskStatus.Created)
+            {
+                Ended_youtube.Wait();
+                Ended_youtube.Dispose();
+            }
+            closing = false;
+            //ファイルを閉じる
+            if (afreader != null)
+                afreader.Close();
+            if (mfreader != null)
+                mfreader.Close();
+            //Youtubeを閉じる
+            if (browser != null)
+                browser.LoadHtml("<html><head></head><body></body></html>", "http://example.com/");
         }
         //終了処理
         public void Dispose()
@@ -541,7 +545,7 @@ namespace TolyMusic_for_PC
                 }
 
                 await Task.Delay(10);
-                if (initializing)
+                if (closing)
                     return;
             }
         }
