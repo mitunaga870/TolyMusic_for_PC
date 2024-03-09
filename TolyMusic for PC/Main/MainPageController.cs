@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Data.SQLite;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using TolyMusic_for_PC.Library;
 using TolyMusic_for_PC.Local;
 using TolyMusic_for_PC.Streaming;
@@ -35,6 +30,8 @@ namespace TolyMusic_for_PC
             local = new Local_PC(vm,player,queue,this.container,this.func_container);
             streaming = new Streaming_PC(vm,player,queue,this.container,this.func_container);
             library = new Lib_PC(vm,player,queue,this.container,this.func_container);
+            
+            //初期ページに移動
             if(vm.isOnline)
                 go("library", "tracks");
             else

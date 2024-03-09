@@ -39,6 +39,7 @@
                 <Button Width="54" Content="巻き戻し" Click="Prev"/>
                 <Button Width="54" Content="再生・停止" Click="Toggle_Player"/>
                 <Button Width="54" Content="早送り" Click="Skip"/>
+                <Button Width="54" Content="停止" Click="Stop"/>
                 <CheckBox Width="54" Content="リピート" Foreground="#ececec" IsChecked="{Binding Loop}" IsThreeState="True"/>
             </StackPanel>
             

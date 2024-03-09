@@ -1,0 +1,18 @@
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\PCM_Test.exe.config
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\PCM_Test.exe
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\PCM_Test.pdb
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.Core.dll
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.Wasapi.dll
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.WinForms.dll
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.WinMM.dll
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\Microsoft.Win32.Registry.dll
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.Core.xml
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\NAudio.Wasapi.xml
+D:\data\rider\TolyMusic_for_PC\PCM Test\bin\Debug\Microsoft.Win32.Registry.xml
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM Test.csproj.AssemblyReference.cache
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM Test.csproj.SuggestedBindingRedirects.cache
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM_Test.exe.config
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM Test.csproj.CoreCompileInputs.cache
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM Test.csproj.CopyComplete
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM_Test.exe
+D:\data\rider\TolyMusic_for_PC\PCM Test\obj\Debug\PCM_Test.pdb

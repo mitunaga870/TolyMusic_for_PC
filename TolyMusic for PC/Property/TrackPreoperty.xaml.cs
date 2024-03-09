@@ -68,9 +68,9 @@ public partial class TrackPreoperty : PropertyWindow
             param.Add(new MySqlParameter("@prev_id", prev_id));
             param.Add(new MySqlParameter("@track_id", track_id));
             //tracksの削除
-            DB.NonQuery("delete from tracks where id = @prev_id",param);
+            DB.NonQuery("delete from tracks where track_id = @prev_id",param);
             //track_artistの変更
-            DB.NonQuery("update track_artist set track_id = @track_id where track_id = @prev_id and artist_id not in (select artist_id from track_artist where track_id = @track_id)", param);
+            DB.NonQuery("update track_artist set track_id = @track_id where track_id = @prev_id and artist_id not in (select artist_id from (select artist_id from track_artist where track_id = @track_id)tmp)", param);
             //locationの変更
             DB.NonQuery("update location set track_id = @track_id where track_id = @prev_id", param);
             //playlist_trackの変更

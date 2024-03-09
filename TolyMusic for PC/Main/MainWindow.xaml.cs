@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
-using CefSharp.OffScreen;
 using TolyMusic_for_PC.Library;
-using Label = System.Windows.Controls.Label;
 
 namespace TolyMusic_for_PC
 {
@@ -34,23 +28,27 @@ namespace TolyMusic_for_PC
             InitializeComponent();
             vm = new ViewModel();
             DataContext = vm;
-            Player = new Player(vm,VPlayer);
+            Player = new Player(this.Dispatcher,vm,VPlayer);
             queue = new Queue.Main(vm,queue_list);
             lib = new AddLibFunc(vm);
             QEvent = new Queue.Event(vm,Player,queue,queue_list);
+            
             //オンライン確認
             CheckOnline();
+            
             //ページコントローラー初期化
             _mainPageController = new MainPageController(vm,MainGrid,PageFuncContainer,Player,queue);
+            
             //Go_library_tracks( null, null);
             //CefSharp設定
-            CefSharp.Wpf.CefSettings settings = new CefSharp.Wpf.CefSettings();
+            CefSettings settings = new CefSettings();
             settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 /CefSharp Browser" + Cef.CefSharpVersion;
             settings.Locale = "ja";
             settings.AcceptLanguageList = "ja,en-US;q=0.9,en;q=0.8";
             settings.CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache");
             settings.PersistSessionCookies = true;
             Cef.Initialize(settings);
+
         }
         //終了処理
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -128,7 +126,7 @@ namespace TolyMusic_for_PC
         //再生ボタン
         private void Toggle_Player(object sender, RoutedEventArgs e)
         {
-            if (Player.isPlaying)
+            if (Player.IsPlaying)
             {
                 Player.Pause();
             }
@@ -143,6 +141,7 @@ namespace TolyMusic_for_PC
             Setting setting = new Setting();
             setting.Owner = this;
             setting.Show();
+            vm.Load_Settings();
         }
 
         private void Seeked(object sender, RoutedEventArgs e)
@@ -154,14 +153,14 @@ namespace TolyMusic_for_PC
         
         private void Seeking(object sender, RoutedEventArgs e)
         {
-            seek_playing = Player.isPlaying;
+            seek_playing = Player.IsPlaying;
             if (seek_playing)
                 Player.Pause();
         }
 
         private void SetExcl(object sender, RoutedEventArgs e)
         {
-            if (Player.started)
+            if (Player.Started)
             {
                 Player.Start();
             }
@@ -170,7 +169,7 @@ namespace TolyMusic_for_PC
         private void Skip(object sender, RoutedEventArgs e)
         {
             vm.skip = true;
-            if (Player.started)
+            if (Player.Started)
                 Player.next();
         }
 
@@ -194,7 +193,7 @@ namespace TolyMusic_for_PC
 
         private void Prev(object sender, RoutedEventArgs e)
         {
-            if (Player.started)
+            if (Player.Started)
                 Player.prev();
         }
 
@@ -209,5 +208,9 @@ namespace TolyMusic_for_PC
             }
         }
 
+        private void Stop(object sender, RoutedEventArgs e)
+        {
+            Player.Dispose();
+        }
     }
 }   

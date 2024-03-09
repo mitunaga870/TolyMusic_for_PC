@@ -73,7 +73,17 @@ public class Main
             string sc_res_line_after = sc_res_line.Replace("True", "\"true\"");
             sc_res_line_after = sc_res_line_after.Replace("False", "\"false\"");
             sc_res_line_after = sc_res_line_after.Replace("None", "\"none\"");
-            var sc_res_json = JObject.Parse(sc_res_line_after);
+            //Jsonに変換
+            JObject sc_res_json = new JObject();
+            //@TODO:ANSI文字列のエラー対策
+            try
+            {
+                sc_res_json = JObject.Parse(sc_res_line_after);
+            } catch (JsonReaderException)
+            {
+                continue;
+            }
+
             //tracks
             yt_lib.Add(new Track(sc_res_json));
             //albums
@@ -215,6 +225,9 @@ public class Main
             ban_param.Add(new MySqlParameter("@location"+i, dic["location"]));
             switch (dic["location"])
             {
+                case 0://local
+                    ban_quary += "values (@location"+i+",null);";
+                    break;
                 case 1://youtube
                     ban_quary += "values (@location"+i+",@ban_id"+i+");";
                     ban_param.Add(new MySqlParameter("@ban_id"+i, dic["youtube_id"]));

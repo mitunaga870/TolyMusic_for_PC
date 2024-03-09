@@ -22,7 +22,7 @@ public class YoutubeReqHandler : StreamingReqHandler
     public override IResourceRequestHandler GetResourceRequestHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame,
         IRequest request, bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling)
     {
-        string url = request.Url; 
+        String url = request.Url;
         if (Regex.Match(url, @".*cat=streaming.*").Success)
         {
             string id = Regex.Match(url, @"docid=.{11}").Value.Substring(6);

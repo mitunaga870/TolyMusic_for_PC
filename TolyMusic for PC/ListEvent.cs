@@ -19,18 +19,20 @@ public class ListEvent
     //トラックリストでの再生イベント
     public void PlayTrack(object sender, MouseButtonEventArgs e)
     {
-            ListViewItem item = (ListViewItem)sender;
-            //キューの割当
-            vm.Curt_track = (Track)item.Content;
-            vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
-            queue.set();
-            queue.showbutton();
-            for (int i = 0; i < vm.Tracks.Count; i++)
-            {
-                if (vm.Curt_track.Id == vm.PlayQueue[i].Id)
-                    vm.Curt_queue_num = i;
-            }
-            //再生
-            player.Start();
+        //再生中の曲を停止
+        player.Close();
+        ListViewItem item = (ListViewItem)sender;
+        //キューの割当
+        vm.Curt_track = (Track)item.Content;
+        vm.PlayQueue = new ObservableCollection<Track>(vm.Tracks);
+        queue.set();
+        queue.showbutton();
+        for (int i = 0; i < vm.Tracks.Count; i++)
+        {
+            if (vm.Curt_track.Id == vm.PlayQueue[i].Id)
+                vm.Curt_queue_num = i;
+        }
+        //再生
+        player.Start();
     }
 }

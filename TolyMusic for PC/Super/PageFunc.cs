@@ -33,6 +33,8 @@ namespace TolyMusic_for_PC.Super
         //純再生
         public virtual void PlayAll(object sender = null, RoutedEventArgs e = null)
              {
+                 player.Dispose();
+                 
                  //キュー作成作業
                  MakeQueue();
                  vm.Curt_queue_num = 0;
@@ -47,8 +49,11 @@ namespace TolyMusic_for_PC.Super
         //シャッフル再生
         public virtual void ShuffleAll(object sender = null, RoutedEventArgs e = null)
         {
+            //プレイヤー破棄
+            player.Dispose();
             //キュー作成作業
             MakeQueue();
+            
             vm.Curt_queue_num = 0;
             for (int i = vm.PlayQueue.Count - 1; i > 0; i--)
             {

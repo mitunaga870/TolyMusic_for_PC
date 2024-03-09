@@ -28,7 +28,7 @@ namespace TolyMusic_for_PC.Local
         {
             
             //ファイルのパスを配列で取得
-            Collection<string> files = new Collection<string>();
+            Collection<Dictionary<String,String>> files = new Collection<Dictionary<String,String>>();
             foreach (var path in Properties.Settings.Default.LocalDirectryPath.Split(','))
             {
                 if (path == "")
@@ -38,7 +38,12 @@ namespace TolyMusic_for_PC.Local
                 string[] tmp_strary = System.IO.Directory.GetFiles(path, "*", SearchOption.AllDirectories);
                 foreach (string tmp_str in tmp_strary)
                 {
-                    files.Add(tmp_str);
+                    files.Add(
+                        new Dictionary<string, string>()
+                        {
+                            { "cwd", path },
+                            { "path", tmp_str.Replace(path,"") }
+                        });
                 }
             }
             //DBが存在しない時作成
@@ -77,17 +82,18 @@ namespace TolyMusic_for_PC.Local
             //tracks及びtrack_albumテーブルに書き込む
             List<SQLiteParameter[]> params_tracks = new List<SQLiteParameter[]>();
             List<SQLiteParameter[]> params_track_album = new List<SQLiteParameter[]>();
-            foreach (string file in files){
+            foreach (Dictionary<String,String> pathset in files){
+                String filepath = pathset["cwd"] + pathset["path"];
                 //拡張子の確認
-                if (Path.GetExtension(file) != ".mp3"&& Path.GetExtension(file) != ".m4a"&& Path.GetExtension(file) != ".flac" && Path.GetExtension(file) != ".wav")
+                if (Path.GetExtension(filepath) != ".mp3"&& Path.GetExtension(filepath) != ".m4a"&& Path.GetExtension(filepath) != ".flac" && Path.GetExtension(filepath) != ".wav")
                     continue;
                 //既に登録されているか確認
-                if(tracks.Where(x => x.Path == file).Count() != 0)
+                if(tracks.Where(x => x.Path == filepath).Count() != 0)
                     continue;
                 //パラメータ配列の作成
                 SQLiteParameter[] param_tracks = new SQLiteParameter[9];
                 //ファイルのタグを取得
-                TagLib.File f = TagLib.File.Create(file);
+                TagLib.File f = TagLib.File.Create(filepath);
                 //タグデータの文字化けが予想される場合・パスから取得するように
                 bool Tagfail = Regex.Match(f.Tag.Title,@"�").Success;
                 //楽曲idを生成
@@ -95,7 +101,7 @@ namespace TolyMusic_for_PC.Local
                 param_tracks[0] = (new SQLiteParameter("track_id", trackid));
                 if(Tagfail)
                 {
-                    string title = Path.GetFileNameWithoutExtension(file);
+                    string title = Path.GetFileNameWithoutExtension(filepath);
                     title = Regex.Replace(title, @"[0-9]+-", "");
                     param_tracks[1] = (new SQLiteParameter("track_title", title));
                     param_tracks[2] = new SQLiteParameter("track_title_pron", null);
@@ -108,7 +114,7 @@ namespace TolyMusic_for_PC.Local
                     param_tracks[3] = (new SQLiteParameter("track_num", f.Tag.TrackCount));
                 }
                 param_tracks[4] = (new SQLiteParameter("duration", f.Properties.Duration.TotalSeconds));
-                param_tracks[5] = (new SQLiteParameter("path", file));
+                param_tracks[5] = (new SQLiteParameter("path", pathset["path"].Remove(0,1)));
 
                 //アルバムの存在確認及びアルバムidの生成・取得
                 string album_title;
@@ -118,7 +124,7 @@ namespace TolyMusic_for_PC.Local
                 }
                 else
                 {
-                    album_title = Path.GetFileName(Path.GetDirectoryName(file));
+                    album_title = Path.GetFileName(Path.GetDirectoryName(filepath));
                 }
                 if (added_album.ContainsKey(album_title))
                 {
@@ -138,7 +144,7 @@ namespace TolyMusic_for_PC.Local
                     group_name = f.Tag.FirstAlbumArtist;
                     if (added_artist.ContainsKey(group_name))
                     { 
-                        param_tracks[7] = new SQLiteParameter("$group_id", artist[group_name]);
+                        param_tracks[7] = new SQLiteParameter("$group_id", added_artist[group_name]);
                     }
                     else 
                     { 
@@ -200,7 +206,7 @@ namespace TolyMusic_for_PC.Local
                 }
                 else
                 {
-                    string tmp = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(file)));
+                    string tmp = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(filepath)));
                     foreach (var performer in Regex.Split(tmp, @"[、,]"))
                     {
                         SQLiteParameter[] param_track_album = new SQLiteParameter[2];

@@ -117,10 +117,8 @@ namespace TolyMusic_for_PC.Library
                 foreach (var location in addedlocation)
                 {
                     //データベースのpathをローカルパスに変換
-                    string tmp_path = cwd.AbsolutePath + "/" + location["path"];
-                    tmp_path = tmp_path.Replace("/","\\");
-                    tmp_path = Uri.UnescapeDataString(tmp_path);
-                    if (string.Equals(tracks[i].Path,tmp_path))
+                    String addedPath = location["path"];
+                    if (string.Equals(tracks[i].Path,addedPath))
                     {
                         //locationに追加済みのときはスキップしこのデバイス出ない場合はこのデバイスを追加
                         if(location["device_id"] != device_id)
@@ -130,7 +128,7 @@ namespace TolyMusic_for_PC.Library
                             location_parameters.Add(new MySqlParameter("@track_id" + l, tracks[i].Id));
                             location_parameters.Add(new MySqlParameter("@location" + l, 0));
                             location_parameters.Add(new MySqlParameter("@device_id" + l, device_id));
-                            location_parameters.Add(new MySqlParameter("@path" + l, tmp_path));
+                            location_parameters.Add(new MySqlParameter("@path" + l, addedPath));
                         }
                         continue_switch = true;
                         break;
@@ -225,11 +223,7 @@ namespace TolyMusic_for_PC.Library
                 location_parameters.Add(new MySqlParameter("@device_id" + l, device_id));
                 //パスを相対パスに変換
                 string postpath;
-                Uri path = new Uri(tracks[i].Path);
-                Uri postpathuri = cwd.MakeRelativeUri(path);
-                postpath = postpathuri.ToString();
-                postpath = postpath.Replace(cwd.Segments[cwd.Segments.Length - 1] + "/", "");
-                location_parameters.Add(new MySqlParameter("@path" + l, postpath));
+                location_parameters.Add(new MySqlParameter("@path" + l, tracks[i].Path));
                 l++;
             }
             //artist

@@ -21,5 +21,12 @@
       <jdbc-url>jdbc:sqlite:C:\Users\mitu\RiderProjects\TolyMusic_for_PC\TolyMusic for PC\bin\Debug\local.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="@192.168.0.100" uuid="5a1985c4-b57a-4499-934e-70bf33cdd73c">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://192.168.0.100:3150</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

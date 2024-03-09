@@ -70,15 +70,26 @@ namespace TolyMusic_for_PC
         public void Load_Settings()
         {
             var setting = Properties.Settings.Default;
+            //恐竜ドライバがカスタム済みの場合
             if (setting.SDcustumized)
             {
                 MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+                //デバイスを列挙
                 foreach (var wasMMD in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
                 {
-                    if (wasMMD.DeviceFriendlyName == setting.ShareDriver)
+                    //エラーが出る場合があるのでtry-catch
+                    try
                     {
-                        Share_Driver = new Driver(wasMMD);
-                        break;
+                        //設定されたデバイス名と一致するデバイスを探す
+                        if (wasMMD.DeviceFriendlyName == setting.ShareDriver)
+                        {
+                            Share_Driver = new Driver(wasMMD);
+                            break;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
                     }
                 }
                 enumerator.Dispose();
@@ -90,12 +101,20 @@ namespace TolyMusic_for_PC
                 else
                 {
                     MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-                    foreach (var wasMMD in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
+                    foreach (var wasMMD in enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active))
                     {
-                        if (wasMMD.DeviceFriendlyName == setting.ExclutionDriver)
+                        //エラードライバをスキップ
+                        try
                         {
-                            Excl_Driver = new Driver(wasMMD);
-                            break;
+                            if (wasMMD.DeviceFriendlyName == setting.ExclutionDriver)
+                            {
+                                Excl_Driver = new Driver(wasMMD);
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            continue;
                         }
                     }
                     enumerator.Dispose();
@@ -248,8 +267,16 @@ namespace TolyMusic_for_PC
             get { return curt_track; }
             set
             {
-                curt_track = value;
-                Curt_Title = value.Title;
+                if (value == null)
+                {
+                    curt_track = null;
+                    Curt_Title = "";
+                }
+                else
+                {
+                    curt_track = value;
+                    Curt_Title = value.Title;
+                }
                 OnPropertyChanged();
             }
         }
@@ -382,6 +409,14 @@ namespace TolyMusic_for_PC
                 }
                 return Curt_track.Title + " - " + Curt_track.Artist;
             }
+        }
+        //Queueの削除
+        public void DeleteQueue()
+        {
+            if (PlayQueue == null)
+                return;
+            PlayQueue.Clear();
+            Curt_queue_num = 0;
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Windows;
+﻿using System.IO;
 using CefSharp.Wpf;
-using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
-using TolyMusic_for_PC;
+using NAudio.Wave;
+using NAudio.Wasapi.CoreAudioApi;
 
 namespace StreamingTest
 {
@@ -15,10 +14,14 @@ namespace StreamingTest
         public MainWindow()
         {
             InitializeComponent();
-        }
-        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            Python.Get("sc/test.py");
+            
+            
+            browser = new ChromiumWebBrowser("https://www.youtube.com/embed/Ov94vYTgvlQ?autoplay=1");
+            
+            GetStreamingHandler handler = new GetStreamingHandler();
+            browser.AudioHandler = handler;
+            
+            Content = browser;
         }
     }
 }

@@ -33,17 +33,19 @@ public partial class ArtistProperty : PropertyWindow
 
     protected override void Send_Data(object sender, RoutedEventArgs e)
     {
-        string artist_id = AllArtist[Name_Combobox.SelectedIndex].Id;
-        //名前
+        int index = Name_Combobox.SelectedIndex;
+        string artist_id;
         string name;
-        if(artist_id == prev_id || Name_Combobox.SelectedIndex == -1)
+        if (index == -1)
         {
+            artist_id = prev_id;
             name = Name_Combobox.Text;
         }
         else
         {
             if(MessageBox.Show("アーティストを統合します。\nよろしいですか？","確認",MessageBoxButton.YesNo) == MessageBoxResult.No)
                 return;
+            artist_id = AllArtist[Name_Combobox.SelectedIndex].Id;
             name = AllArtist[Name_Combobox.SelectedIndex].Name;
             var param = new Collection<MySqlParameter>();
             param.Add(new MySqlParameter("@prev_id", prev_id));

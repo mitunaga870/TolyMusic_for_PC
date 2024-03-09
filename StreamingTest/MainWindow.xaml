@@ -6,17 +6,6 @@
         xmlns:local="clr-namespace:StreamingTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <StackPanel>
-        <Button Click="ButtonBase_OnClick" Height="100">TMP</Button>
-        <Label Content="title"></Label>
-        <Label Name="title"></Label>
-        <Label Content="album"></Label>
-        <Label Name="album"></Label>
-        <Label Content="artist"></Label>
-        <Label Name="artist"></Label>
-        <Label Content="composer"></Label>
-        <Label Name="composer"></Label>
-        <Label Content="group"></Label>
-        <Label Name="group"></Label>
+    <StackPanel Name="Panel">
     </StackPanel>
 </Window>

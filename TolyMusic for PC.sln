@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TolyMusic for PC", "TolyMus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamingTest", "StreamingTest\StreamingTest.csproj", "{A5AE7DCA-317B-41D5-9696-A14B751D003F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCM Test", "PCM Test\PCM Test.csproj", "{F2EF784D-892B-4823-841C-FA5DAFB2767F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A5AE7DCA-317B-41D5-9696-A14B751D003F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5AE7DCA-317B-41D5-9696-A14B751D003F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5AE7DCA-317B-41D5-9696-A14B751D003F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2EF784D-892B-4823-841C-FA5DAFB2767F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EF784D-892B-4823-841C-FA5DAFB2767F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EF784D-892B-4823-841C-FA5DAFB2767F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EF784D-892B-4823-841C-FA5DAFB2767F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
